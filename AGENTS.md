@@ -50,13 +50,21 @@ yet present in `scripts/` as not implemented.
      while a TUI window is open or as a substitute for in-window feedback. External notifications
      (`lazyos-notify`) are strictly reserved for headless events with no active TUI window (hardware
      volume/brightness OSD, post-close screenshot/recording confirmation, in-place dictation/translation,
-     and clipboard secret copy).
+     and clipboard secret copy). Voice-to-text dictation (`dictate`, `Alt+Ctrl+X`) specifically
+     operates headlessly so `wtype` never loses Wayland keyboard focus on the target window: holding
+     `Alt+Ctrl+X` (`--press` / `--release`) records push-to-talk and transcribes on release (`taskset -c 4-7 whisper-cli -t 4`),
+     while a quick tap or starting from the Root Menu records hands-free with synchronized stop/cancel
+     controls across the `lazyos-notify` action buttons (`Stop & Transcribe` / `Cancel`), the Waybar
+     `custom/busy` spinner (`bar-busy`), and the Root Menu's dynamic `Stop dictation` row.
   3. **Separate actions from domain results, with a consistent foundation and live reactivity**:
      Tool-level actions (`Rescan`, `Turn off/on`, `Share QR`, `nmtui`, `bluetoothctl`, `Clean all safe`,
      `Pick a pixel`, `Mute`, `Mixer`, `New reminder`, `Do not disturb`, `Dismiss all`, `Save image`,
-     `Clear history`, `Refresh`, `Search manuals`, `Man pages`, `Copy summary`) never clutter the
+     `Clear history`, `Refresh`, `Search manuals`, `Man pages`, `Copy summary`, `Save PNG`) never clutter the
      scrollable `ListState`; they live in a dedicated zero-allocation horizontal `ActionStrip` widget
-     (`Tab` / `Ctrl+<Key>` / mouse click) so the primary list holds strictly domain results. Standard
+     (`Tab` / `Ctrl+<Key>` / mouse click) so the primary list holds strictly domain results. Generated
+     QR codes (`menu qr` and `menu net` Share QR) save high-resolution PNG files (`s` / `^S Save PNG`)
+     to `~/Pictures/Screenshots/<YYYY-MM-DD>/<prefix>-<timestamp>.png`, matching the screenshot daily
+     folder convention. Standard
      menus share identical density-aware card padding (`draw_card` inner geometry), single-advance Nerd
      Font icons on every row, zero-allocation case-folded filtering (`ListState::type_filter` +
      `draw_filter_bar`), automatic scrollbars (`draw_scrollbar`), consistent `Esc` back-navigation
