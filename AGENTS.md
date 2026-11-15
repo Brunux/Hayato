@@ -47,11 +47,16 @@ yet present in `scripts/` as not implemented.
      screenshot/recording confirmation, in-place dictation/translation, and clipboard secret copy).
   3. **Consistent foundation, domain-tailored layout, and live reactivity**: Standard menus share
      identical density-aware card padding (`draw_card` inner geometry), single-advance Nerd Font icons
-     on every row, zero-allocation case-folded filtering (`ListState::type_filter`), and consistent
-     keybars. At the same time, layouts adapt as much as needed to serve the actual application
-     intuitively — exemplified by `menu theme` (dual-pane layout with ANSI swatches, desktop mockups,
-     and live window re-theming on selection), `menu audio` (live volume gauges and inline `Left`/`Right`
-     adjustment), `menu qr` (in-window QR rendering), and `menu files` / `menu grep` (split-pane
+     on every row, zero-allocation case-folded filtering (`ListState::type_filter` + `draw_filter_bar`),
+     automatic scrollbars (`draw_scrollbar`), and consistent keybars. At the same time, layouts and
+     window geometry adapt as much as needed to serve the actual application intuitively — including
+     live post-map window resizing and re-centering (`Screen::desired_size` via Sway IPC) when switching
+     modes (such as showing an inline half-block Wi-Fi QR code in `menu net` or `menu qr`, expanding
+     `menu about` into a wide log viewer, or transitioning a compact wizard into `TaskView`), as well
+     as rich zero-allocation domain widgets (`menu theme` dual-pane swatches and desktop mockups,
+     `menu audio` live volume gauges, `menu net` 4-bar signal meters and connected hero card, `menu clean`
+     storage proportion bars, `menu colour` truecolor swatch and WCAG card, `menu calc` live expression
+     hero card, `menu about` 2-column hardware dashboard, and `menu files` / `menu grep` split-pane
      previews).
 - **Icons first, never forced.** Icons and readable TUI tools are the house taste, not a garnish:
   a menu row gets its Nerd Font glyph from `lazyos-ui`, a notification its name from

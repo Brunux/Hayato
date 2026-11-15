@@ -609,11 +609,15 @@ the workflow and the routing.
      (`pkg`, `format`, `swap`, `dev` profile backup/restore, `download`, `updates`) run inside
      in-window `TaskView`. External notifications (`lazyos-notify`) are strictly reserved for headless
      events (hardware OSD, post-close screen capture, in-place dictation/translation, secret copy).
-   - **Consistent foundation & domain-tailored layouts**: Unified density-aware card layout
-     (`draw_card` inner geometry), universal `ListState::type_filter` search, single-advance Nerd Font
-     glyphs on every row, persistent toggle loops (`settings`, `display`, `audio`, `net`, `bluetooth`,
-     `clean`), and domain-tailored views (`menu theme` dual-pane live preview, `menu audio` live
-     volume gauges, `menu qr` inline UTF-8 QR rendering, native `bar-power` battery/memory TUI).
+   - **Consistent foundation, adaptive window sizing & domain-tailored layouts**: Unified density-aware
+     card layout (`draw_card` inner geometry), universal `ListState::type_filter` search with styled
+     `draw_filter_bar` and `draw_scrollbar`, single-advance Nerd Font glyphs on every row, persistent
+     toggle loops (`settings`, `display`, `audio`, `net`, `bluetooth`, `clean`), dynamic post-map window
+     resizing and re-centering (`Screen::desired_size` for inline Wi-Fi/text QR codes, log viewers, and
+     wizard-to-`TaskView` transitions), and zero-allocation domain-tailored views (`menu theme` dual-pane
+     live preview, `menu audio` hero volume gauges, `menu qr` & `menu net` inline half-block `draw_qr`,
+     `menu colour` truecolor swatch card, `menu clean` storage proportion bars, `menu about` 2-column
+     hardware dashboard, and native `bar-power` battery/memory TUI).
 7. **Later** — `lazyos-greeter`, bar elevation, `theme from-wallpaper` (matugen-style), sound design
    (if enabled), custom lock and which-key overlay (if un-parked).
 
