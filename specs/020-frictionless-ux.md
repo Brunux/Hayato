@@ -26,6 +26,8 @@ While specs 001–019 migrated all 45+ surfaces to the native Rust TUI framework
 
 - **Phase 1 — `lazyos-ui` Widgets, Dynamic Window Resize & Core Primitives**:
   - `Screen::desired_size(&self) -> Option<(u16, u16)>` & `request_window_size(width_px, height_px)`: dynamically resize and re-center the live floating `foot` window in Sway (`swaymsg [pid=<ppid>] floating enable, resize set width <W> px height <H> px, move position center` with `XTWINOPS` `\x1b[4;<H>;<W>t` fallback) whenever a screen transitions between compact and expanded views (e.g., showing a Wi-Fi QR code, opening a wide log/manual detail pane, or transitioning a compact wizard into `TaskView`).
+  - `ActionStrip`, `ActionItem`, and `ActionStripEvent`: dedicated zero-allocation horizontal pill bar for tool-level actions (`Tab` focuses, `Left`/`Right` moves, `Enter`/`Space` activates, `Ctrl+<Key>` shortcuts, mouse click support) so `ListState` holds strictly domain results.
+  - `ActionRunner<T>` & `ActionNotice`: single-polled background task runner (`poll(&mut self) -> Option<T>`) with transient vs. persistent status lifecycle (`clear_status()` on routine scan completion, 3-second `set_transient()` for positive state transitions, and `set_persistent_error()` / `set_persistent_info()` for high-signal outcomes).
   - `ListState::update_rows(&mut self, rows: Vec<Row>)`: preserve selected row identity (`.value`/`.label`), active filter query, and scroll offset when background scans refresh a list.
   - Unified density-aware `list_layout(area: Rect, design: &Design) -> (Rect, Rect)` derived from `draw_card`'s inner `Rect`.
   - Zero-allocation visual craft primitives in `lazyos-ui::widgets`:

@@ -41,22 +41,36 @@ yet present in `scripts/` as not implemented.
      caches) show an in-window braille spinner and status banner and update the list in-place; heavy
      multi-step or streaming operations (package install/update, disk format/swap, profile backup/restore,
      media downloads) run inside an in-window `TaskView` with step checklists, progress bars, and a
-     persistent final result card. Never fire `Card::send()` / `notify-send` while a TUI window is open
-     or as a substitute for in-window feedback. External notifications (`lazyos-notify`) are strictly
-     reserved for headless events with no active TUI window (hardware volume/brightness OSD, post-close
-     screenshot/recording confirmation, in-place dictation/translation, and clipboard secret copy).
-  3. **Consistent foundation, domain-tailored layout, and live reactivity**: Standard menus share
-     identical density-aware card padding (`draw_card` inner geometry), single-advance Nerd Font icons
-     on every row, zero-allocation case-folded filtering (`ListState::type_filter` + `draw_filter_bar`),
-     automatic scrollbars (`draw_scrollbar`), and consistent keybars. At the same time, layouts and
-     window geometry adapt as much as needed to serve the actual application intuitively — including
-     live post-map window resizing and re-centering (`Screen::desired_size` via Sway IPC) when switching
-     modes (such as showing an inline half-block Wi-Fi QR code in `menu net` or `menu qr`, expanding
-     `menu about` into a wide log viewer, or transitioning a compact wizard into `TaskView`), as well
-     as rich zero-allocation domain widgets (`menu theme` dual-pane swatches and desktop mockups,
-     `menu audio` live volume gauges, `menu net` 4-bar signal meters and connected hero card, `menu clean`
-     storage proportion bars, `menu colour` truecolor swatch and WCAG card, `menu calc` live expression
-     hero card, `menu about` 2-column hardware dashboard, and `menu files` / `menu grep` split-pane
+     persistent final result card. Action status follows a **transient vs. persistent lifecycle**
+     (`ActionNotice` in `ActionRunner`): routine background discovery clears its status banner immediately
+     on completion (`clear_status()`) so fresh results speak for themselves; routine positive transitions
+     auto-clear after 3 seconds (`set_transient()`); and only high-signal or actionable outcomes
+     (connection/pairing errors via `set_persistent_error()` or total space freed via
+     `set_persistent_info()`) persist until the user interacts. Never fire `Card::send()` / `notify-send`
+     while a TUI window is open or as a substitute for in-window feedback. External notifications
+     (`lazyos-notify`) are strictly reserved for headless events with no active TUI window (hardware
+     volume/brightness OSD, post-close screenshot/recording confirmation, in-place dictation/translation,
+     and clipboard secret copy).
+  3. **Separate actions from domain results, with a consistent foundation and live reactivity**:
+     Tool-level actions (`Rescan`, `Turn off/on`, `Share QR`, `nmtui`, `bluetoothctl`, `Clean all safe`,
+     `Pick a pixel`, `Mute`, `Mixer`, `New reminder`, `Do not disturb`, `Dismiss all`, `Save image`,
+     `Clear history`, `Refresh`, `Search manuals`, `Man pages`, `Copy summary`) never clutter the
+     scrollable `ListState`; they live in a dedicated zero-allocation horizontal `ActionStrip` widget
+     (`Tab` / `Ctrl+<Key>` / mouse click) so the primary list holds strictly domain results. Standard
+     menus share identical density-aware card padding (`draw_card` inner geometry), single-advance Nerd
+     Font icons on every row, zero-allocation case-folded filtering (`ListState::type_filter` +
+     `draw_filter_bar`), automatic scrollbars (`draw_scrollbar`), consistent `Esc` back-navigation
+     (clearing filters, stepping back from sub-views, and returning from submenus to the Root Menu
+     without closing the window), and consistent keybars. At the same time, layouts and window geometry
+     adapt as much as needed to serve the actual application intuitively — including live post-map
+     window resizing and re-centering (`Screen::desired_size` via Sway IPC) when switching modes (such
+     as showing an inline half-block Wi-Fi QR code in `menu net` or `menu qr`, expanding `menu about` /
+     `menu learn` into a wide viewer, or transitioning a compact wizard into `TaskView`), as well as
+     rich zero-allocation domain widgets (`menu theme` dual-pane swatches and desktop mockups,
+     `menu audio` live volume gauges, `menu net` / `menu bluetooth` hero cards and signal meters,
+     `menu clean` storage proportion bars, `menu colour` truecolor swatch and WCAG card, `menu calc`
+     live expression hero card with movable cursor and Python-style operators, `menu about` hardware
+     dashboard, `menu learn` `glow`-rendered markdown viewer, and `menu files` / `menu grep` split-pane
      previews).
 - **Icons first, never forced.** Icons and readable TUI tools are the house taste, not a garnish:
   a menu row gets its Nerd Font glyph from `lazyos-ui`, a notification its name from
