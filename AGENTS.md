@@ -24,6 +24,62 @@ yet present in `scripts/` as not implemented.
   pin execution to the MT8192's Cortex-A76 performance cores (CPUs 4-7) with
   `taskset -c 4-7` (and `-j 4`), leaving the Cortex-A55 efficiency cores (CPUs
   0-3) free and responsive for the desktop session.
+- **Intuitive, frictionless, and self-contained UX** (spec 020). Every interactive surface in LazyOS
+  follows three core principles:
+  1. **Anticipate primary intent on open**: Opening a tool immediately triggers its most likely
+     discovery or refresh action asynchronously without blocking first paint (e.g., `menu net` shows
+     cached networks immediately while running a background Wi-Fi rescan that updates the list
+     in-place; `menu bluetooth` scans automatically on open and after power-on; `menu clean` computes
+     reclaimable space asynchronously; `menu calc` evaluates expressions live as the user types).
+     Never force the user to click "Rescan" just to see current state, and never close a menu after
+     toggling a setting or rescanning.
+  2. **The tool informs the user in-window at all times; external notifications are only for headless
+     events**: Historically, shell/rofi scripts closed their window before running a slow command and
+     relied on external `busy` / `notify-send` toasts to report progress and completion. In the native
+     TUI framework, **the tool window stays open and owns the entire lifecycle**: short actions
+     (1–8 s, like connecting to Wi-Fi, pairing Bluetooth, switching DNS, mounting drives, cleaning
+     caches) show an in-window braille spinner and status banner and update the list in-place; heavy
+     multi-step or streaming operations (package install/update, disk format/swap, profile backup/restore,
+     media downloads) run inside an in-window `TaskView` with step checklists, progress bars, and a
+     persistent final result card. Action status follows a **transient vs. persistent lifecycle**
+     (`ActionNotice` in `ActionRunner`): routine background discovery clears its status banner immediately
+     on completion (`clear_status()`) so fresh results speak for themselves; routine positive transitions
+     auto-clear after 3 seconds (`set_transient()`); and only high-signal or actionable outcomes
+     (connection/pairing errors via `set_persistent_error()` or total space freed via
+     `set_persistent_info()`) persist until the user interacts. Never fire `Card::send()` / `notify-send`
+     while a TUI window is open or as a substitute for in-window feedback. External notifications
+     (`lazyos-notify`) are strictly reserved for headless events with no active TUI window (hardware
+     volume/brightness OSD, post-close screenshot/recording confirmation, in-place dictation/translation,
+     and clipboard secret copy). Voice-to-text dictation (`dictate`, `Alt+Ctrl+X`) specifically
+     operates headlessly so `wtype` never loses Wayland keyboard focus on the target window: holding
+     `Alt+Ctrl+X` (`--press` / `--release`) records push-to-talk and transcribes on release (`taskset -c 4-7 whisper-cli -t 4`),
+     while a quick tap or starting from the Root Menu records hands-free with synchronized stop/cancel
+     controls across the `lazyos-notify` action buttons (`Stop & Transcribe` / `Cancel`), the Waybar
+     `custom/busy` spinner (`bar-busy`), and the Root Menu's dynamic `Stop dictation` row.
+  3. **Separate actions from domain results, with a consistent foundation and live reactivity**:
+     Tool-level actions (`Rescan`, `Turn off/on`, `Share QR`, `nmtui`, `bluetoothctl`, `Clean all safe`,
+     `Pick a pixel`, `Mute`, `Mixer`, `New reminder`, `Do not disturb`, `Dismiss all`, `Save image`,
+     `Clear history`, `Refresh`, `Search manuals`, `Man pages`, `Copy summary`, `Save PNG`) never clutter the
+     scrollable `ListState`; they live in a dedicated zero-allocation horizontal `ActionStrip` widget
+     (`Tab` / `Ctrl+<Key>` / mouse click) so the primary list holds strictly domain results. Generated
+     QR codes (`menu qr` and `menu net` Share QR) save high-resolution PNG files (`s` / `^S Save PNG`)
+     to `~/Pictures/Screenshots/<YYYY-MM-DD>/<prefix>-<timestamp>.png`, matching the screenshot daily
+     folder convention. Standard
+     menus share identical density-aware card padding (`draw_card` inner geometry), single-advance Nerd
+     Font icons on every row, zero-allocation case-folded filtering (`ListState::type_filter` +
+     `draw_filter_bar`), automatic scrollbars (`draw_scrollbar`), consistent `Esc` back-navigation
+     (clearing filters, stepping back from sub-views, and returning from submenus to the Root Menu
+     without closing the window), and consistent keybars. At the same time, layouts and window geometry
+     adapt as much as needed to serve the actual application intuitively — including live post-map
+     window resizing and re-centering (`Screen::desired_size` via Sway IPC) when switching modes (such
+     as showing an inline half-block Wi-Fi QR code in `menu net` or `menu qr`, expanding `menu about` /
+     `menu learn` into a wide viewer, or transitioning a compact wizard into `TaskView`), as well as
+     rich zero-allocation domain widgets (`menu theme` dual-pane swatches and desktop mockups,
+     `menu audio` live volume gauges, `menu net` / `menu bluetooth` hero cards and signal meters,
+     `menu clean` storage proportion bars, `menu colour` truecolor swatch and WCAG card, `menu calc`
+     live expression hero card with movable cursor and Python-style operators, `menu about` hardware
+     dashboard, `menu learn` `glow`-rendered markdown viewer, and `menu files` / `menu grep` split-pane
+     previews).
 - **Icons first, never forced.** Icons and readable TUI tools are the house taste, not a garnish:
   a menu row gets its Nerd Font glyph from `lazyos-ui`, a notification its name from
   the theme pictures (`lazyos --icon-names`), a `lazyos menu files` row a picture from the preview pane, a
@@ -2712,11 +2768,13 @@ exactly what forky ships) and **scenefx 0.5**, and `scripts/build-swayfx.sh` bui
   foot searches the listed fonts in order and draws the first that has the glyph *at that font's
   size*, so a stripped-set glyph at 11 pt sat a fifth short of the cell; the old comment claiming
   foot has no fontconfig fallback at all was wrong (foot.ini(5): *"the dynamic fallback list from
-  fontconfig … is searched"*) and was what hid the sizing half. `check-system.sh` reads the prompt,
-  asks fontconfig which family draws each private-use codepoint and FAILs when the answer is none
-  (the box that logs nothing) and WARNs when the only families that have it are not in foot's chain
-  (the glyph renders small from the fallback), naming the codepoint; the manual section is
-  `04-software.md` § *The prompt*.
+  fontconfig … is searched"*) and was what hid the sizing half. In addition, `foot.ini` sets
+  `selection-target=both` so selecting text in `foot` automatically copies to both the PRIMARY
+  selection and the system CLIPBOARD. `check-system.sh` reads the prompt, asks fontconfig which family
+  draws each private-use codepoint and FAILs when the answer is none (the box that logs nothing) and
+  WARNs when the only families that have it are not in foot's chain (the glyph renders small from the
+  fallback), naming the codepoint, and verifies `selection-target=both` in `foot.ini`; the manual
+  section is `04-software.md` § *The prompt* and § *The terminal*.
 - **`/etc/yt-dlp.conf` names Node as yt-dlp's JS runtime**, for the same reason node is installed at
   all: yt-dlp 2026 needs a JS runtime for YouTube's JS challenges ("EJS"), enables only `deno` by
   default and Debian ships none, so a stock install logs `[debug] JS runtimes: none` and warns that
