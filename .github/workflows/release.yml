@@ -4,64 +4,216 @@ on:
   push:
     tags:
       - "v*"
+  workflow_dispatch:
+    inputs:
+      target:
+        description: "Release target (all, google-asurada, arm64-uefi, arm64-extlinux)"
+        required: true
+        default: "all"
+      publish:
+        description: "Publish GitHub release if running on a v* tag"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
 
 jobs:
-  verify-tag:
+  verify:
     runs-on: ubuntu-latest
+    outputs:
+      targets: ${{ steps.plan.outputs.targets }}
+      need_hayato_kernel: ${{ steps.plan.outputs.need_hayato_kernel }}
+      should_publish: ${{ steps.plan.outputs.should_publish }}
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - name: Tag matches VERSION, submodules, and release notes
+      - name: Verify versions or umbrella validation
+        id: plan
         run: |
-          tag="${GITHUB_REF_NAME}"
-          expected="v$(tr -d '\n' < VERSION)"
-          if [ "$tag" != "$expected" ]; then
-            echo "tag $tag does not match VERSION ($expected)"
-            exit 1
-          fi
-          for vfile in core/VERSION desktop/VERSION; do
-            subver="v$(tr -d '\n' < "$vfile")"
-            if [ "$tag" != "$subver" ]; then
-              echo "tag $tag does not match $vfile ($subver)"
+          if [ "${{ github.event_name }}" = "push" ]; then
+            tag="${GITHUB_REF_NAME}"
+            expected="v$(tr -d '\n' < VERSION)"
+            if [ "$tag" != "$expected" ]; then
+              echo "tag $tag does not match VERSION ($expected)"
               exit 1
             fi
-          done
-          if [ ! -f "docs/releases/$tag.md" ]; then
-            echo "docs/releases/$tag.md is missing (it is the release body)"
-            exit 1
+            for vfile in core/VERSION desktop/VERSION; do
+              subver="v$(tr -d '\n' < "$vfile")"
+              if [ "$tag" != "$subver" ]; then
+                echo "tag $tag does not match $vfile ($subver)"
+                exit 1
+              fi
+            done
+            if [ ! -f "docs/releases/$tag.md" ]; then
+              echo "docs/releases/$tag.md is missing (it is the release body)"
+              exit 1
+            fi
+            targets='["google-asurada","arm64-uefi","arm64-extlinux"]'
+            need_hayato_kernel="true"
+            should_publish="true"
+          else
+            ./build.sh validate
+            case "${{ github.event.inputs.target }}" in
+              all)
+                targets='["google-asurada","arm64-uefi","arm64-extlinux"]'
+                need_hayato_kernel="true"
+                ;;
+              google-asurada)
+                targets='["google-asurada"]'
+                need_hayato_kernel="true"
+                ;;
+              arm64-uefi|arm64-extlinux)
+                targets='["${{ github.event.inputs.target }}"]'
+                need_hayato_kernel="false"
+                ;;
+              *)
+                echo "Unsupported target: ${{ github.event.inputs.target }}"
+                exit 1
+                ;;
+            esac
+            should_publish="false"
           fi
+          echo "targets=$targets" >> "$GITHUB_OUTPUT"
+          echo "need_hayato_kernel=$need_hayato_kernel" >> "$GITHUB_OUTPUT"
+          echo "should_publish=$should_publish" >> "$GITHUB_OUTPUT"
 
-  build:
-    needs: verify-tag
+  build-desktop:
+    needs: verify
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
         with:
           submodules: true
-      - name: Build tools
+      - name: Install build dependencies
         run: sudo ./core/scripts/00-deps.sh
-      - name: Free space for the build
+      - name: Free space for shared desktop build
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
           df -h
-      - name: Build rootfs and images
+      - name: Build shared desktop once (swayfx, workstyle, lazyos)
         run: |
           export BUILD_ROOT=/var/tmp/lazyos-build
+          ./build.sh desktop
+          mkdir -p stages
+          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - swayfx-stage workstyle-stage lazyos-stage | zstd -T0 -6 -q -o stages/desktop-stages.tar.zst
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-stages
+          path: stages/desktop-stages.tar.zst
+          retention-days: 2
+
+  build-hayato-kernel:
+    needs: verify
+    if: needs.verify.outputs.need_hayato_kernel == 'true'
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install build dependencies
+        run: sudo ./core/scripts/00-deps.sh
+      - name: Free space for Hayato kernel build
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          df -h
+      - name: Build mediatek-mt81 kernel once (google-asurada)
+        run: |
+          export BUILD_ROOT=/var/tmp/lazyos-build
+          DEVICE=google-asurada ./build.sh kernel
+          mkdir -p stages
+          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - kernel-stage-mediatek-mt81 | zstd -T0 -6 -q -o stages/hayato-kernel-stage.tar.zst
+      - uses: actions/upload-artifact@v4
+        with:
+          name: hayato-kernel-stage
+          path: stages/hayato-kernel-stage.tar.zst
+          retention-days: 2
+
+  build-target:
+    needs: [verify, build-desktop, build-hayato-kernel]
+    if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-hayato-kernel.result == 'success' || needs.build-hayato-kernel.result == 'skipped') }}
+    runs-on: ubuntu-24.04-arm
+    strategy:
+      fail-fast: false
+      matrix:
+        target: ${{ fromJson(needs.verify.outputs.targets) }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Install build dependencies
+        run: sudo ./core/scripts/00-deps.sh
+      - name: Free space for target assembly
+        run: |
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          df -h
+      - uses: actions/download-artifact@v4
+        with:
+          name: desktop-stages
+          path: stages
+      - uses: actions/download-artifact@v4
+        if: matrix.target == 'google-asurada'
+        with:
+          name: hayato-kernel-stage
+          path: stages
+      - name: Assemble rootfs, images, and release archive
+        run: |
+          export BUILD_ROOT=/var/tmp/lazyos-build
+          sudo mkdir -p "$BUILD_ROOT/work"
+          sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/desktop-stages.tar.zst
+          if [ -f stages/hayato-kernel-stage.tar.zst ]; then
+            sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/hayato-kernel-stage.tar.zst
+          fi
+          export DEVICE="${{ matrix.target }}"
+          export SKIP_DESKTOP_BUILD=yes
+          export SKIP_KERNEL_BUILD=yes
           sudo -E ./build.sh all
-          sudo -E ./build.sh release "$PWD/out"
+          sudo -E ./build.sh release "$PWD/out-${{ matrix.target }}"
+          sudo chown -R "$USER:$USER" "$PWD/out-${{ matrix.target }}"
+          rm -f "$PWD/out-${{ matrix.target }}"/*.img
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.target }}
+          path: out-${{ matrix.target }}/*
+          retention-days: 7
+
+  publish:
+    needs: [verify, build-target]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: release-*
+          path: out-all
+          merge-multiple: true
+      - name: Merge and verify SHA256SUMS
+        run: |
+          mkdir -p release-files
+          cat out-all/* > out-all/MERGED_SUMS || true
+          find out-all -type f ! -name 'SHA256SUMS' ! -name 'MERGED_SUMS' -exec mv -t release-files {} +
+          # Recompute clean combined SHA256SUMS across all shipped assets
+          (
+            cd release-files
+            rm -f SHA256SUMS
+            sha256sum * > SHA256SUMS
+            sha256sum -c SHA256SUMS
+          )
+          ls -lh release-files
+      - uses: actions/upload-artifact@v4
+        if: needs.verify.outputs.should_publish != 'true'
+        with:
+          name: lazyos-release-preview
+          path: release-files/*
+          retention-days: 7
       - name: Publish GitHub Release
+        if: needs.verify.outputs.should_publish == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
-            out/*.img.xz \
-            out/*-rootfs.tar.zst \
-            out/*.vmlinuz.kpart \
-            out/SHA256SUMS \
+            release-files/* \
             --title "$GITHUB_REF_NAME" \
             --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
             --verify-tag

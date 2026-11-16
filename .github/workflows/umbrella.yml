@@ -15,21 +15,28 @@ jobs:
       - name: Verify submodule layout and shell syntax
         run: |
           ./build.sh validate
-      - name: Verify umbrella cross-repo resolution for core/lib.sh
+      - name: Verify umbrella cross-repo resolution for core/lib.sh across all targets
         run: |
           TMP="$(mktemp -d)"
-          (
-            export BUILD_ROOT="$TMP/build"
-            export LAZYOS_ROOT_DIR="$PWD"
-            export DEVICE="google-asurada"
-            . ./core/scripts/lib.sh
-            [ "$BOOT_TYPE" = "depthcharge" ]
-            [ "$KERNEL_RELEASE" = "7.2.7-mt81" ]
-            [ -d "$DEVICES_DIR/google-asurada" ]
-            [ -d "$UI_DIR/files" ]
-            [ "$VERSION" = "" ] || true
-            echo "Umbrella lib.sh OK: $DEVICE $KERNEL_RELEASE $BOOT_TYPE"
-          )
+          check_profile() {
+            local dev="$1" want_src="$2" want_rel="$3" want_boot="$4" want_img="$5"
+            (
+              export BUILD_ROOT="$TMP/build"
+              export LAZYOS_ROOT_DIR="$PWD"
+              export DEVICE="$dev"
+              . ./core/scripts/lib.sh
+              [ "$KERNEL_SOURCE_TYPE" = "$want_src" ]
+              [ "$KERNEL_RELEASE" = "$want_rel" ]
+              [ "$BOOT_TYPE" = "$want_boot" ]
+              [ "$IMAGE_SIZE_MIB" = "$want_img" ]
+              [ -d "$DEVICES_DIR/$dev" ]
+              [ -d "$UI_DIR/files" ]
+              echo "Umbrella lib.sh OK: $DEVICE source=$KERNEL_SOURCE_TYPE rel=$KERNEL_RELEASE boot=$BOOT_TYPE img=${IMAGE_SIZE_MIB}MiB"
+            )
+          }
+          check_profile google-asurada source 7.2.7-mt81 depthcharge 6144
+          check_profile arm64-uefi debian-pkg debian-pkg uefi 8192
+          check_profile arm64-extlinux debian-pkg debian-pkg extlinux 8192
           [ "$(cat VERSION)" = "$(cat core/VERSION)" ]
           [ "$(cat VERSION)" = "$(cat desktop/VERSION)" ]
           rm -rf "$TMP"
