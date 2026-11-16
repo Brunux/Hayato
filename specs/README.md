@@ -216,6 +216,7 @@ specs.
 | 018 | [`018-tui-installer.md`](018-tui-installer.md) — full TUI installer: user setup, timezone, disk safety, progress | 4-5 | merged |
 | 019 | [`019-notification-daemon.md`](019-notification-daemon.md) — eye-candy layer-shell notification daemon, actions, progress | 5 | merged |
 | 020 | [`020-frictionless-ux.md`](020-frictionless-ux.md) — intuitive, frictionless, self-contained UX overhaul | 6 | draft |
+| 021 | [`021-greeter.md`](021-greeter.md) — native `lazyos-greeter` over `greetd` IPC | 7 | in progress |
 
 The status column is the word that opens each file's `**Status**` line, and CI fails when the two
 disagree (`The index status is the spec's status`, `.github/workflows/specs.yml`). `merged` means
