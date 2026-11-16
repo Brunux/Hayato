@@ -51,8 +51,8 @@
       "image": "https://brunux.github.io/LazyOS/brand/social-preview.png",
       "applicationCategory": "Operating system",
       "operatingSystem": "Linux (Debian forky, arm64)",
-      "softwareVersion": "0.5.0",
-      "downloadUrl": "https://github.com/Brunux/LazyOS/releases",
+      "softwareVersion": "0.5.1",
+      "downloadUrl": "https://github.com/Brunux/LazyOS/releases/tag/v0.5.1",
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "author": { "@type": "Person", "name": "Brunux", "url": "https://github.com/Brunux" },
@@ -156,7 +156,14 @@ section { padding: 88px 0; }
 .sec-head p { color: var(--muted); }
 .alt { background: #01303b; border-top: 1px solid rgba(30, 74, 85, 0.5); border-bottom: 1px solid rgba(30, 74, 85, 0.5); }
 
-/* Screenshot frame */
+/* Screenshot frame & spotlight tabs */
+.tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
+.tab { display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: 10px; border: 1px solid var(--line); background: var(--base02); color: var(--muted); font-family: var(--mono); font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 0 var(--key-shadow); transition: transform 0.1s ease, border-color 0.15s ease, color 0.15s ease; }
+.tab:hover { color: var(--text); border-color: var(--cyan); }
+.tab[aria-selected="true"] { background: rgba(42, 161, 152, 0.14); border-color: var(--cyan); color: var(--text); box-shadow: 0 3px 0 #1b6e68; }
+.tab code { font-size: 12px; color: var(--cyan); font-weight: 400; }
+.spot-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.spot-hint { font-size: 13px; color: var(--cyan); }
 .shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--base02); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); }
 .shot .bar { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
 .shot .bar span { width: 11px; height: 11px; border-radius: 50%; background: var(--line); }
@@ -264,18 +271,22 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
       <div class="row" style="padding-left: 36px"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
     </div>
     <div class="wrap">
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>v0.5.0 · Debian forky · arm64</span>
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>v0.5.1 · Debian forky · arm64</span>
       <h1>lazyOS<span class="cur blink">_</span></h1>
       <p class="lede">Debian arm64 for Chromebooks &amp; Mainline ARM64. Keyboard first. <em>Lazy by design.</em></p>
-      <p class="sub">Real Debian above the kernel, board-tuned support for Hayato plus stock Debian <code>linux-image-arm64</code> for UEFI and U-Boot targets, and a <code>swayfx</code> session driven by our pure-Rust TUI suite.</p>
+      <p class="sub">Real Debian above the kernel, board-tuned support for Hayato plus stock Debian <code>linux-image-arm64</code> for UEFI and U-Boot targets, and a <code>swayfx</code> session driven by our pure-Rust <code>lazyos</code> TUI, greeter, theme engine, and installer.</p>
       <div class="ctas">
-        <a class="btn btn-primary" href="https://github.com/Brunux/LazyOS/releases">
+        <a class="btn btn-primary" href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"/><path d="m6 11 6 6 6-6"/><path d="M5 20h14"/></svg>
-          Releases (v0.5.0)
+          Download v0.5.1
+        </a>
+        <a class="btn btn-ghost" href="#features">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          Noticeable features
         </a>
         <a class="btn btn-ghost" href="https://github.com/Brunux/LazyOS">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5"/><path d="m16 7 5 5-5 5"/></svg>
-          View the source
+          Source
         </a>
       </div>
       <p class="meta">Targets: <code>google-asurada</code> (Hayato MT8192) · <code>arm64-uefi</code> · <code>arm64-extlinux</code></p>
@@ -285,16 +296,25 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
   <section class="alt" aria-labelledby="look">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">THE SESSION</span>
+        <span class="kicker">THE SESSION · v0.5.1</span>
         <h2 id="look">Everything is one keystroke away</h2>
-        <p><code>swayfx</code> with blur and rounded corners, <code>waybar</code> on top, and native Ratatui menus (<code>lazyos</code>) for the launcher, window switcher, settings, and installer — plus <code>lazyos-greeter</code> at login, <code>lazyos-notify</code> cards, and an interactive manual.</p>
+        <p><code>swayfx</code> with blur and rounded corners, <code>waybar</code> on top, and one pure-Rust Ratatui suite (<code>lazyos</code>) driving the session menu, <code>lazyos-greeter</code> at boot, 16 synced themes, <code>lazyos-notify</code> cards, and the 6-step disk installer.</p>
+      </div>
+      <div class="spot-head">
+        <div class="tabs" role="tablist" aria-label="LazyOS v0.5.1 interactive surfaces">
+          <button class="tab" type="button" role="tab" aria-selected="true" data-src="screenshots/v051-menu.png" data-alt="LazyOS v0.5.1 root menu centered over the Solarized keyboard wallpaper showing Terminal, Files, Search inside files, Places, Camera, Download, Settings, Learn, Keybindings, Applications, Window switcher, Calculator, Emoji, Clipboard, Password, SSH, Agent session and Ask" data-cap="Root Menu (Alt+Space): instant fuzzy launcher, files, tools, and AI agents using 101 verified fork-ready Nerd Font &amp; Font Awesome glyphs (zero tofu boxes)." data-cmd="Alt+Space · lazyos menu">Root Menu <code>Alt+Space</code></button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-src="screenshots/v051-greeter.png" data-alt="LazyOS native lazyos-greeter login screen showing brunux user pill, + Other button, blinking focus cursor on password field, Sway session selector, Solarized Dark theme pill, and Sleep/Reboot/Shut down/Settings actions" data-cap="Native lazyos-greeter (greetd IPC): user pills, blinking accent cursors, F4 16-theme switcher, F2 session picker, polkit-backed power buttons, and ^G defaults editor." data-cmd="VT7 · lazyos-greeter">Native Greeter <code>greetd</code></button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-src="screenshots/v051-theme.png" data-alt="LazyOS 16-theme appearance picker with live Sixel wallpaper simulation, Waybar preview, 16 ANSI color swatches, semantic role hex codes, WCAG 2.1 contrast check, and notification preview" data-cap="16-Theme Engine (Alt+Ctrl+T): live Sixel wallpaper, bar, ANSI palette, and WCAG contrast preview updating 13 config files atomically across the whole session." data-cmd="Alt+Ctrl+T · lazyos menu theme">16 Themes <code>Alt+Ctrl+T</code></button>
+          <button class="tab" type="button" role="tab" aria-selected="false" data-src="screenshots/v051-installer.png" data-alt="LazyOS v0.5.1 pure-Rust 6-step system installer pre-flight screen showing Google Hayato rev1 hardware, ChromeOS Depthcharge boot backend, target disk, and verified GPT/vboot utilities" data-cap="Pure-Rust System Installer (lazyos installer): 6-step guided wizard with hardware/power pre-flight, Depthcharge/UEFI/Extlinux support, and Cancel-first double confirmations." data-cmd="lazyos installer">Disk Installer <code>tui / --clone</code></button>
+        </div>
+        <span class="spot-hint"><code id="spot-cmd">Alt+Space · lazyos menu</code></span>
       </div>
       <figure>
         <div class="shot">
           <div class="bar" aria-hidden="true"><span></span><span></span><span></span></div>
-          <img src="screenshots/hayato-r1-launcher.png" width="1920" height="1200" alt="The LazyOS desktop launcher listing Agents, Audio output, Bluetooth, btop, Calculator, Dictation, Files and Foot">
+          <img id="spot-img" src="screenshots/v051-menu.png" width="1920" height="1200" alt="LazyOS v0.5.1 root menu centered over the Solarized keyboard wallpaper showing Terminal, Files, Search inside files, Places, Camera, Download, Settings, Learn, Keybindings, Applications, Window switcher, Calculator, Emoji, Clipboard, Password, SSH, Agent session and Ask">
         </div>
-        <figcaption>The launcher on the Hayato (capture from v0.4). Applications and menus share one icon &amp; glyph vocabulary with the bar.</figcaption>
+        <figcaption id="spot-cap">Root Menu (<code>Alt+Space</code>): instant fuzzy launcher, files, tools, and AI agents using 101 verified <code>forky</code> Nerd Font &amp; Font Awesome glyphs (zero tofu boxes).</figcaption>
       </figure>
     </div>
   </section>
@@ -314,9 +334,11 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>K</kbd></span><span class="what">Every key binding, searchable</span></div>
         <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>F</kbd></span><span class="what">Files</span></div>
         <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>A</kbd>/<kbd>B</kbd>/<kbd>W</kbd>/<kbd>P</kbd></span><span class="what">Audio, Bluetooth, network, power</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>X</kbd></span><span class="what">Dictation</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>A</kbd></span><span class="what">AI agents</span></div>
+        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>T</kbd></span><span class="what">16 themes, wallpapers &amp; live preview</span></div>
+        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>X</kbd></span><span class="what">Offline dictation (hold or tap)</span></div>
+        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>A</kbd></span><span class="what">AI agents &amp; account profiles</span></div>
         <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Escape</kbd></span><span class="what">Lock, suspend, log out, reboot, power off</span></div>
+        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Space</kbd> <span style="color:var(--muted)">›</span> <kbd>Install</kbd></span><span class="what">Clone live OS onto internal disk</span></div>
       </div>
     </div>
   </section>
@@ -325,39 +347,54 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
     <div class="wrap">
       <div class="sec-head">
         <span class="kicker">LAZY, ON PURPOSE</span>
-        <h2 id="feat-h">Native Rust tools, zero background bloat</h2>
-        <p>No background polling daemons. One multi-call <code>lazyos</code> binary drives every TUI surface, greeter, theme compiler, and installer.</p>
+        <h2 id="feat-h">Most noticeable features in v0.5.1</h2>
+        <p>Zero background polling daemons. One multi-call <code>lazyos</code> binary drives the login greeter, 16-theme engine, in-window TUI tools, offline AI/dictation workflows, and disk installer.</p>
       </div>
       <div class="grid">
         <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="10" r="2.5"/><path d="M8 17c1.2-2 6.8-2 8 0"/></svg></div>
+          <h3>Native <code>lazyos-greeter</code> &amp; Settings</h3>
+          <p>Pure-Rust <code>greetd</code> IPC login on VT7 with clickable user pills, blinking cursors, live <code>F4</code> 16-theme cycling, <code>^G</code> settings, polkit power actions, and raw TTY fallback.</p>
+        </article>
+        <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.7 0 2-1.2 1.2-2.2-.8-1-1-1.8.3-1.8h2a3.5 3.5 0 0 0 3.5-3.5"/></svg></div>
+          <h3>16 themes, 13 synced surfaces</h3>
+          <p><kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>T</kbd> previews wallpaper thumbnails, ANSI swatches, and WCAG contrast live—rewriting Sway, Waybar, <code>foot</code>, Starship, <code>lazyos-notify</code>, and the greeter together.</p>
+        </article>
+        <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M8 18v-4h8v4"/><path d="M9 6v3h4V6"/></svg></div>
+          <h3>Pure-Rust multi-target installer</h3>
+          <p>6-step guided wizard (<code>lazyos installer</code>) &amp; headless <code>--clone</code> mode with pre-flight safety checks for ChromeOS <code>depthcharge</code>, ARM64 <code>uefi</code>, and U-Boot <code>extlinux</code>.</p>
+        </article>
+        <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M13 15h4"/></svg></div>
-          <h3>AI agents, built in</h3>
-          <p>Launch Claude Code, Codex, OpenCode, Gemini or Copilot from one menu, install them into <code>~/.local</code>, and keep separate accounts per agent.</p>
+          <h3>AI agents &amp; MCP server</h3>
+          <p>Launch Claude Code, Codex, OpenCode, Gemini CLI, or Copilot from one menu, manage separate accounts, or expose session context via <code>lazyos mcp</code>.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></div>
-          <h3>Dictation, offline</h3>
-          <p><code>parecord</code> → <code>whisper-cli</code> → <code>wtype</code>. Hold <kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>X</kbd> for push-to-talk or tap for hands-free capture.</p>
+          <h3>Offline dictation, zero focus loss</h3>
+          <p><code>parecord</code> → pinned <code>whisper-cli</code> → <code>wtype</code>. Hold <kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>X</kbd> for push-to-talk or tap for hands-free voice entry with Waybar &amp; toast stop controls.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3"/><path d="M12 18v3"/><path d="m5.6 5.6 2.1 2.1"/><path d="m16.3 16.3 2.1 2.1"/><path d="M3 12h3"/><path d="M18 12h3"/></svg></div>
-          <h3>Slow actions say so twice</h3>
-          <p>Scans and installs show live progress inside the window alongside a Waybar spinner, and headless events emit themed <code>lazyos-notify</code> cards.</p>
+          <h3>Frictionless in-window UX</h3>
+          <p>Menus open immediately on cached state (Wi-Fi with QR sharing, BT, audio, live <code>calc</code>, file previews) with dedicated <code>ActionStrip</code> buttons and <code>TaskView</code> progress.</p>
+        </article>
+        <article class="card">
+          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
+          <h3>Layer-shell notifications &amp; OSD</h3>
+          <p><code>lazyos-notify</code> renders interactive Wayland cards and volume/brightness OSD bars using both <code>Symbols Nerd Font Mono</code> and <code>Font Awesome 6</code> icons.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h6"/><path d="M8 11h6"/></svg></div>
-          <h3>Learn, on the machine</h3>
-          <p>A seven-page manual in the launcher, rendered directly in the terminal: welcome, menus, shortcuts, software, the system, troubleshooting, agents.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17V7"/><path d="M8 17V4"/><path d="M12 17v-6"/><path d="M16 17V9"/><path d="M20 17v-3"/><path d="M3 20h18"/></svg></div>
-          <h3>A terminal with taste</h3>
-          <p><code>eza</code>, <code>bat</code>, <code>zoxide</code>, <code>fzf</code>, <code>ripgrep</code>, <code>starship</code>, <code>lazygit</code>, <code>btop</code>, <code>tmux</code>, <code>yt-dlp</code> and friends, ready from the first login.</p>
+          <h3>101-glyph alphabet &amp; 7-page manual</h3>
+          <p>Every UI glyph is verified against Debian <code>forky</code>'s fonts (0 tofu boxes), and the built-in <strong>Learn</strong> viewer renders the full manual right inside <code>foot</code>.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <h3>Modular health checks</h3>
-          <p><code>check-system.sh</code> prints OK/WARN/FAIL across core, hardware, and desktop checks, reading live system metadata under <code>/etc/lazyos/</code>.</p>
+          <h3>Three-tier health witnesses</h3>
+          <p><code>./build.sh check</code> runs modular core, board hardware, and desktop checks reading <code>/etc/lazyos/</code> metadata plus font and layout invariants.</p>
         </article>
       </div>
     </div>
@@ -366,25 +403,34 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
   <section aria-labelledby="gal-h">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">ON REAL HARDWARE</span>
-        <h2 id="gal-h">Screenshots from the Hayato (v0.4)</h2>
+        <span class="kicker">ACROSS THE WORKFLOW</span>
+        <h2 id="gal-h">v0.5.1 highlights &amp; live captures</h2>
+        <p>Every panel shares one design language, keyboard grammar, and verified icon table.</p>
       </div>
       <div class="gallery">
         <figure>
-          <div class="shot"><img src="screenshots/hayato-r1-keys.png" width="1920" height="1200" loading="lazy" alt="The key binding viewer listing every shortcut parsed from the sway configuration"></div>
-          <figcaption>Alt+Ctrl+K: every binding, parsed from the session's own files. Enter copies the command.</figcaption>
+          <div class="shot"><img src="screenshots/v051-greeter.png" width="1920" height="1200" loading="lazy" alt="Native lazyos-greeter login canvas with user pills, blinking password cursor, session and theme pills, and power strip"></div>
+          <figcaption><strong>Native Greeter (v0.5.1):</strong> <code>lazyos-greeter</code> over <code>greetd</code> IPC with blinking focus cursors, <code>F4</code> theme switcher, and polkit power controls.</figcaption>
         </figure>
         <figure>
-          <div class="shot"><img src="screenshots/hayato-r1-busy.png" width="1920" height="1200" loading="lazy" alt="A Wi-Fi scan in progress with a notification card and a spinner on the bar"></div>
-          <figcaption>A Wi-Fi scan: the card becomes the answer when the scan ends.</figcaption>
+          <div class="shot"><img src="screenshots/v051-theme.png" width="1920" height="1200" loading="lazy" alt="Theme picker showing 16 palettes, live Sixel wallpaper simulation, Waybar preview, ANSI swatches, and WCAG contrast checks"></div>
+          <figcaption><strong>16-Theme Engine:</strong> live wallpaper, bar, ANSI palette, and accessibility preview across 13 synced surfaces.</figcaption>
         </figure>
         <figure>
-          <div class="shot"><img src="screenshots/hayato-r1-files.png" width="1920" height="1200" loading="lazy" alt="The file browser listing folders with icons"></div>
-          <figcaption>Files browser: text opens in the terminal, everything else in Firefox.</figcaption>
+          <div class="shot"><img src="screenshots/v051-installer.png" width="1920" height="1200" loading="lazy" alt="Pure-Rust 6-step system installer verifying platform SoC, Depthcharge boot backend, target disk, and utilities"></div>
+          <figcaption><strong>Guided Disk Installer:</strong> pre-flight SoC, power, and partition-tool verification before writing internal storage.</figcaption>
         </figure>
         <figure>
-          <div class="shot"><img src="screenshots/hayato-r1-settings.png" width="1920" height="1200" loading="lazy" alt="The settings menu with radios, night light, touchpad and rotation"></div>
-          <figcaption>Settings: radios, night light, touchpad and rotation, one menu away.</figcaption>
+          <div class="shot"><img src="screenshots/v051-agents.png" width="1920" height="1200" loading="lazy" alt="AI Agents menu listing Claude Code, Codex, OpenCode, Gemini CLI, GitHub Copilot, default agent selector, and terminal workspace"></div>
+          <figcaption><strong>AI Agents Menu (Alt+Ctrl+Shift+A):</strong> install, pick, and isolate multi-account profiles in <code>~/Work</code>.</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="screenshots/v051-keys.png" width="1920" height="1200" loading="lazy" alt="Searchable keybindings viewer parsed directly from active Sway configuration files"></div>
+          <figcaption><strong>Live Keybindings (Alt+Ctrl+K):</strong> parsed directly from Sway configs—type to filter, Enter copies the command.</figcaption>
+        </figure>
+        <figure>
+          <div class="shot"><img src="screenshots/hayato-r1-sway.png" width="1920" height="1200" loading="lazy" alt="Full Wayland session on Google Hayato Chromebook with Waybar system telemetry, terminal prompt, and desktop notes"></div>
+          <figcaption><strong>On Google Hayato (MT8192):</strong> Waybar system telemetry, tiling terminal, Starship prompt, and TUI notes on Chromebook hardware.</figcaption>
         </figure>
       </div>
     </div>
@@ -401,7 +447,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <div class="step">
           <div>
             <h3>Download a release image</h3>
-            <p>Get <code>google-asurada.img.xz</code> (Hayato), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases">Releases</a> (<code>v0.5.0</code> shipped <code>google-asurada</code>; subsequent releases build all three targets via our Hybrid Matrix).</p>
+            <p>Get <code>google-asurada.img.xz</code> (Hayato), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">v0.5.1 Releases</a>—built across all three targets via our Hybrid Matrix.</p>
           </div>
         </div>
         <div class="step">
@@ -496,6 +542,34 @@ document.querySelectorAll('.copy').forEach(function (b) {
     if (navigator.clipboard) { navigator.clipboard.writeText(t).then(done, function () {}); }
   });
 });
+
+(function () {
+  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab[role="tab"]'));
+  var img = document.getElementById('spot-img');
+  var cap = document.getElementById('spot-cap');
+  var cmd = document.getElementById('spot-cmd');
+  if (!tabs.length || !img || !cap || !cmd) return;
+
+  function activate(tab) {
+    tabs.forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+    img.src = tab.getAttribute('data-src');
+    img.alt = tab.getAttribute('data-alt');
+    cap.textContent = tab.getAttribute('data-cap');
+    cmd.textContent = tab.getAttribute('data-cmd');
+  }
+
+  tabs.forEach(function (tab, i) {
+    tab.addEventListener('click', function () { activate(tab); });
+    tab.addEventListener('keydown', function (ev) {
+      if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
+        ev.preventDefault();
+        var next = tabs[(i + (ev.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
+        next.focus();
+        activate(next);
+      }
+    });
+  });
+})();
 </script>
 </body>
 </html>

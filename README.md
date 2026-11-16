@@ -1,6 +1,6 @@
 <p align="center"><img src="desktop/brand/social-preview.png" width="720" alt="lazyOS_ - Debian for ARM Chromebooks &amp; Mainline ARM64. Keyboard first. Lazy by design."></p>
 
-# LazyOS (`0.5.0`)
+# LazyOS (`0.5.1`)
 
 **Website:** [brunux.github.io/LazyOS](https://brunux.github.io/LazyOS/) · **Brand:** [`desktop/brand/`](https://github.com/Brunux/lazyos-desktop/tree/main/brand)
 
