@@ -26,7 +26,8 @@ The boot login screen still runs `tuigreet` 0.9.1: a static black-and-white/ANSI
   - Live theme switcher (`F4` / `^T` / ActionStrip) across all 16 built-in themes via `Screen::design()` and PTY OSC palette updates.
   - Bottom `ActionStrip` for `Session`, `Theme`, `Sleep`, `Reboot`, and `Shut down` with mandatory inline Cancel-first confirmation before any power action.
 - VT7 compositor session launcher (`lazyos-greeter --session`): generates theme-matched `foot.ini`, `sway.conf`, and wallpaper PNG under `${XDG_RUNTIME_DIR:-/tmp}/lazyos-greeter/` (`--prepare-session` prints paths cleanly for validation) and launches minimal `sway` + `swaybg` wallpaper + fullscreen `foot` running `lazyos-greeter --ui`, falling back cleanly to running `GreeterScreen` directly on VT7 TTY if `sway` or `foot` cannot start.
-- Syncs theme automatically with remembered user's `~/.local/state/lazyos/theme/active` (when readable) or `/var/lib/lazyos/greeter/theme` or `/etc/lazyos/greeter.toml`, defaulting to `solarized`.
+- Syncs theme automatically with remembered user's `~/.local/state/lazyos/theme/active` (when `follow_user_theme = true`, the default) or enforces the configured `/etc/lazyos/greeter.toml` default theme (`follow_user_theme = false`), defaulting to `solarized`.
+- Native **Greeter Settings** surface (`src/greeter/settings.rs`, opened via `lazyos menu greeter`, `lazyos greeter settings`, **Settings → Login screen (Greeter)**, Root Menu **Greeter settings**, or **Ctrl+G** / **F9** inside `lazyos greeter --preview`) editing `/etc/lazyos/greeter.toml` (`follow_user_theme`, `theme`, `show_user_pills`, `remember_user`, `default_session`, `remember_session`, `clock_24h`, `show_power_actions`, `greeting`) with Cancel-first Reset and live preview handoff.
 - Retire `tuigreet` from `uis/sway/packages.list` and update `scripts/rootfs-setup.sh` to configure `/etc/greetd/config.toml` and `/var/lib/lazyos/greeter`.
 
 **Out:**
