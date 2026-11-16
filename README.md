@@ -31,7 +31,7 @@ Useful `./build.sh` targets:
 - `./build.sh desktop` — Stage SwayFX, Workstyle, and Rust `lazyos` binaries
 - `./build.sh rootfs` — Debootstrap Debian `forky` arm64 and install kernel + desktop
 - `./build.sh image [IMG]` — Build sanitized disk image via configured `boot_type`
-- `./build.sh release [DIR]` — Build compressed `.img.xz`, `-rootfs.tar.zst`, optional `.vmlinuz.kpart`, and `SHA256SUMS`
+- `./build.sh release [DIR]` — Build sanitized, compressed `<target>.img.xz` release image and `SHA256SUMS`
 - `./build.sh check` — Run modular health verification (`10-core.sh` + `20-device.sh` + `30-desktop.sh`)
 - `./build.sh validate` — Validate devices, Kconfig fragments, shell scripts, and umbrella paths
 
