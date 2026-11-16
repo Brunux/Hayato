@@ -48,7 +48,7 @@ jobs:
             # their record, not an assignment.
             grep -qE '`claude-(fable|opus|sonnet|haiku)-[0-9]+-[0-9]+`|opencode-go/' "$file" ||
               { echo "FAIL $file: no model assigned (a claude-* ID, specs/README.md §6)"; status=1; }
-            grep -q "scripts/check-system.sh" "$file" ||
+            grep -qE "scripts/check-(system|core|desktop)\.sh|check-device\.sh" "$file" ||
               { echo "FAIL $file: no check-system witness"; status=1; }
             grep -q "usr/share/doc/lazyos" "$file" ||
               { echo "FAIL $file: no manual witness"; status=1; }

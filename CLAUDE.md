@@ -1,13 +1,10 @@
 # CLAUDE.md
 
-`AGENTS.md` is this repository's instructions file, and it is the one every agent reads: the
-image ships OpenCode, which reads it by that name, and the specs are built with Claude models
-(`specs/README.md` §6). This file only makes Claude Code load the same text, so there is one set
-of rules and no second copy to drift.
-
 @AGENTS.md
 
-When the work is a spec, `specs/README.md` is the process (branch, commits, the three witnesses,
-the definition of done) and the spec file is the task. The PR body records the model, the effort
-and the harness that did the work (`.github/PULL_REQUEST_TEMPLATE.md`), and the AI never merges
-its own PR.
+## Working in the Umbrella
+- Read the owning submodule's `AGENTS.md` (`core/AGENTS.md`, `desktop/AGENTS.md`, or
+  `devices/AGENTS.md`) instead of loading all repositories at once.
+- On 8-core ARM64 targets (MT8192), pin Cargo compilation/tests with `taskset -c 4-7` and `-j 4`.
+- Always create and push PRs/branches targeting the owning sub-repository cleanly; never push
+  directly to remotes unless requested.

@@ -1,17 +1,11 @@
-# The landing page: site/ plus the pictures it borrows from the repository
-# (brand/ and docs/screenshots/), published to GitHub Pages on every push to
-# main that touches them.  Nothing is built: the page is one HTML file, and the
-# assembly below is a copy, so a local preview is the same three copies.
-#
-# One-time setup: Settings > Pages > Build and deployment > Source: GitHub Actions.
-name: Pages
+name: Deploy landing page
 
 on:
   push:
     branches: [main]
     paths:
       - "site/**"
-      - "brand/**"
+      - "desktop"
       - "docs/screenshots/**"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
@@ -23,30 +17,29 @@ permissions:
 
 concurrency:
   group: pages
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
-
-      - name: Assemble the site
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Assemble site
         run: |
+          rm -rf _site
+          cp -a site _site
           mkdir -p _site/brand _site/screenshots
-          cp -R site/. _site/
-          cp brand/lazyos.svg brand/social-preview.png _site/brand/
+          cp desktop/brand/lazyos.svg desktop/brand/social-preview.png _site/brand/
+          [ -f desktop/brand/apple-touch-icon.png ] && cp desktop/brand/apple-touch-icon.png _site/apple-touch-icon.png
           cp docs/screenshots/*.png _site/screenshots/
-          touch _site/.nojekyll
-
       - uses: actions/configure-pages@v5
-
       - uses: actions/upload-pages-artifact@v3
         with:
           path: _site
-
       - id: deployment
         uses: actions/deploy-pages@v4

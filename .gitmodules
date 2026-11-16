@@ -1,0 +1,9 @@
+[submodule "core"]
+	path = core
+	url = https://github.com/Brunux/lazyos-core.git
+[submodule "desktop"]
+	path = desktop
+	url = https://github.com/Brunux/lazyos-desktop.git
+[submodule "devices"]
+	path = devices
+	url = https://github.com/Brunux/lazyos-devices.git

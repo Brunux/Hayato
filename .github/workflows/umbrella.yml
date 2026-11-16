@@ -1,0 +1,41 @@
+name: Umbrella Integration
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true
+      - name: Verify submodule layout and shell syntax
+        run: |
+          ./build.sh validate
+      - name: Verify umbrella cross-repo resolution for core/lib.sh
+        run: |
+          TMP="$(mktemp -d)"
+          (
+            export BUILD_ROOT="$TMP/build"
+            export LAZYOS_ROOT_DIR="$PWD"
+            export DEVICE="google-asurada"
+            . ./core/scripts/lib.sh
+            [ "$BOOT_TYPE" = "depthcharge" ]
+            [ "$KERNEL_RELEASE" = "7.2.7-mt81" ]
+            [ -d "$DEVICES_DIR/google-asurada" ]
+            [ -d "$UI_DIR/files" ]
+            [ "$VERSION" = "" ] || true
+            echo "Umbrella lib.sh OK: $DEVICE $KERNEL_RELEASE $BOOT_TYPE"
+          )
+          [ "$(cat VERSION)" = "$(cat core/VERSION)" ]
+          [ "$(cat VERSION)" = "$(cat desktop/VERSION)" ]
+          rm -rf "$TMP"
+      - name: Verify Pages assembly paths
+        run: |
+          test -f site/index.html
+          test -f desktop/brand/lazyos.svg
+          test -f desktop/brand/social-preview.png
+          test -f desktop/brand/apple-touch-icon.png

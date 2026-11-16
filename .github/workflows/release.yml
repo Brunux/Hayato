@@ -1,90 +1,67 @@
-# Release: a tag builds the aarch64 binaries, checks the version and the notes,
-# and publishes the GitHub release with its checksums.
-#
-# The disk image is deliberately *not* built here. It needs a kernel build,
-# debootstrap, a loop device and root (scripts/build.sh, scripts/make-image.sh),
-# which a hosted runner does not give; publishing an artifact this workflow
-# cannot test would contradict the release rule in AGENTS.md. So the release
-# publishes what CI can vouch for (the framework binaries, tested at the same
-# commit) and the notes point at the image the maintainer builds on the device.
-name: Release
+name: Build release assets
 
 on:
   push:
-    tags: ["v*"]
+    tags:
+      - "v*"
 
 permissions:
   contents: write
 
-env:
-  CARGO_TERM_COLOR: always
-
 jobs:
-  publish:
-    name: build and publish
-    # arm64: the device is aarch64 and the binaries ship as they run. The arm
-    # hosted runner is available for public repositories; on a plan without it
-    # the job needs a self-hosted arm64 runner with the same labels.
-    runs-on: ubuntu-24.04-arm
-    defaults:
-      run:
-        working-directory: rust
+  verify-tag:
+    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - name: Check the tag against VERSION and the notes
-        working-directory: .
+          submodules: true
+      - name: Tag matches VERSION, submodules, and release notes
         run: |
-          set -eu
           tag="${GITHUB_REF_NAME}"
-          version=$(cat VERSION)
-          if [ "$tag" != "v$version" ]; then
-            echo "VERSION is $version but the tag is $tag"
+          expected="v$(tr -d '\n' < VERSION)"
+          if [ "$tag" != "$expected" ]; then
+            echo "tag $tag does not match VERSION ($expected)"
             exit 1
           fi
+          for vfile in core/VERSION desktop/VERSION; do
+            subver="v$(tr -d '\n' < "$vfile")"
+            if [ "$tag" != "$subver" ]; then
+              echo "tag $tag does not match $vfile ($subver)"
+              exit 1
+            fi
+          done
           if [ ! -f "docs/releases/$tag.md" ]; then
             echo "docs/releases/$tag.md is missing (it is the release body)"
             exit 1
           fi
 
-      - name: Install the toolchain
-        uses: dtolnay/rust-toolchain@stable
-
-      - name: Cache the registry and the target directory
-        uses: Swatinem/rust-cache@v2
+  build:
+    needs: verify-tag
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@v4
         with:
-          workspaces: rust
-
-      - name: Test the tagged commit
-        run: cargo test --workspace --all-targets
-
-      - name: Build
-        run: cargo build --workspace --release
-
-      - name: Package the binaries
-        working-directory: .
+          submodules: true
+      - name: Build tools
+        run: sudo ./core/scripts/00-deps.sh
+      - name: Free space for the build
         run: |
-          set -eu
-          mkdir -p dist
-          # Every top-level executable the workspace produces: the `lazyos`
-          # session binary and the sixel spike.
-          find rust/target/release -maxdepth 1 -type f -perm -u+x ! -name '*.d' \
-            -exec cp {} dist/ \;
-          if [ -z "$(ls -A dist)" ]; then
-            echo "the workspace produced no binary to publish"
-            exit 1
-          fi
-          ( cd dist && sha256sum -- * > SHA256SUMS )
-          ls -l dist
-
-      - name: Publish the release
-        working-directory: .
+          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
+          df -h
+      - name: Build rootfs and images
+        run: |
+          export BUILD_ROOT=/var/tmp/lazyos-build
+          sudo -E ./build.sh all
+          sudo -E ./build.sh release "$PWD/out"
+      - name: Publish GitHub Release
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "$GITHUB_REF_NAME" \
+            out/*.img.xz \
+            out/*-rootfs.tar.zst \
+            out/*.vmlinuz.kpart \
+            out/SHA256SUMS \
             --title "$GITHUB_REF_NAME" \
             --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
-            dist/*
+            --verify-tag
