@@ -156,6 +156,19 @@ yet present in `scripts/` as not implemented.
   passing `--passphrase-file` to GPG. `check-system.sh` witnesses that `lib-rofi.sh` is absent, that
   all session menus and launcher entries resolve natively, that disk menus resolve `/usr/sbin` tools
   under stripped environments, and that notification icons resolve against `lazyos --icon-names`.
+- **The boot greeter runs natively in the LazyOS framework (`lazyos-greeter`), retiring `tuigreet`
+  0.9.1** (spec 021). Implemented as the `greeter` command inside the `lazyos` multi-call binary
+  (`/usr/bin/lazyos-greeter -> lazyos`) using a pure-Rust `UnixStream` JSON `greetd` IPC client
+  rather than adding a separate Ratatui binary or external crate. At boot, `greetd` runs
+  `/usr/bin/lazyos-greeter --session` on VT7, which prepares theme-matched `foot.ini`, `sway.conf`,
+  and a generated theme wallpaper, then launches minimal `sway` with fullscreen `foot` hosting
+  `lazyos greeter --ui` (automatically falling back to inline Ratatui TUI on the raw console if
+  Wayland/DRM fails to start). Syncing active themes from the last user's state (or
+  `/var/lib/lazyos/greeter`), `GreeterScreen` supports mouse/touch user pills, masked PAM secrets
+  and multi-step challenges, Wayland/X11 `.desktop` session discovery (`DesktopNames` exported as
+  `XDG_CURRENT_DESKTOP`), live theme cycling (`F4` / `Ctrl+T`), Cancel-first power confirmations, and
+  safe in-session testing via `lazyos greeter --preview`. `check-system.sh` witnesses that
+  `lazyos-greeter` is installed, passes `--check`, and is configured under `/etc/greetd/config.toml`.
 - **Ratatui is not the expensive part, and that is measured rather than assumed**
   ([`docs/optimization.md`](docs/optimization.md) §13). Against a crossterm-only app doing the same
   job it adds 23.6 s to a clean build, 89 MB of `target/`, 328 KB of stripped binary, **no**
