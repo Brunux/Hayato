@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>LazyOS: Debian Linux for ARM Chromebooks · lazy by design</title>
-<meta name="description" content="LazyOS is Debian (forky, arm64) for ARM Chromebooks like the Google Hayato (MediaTek MT8192): postmarketOS hardware support, a keyboard-first swayfx desktop, built-in AI agents, and a free image you flash to microSD, then install to internal storage from the running card.">
+<title>LazyOS: Debian Linux for ARM64 &amp; ARM Chromebooks · lazy by design</title>
+<meta name="description" content="LazyOS is Debian (forky, arm64) for Google Hayato (MT8192) Chromebooks and mainline ARM64 UEFI/extlinux systems: tuned kernel support on Hayato, Debian linux-image-arm64 on generic targets, a keyboard-first swayfx desktop with pure-Rust lazyos TUI/greeter/installer tools, and free images you boot and install from microSD or USB.">
 <link rel="canonical" href="https://brunux.github.io/LazyOS/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Brunux">
@@ -17,18 +17,18 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="LazyOS">
 <meta property="og:locale" content="en_US">
-<meta property="og:title" content="LazyOS: Debian Linux for ARM Chromebooks">
-<meta property="og:description" content="Debian for ARM Chromebooks. Keyboard first. Lazy by design.">
+<meta property="og:title" content="LazyOS: Debian Linux for ARM64 &amp; ARM Chromebooks">
+<meta property="og:description" content="Debian arm64 for Chromebooks and Mainline ARM64. Keyboard first. Lazy by design.">
 <meta property="og:url" content="https://brunux.github.io/LazyOS/">
 <meta property="og:image" content="https://brunux.github.io/LazyOS/brand/social-preview.png">
 <meta property="og:image:width" content="1280">
 <meta property="og:image:height" content="640">
-<meta property="og:image:alt" content="lazyOS_ - Debian for ARM Chromebooks. Keyboard first. Lazy by design.">
+<meta property="og:image:alt" content="lazyOS_ - Debian for ARM Chromebooks and Mainline ARM64. Keyboard first. Lazy by design.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="LazyOS: Debian Linux for ARM Chromebooks">
-<meta name="twitter:description" content="Debian for ARM Chromebooks. Keyboard first. Lazy by design.">
+<meta name="twitter:title" content="LazyOS: Debian Linux for ARM64 &amp; ARM Chromebooks">
+<meta name="twitter:description" content="Debian arm64 for Chromebooks and Mainline ARM64. Keyboard first. Lazy by design.">
 <meta name="twitter:image" content="https://brunux.github.io/LazyOS/brand/social-preview.png">
-<meta name="twitter:image:alt" content="lazyOS_ - Debian for ARM Chromebooks. Keyboard first. Lazy by design.">
+<meta name="twitter:image:alt" content="lazyOS_ - Debian for ARM Chromebooks and Mainline ARM64. Keyboard first. Lazy by design.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -46,13 +46,13 @@
       "@id": "https://brunux.github.io/LazyOS/#software",
       "name": "LazyOS",
       "alternateName": "lazyOS_",
-      "description": "Debian (forky, arm64) for ARM Chromebooks, built on postmarketOS hardware support, with a keyboard-first swayfx desktop.",
+      "description": "Debian (forky, arm64) for Google Hayato Chromebooks and mainline ARM64 UEFI/extlinux systems, with a keyboard-first swayfx desktop and pure-Rust TUI suite.",
       "url": "https://brunux.github.io/LazyOS/",
       "image": "https://brunux.github.io/LazyOS/brand/social-preview.png",
       "applicationCategory": "Operating system",
       "operatingSystem": "Linux (Debian forky, arm64)",
-      "softwareVersion": "0.4.1",
-      "downloadUrl": "https://github.com/Brunux/LazyOS/releases/tag/v0.4.1",
+      "softwareVersion": "0.5.0",
+      "downloadUrl": "https://github.com/Brunux/LazyOS/releases",
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "author": { "@type": "Person", "name": "Brunux", "url": "https://github.com/Brunux" },
@@ -264,21 +264,21 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
       <div class="row" style="padding-left: 36px"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
     </div>
     <div class="wrap">
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>v0.4.1 · Debian forky · arm64</span>
+      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>v0.5.0 · Debian forky · arm64</span>
       <h1>lazyOS<span class="cur blink">_</span></h1>
-      <p class="lede">Debian for ARM Chromebooks. Keyboard first. <em>Lazy by design.</em></p>
-      <p class="sub">Real Debian above the kernel, postmarketOS-grade hardware support below it, and a swayfx session where the thing to press is always on the screen. The system does the boring part.</p>
+      <p class="lede">Debian arm64 for Chromebooks &amp; Mainline ARM64. Keyboard first. <em>Lazy by design.</em></p>
+      <p class="sub">Real Debian above the kernel, board-tuned support for Hayato plus stock Debian <code>linux-image-arm64</code> for UEFI and U-Boot targets, and a <code>swayfx</code> session driven by our pure-Rust TUI suite.</p>
       <div class="ctas">
-        <a class="btn btn-primary" href="https://github.com/Brunux/LazyOS/releases/tag/v0.4.1">
+        <a class="btn btn-primary" href="https://github.com/Brunux/LazyOS/releases">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"/><path d="m6 11 6 6 6-6"/><path d="M5 20h14"/></svg>
-          Download v0.4.1
+          Releases (v0.5.0)
         </a>
         <a class="btn btn-ghost" href="https://github.com/Brunux/LazyOS">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5"/><path d="m16 7 5 5-5 5"/></svg>
           View the source
         </a>
       </div>
-      <p class="meta">First target: Google Hayato (ASUS Chromebook Detachable CM3, MediaTek MT8192)</p>
+      <p class="meta">Targets: <code>google-asurada</code> (Hayato MT8192) · <code>arm64-uefi</code> · <code>arm64-extlinux</code></p>
     </div>
   </div>
 
@@ -287,14 +287,14 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
       <div class="sec-head">
         <span class="kicker">THE SESSION</span>
         <h2 id="look">Everything is one keystroke away</h2>
-        <p>swayfx with blur and rounded corners, waybar on top, and rofi for the launcher, the window switcher and every menu the bar opens. Foot in Solarized, mako for notifications, and a manual you can open from the launcher.</p>
+        <p><code>swayfx</code> with blur and rounded corners, <code>waybar</code> on top, and native Ratatui menus (<code>lazyos</code>) for the launcher, window switcher, settings, and installer — plus <code>lazyos-greeter</code> at login, <code>lazyos-notify</code> cards, and an interactive manual.</p>
       </div>
       <figure>
         <div class="shot">
           <div class="bar" aria-hidden="true"><span></span><span></span><span></span></div>
-          <img src="screenshots/hayato-r1-launcher.png" width="1920" height="1200" alt="The LazyOS desktop with the rofi launcher open, listing Agents, Audio output, Bluetooth, btop, Calculator, Dictation, Files and Foot">
+          <img src="screenshots/hayato-r1-launcher.png" width="1920" height="1200" alt="The LazyOS desktop launcher listing Agents, Audio output, Bluetooth, btop, Calculator, Dictation, Files and Foot">
         </div>
-        <figcaption>The launcher on the Hayato. Applications get icons from a small theme LazyOS renders from the same icon font the bar uses.</figcaption>
+        <figcaption>The launcher on the Hayato (capture from v0.4). Applications and menus share one icon &amp; glyph vocabulary with the bar.</figcaption>
       </figure>
     </div>
   </section>
@@ -325,8 +325,8 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
     <div class="wrap">
       <div class="sec-head">
         <span class="kicker">LAZY, ON PURPOSE</span>
-        <h2 id="feat-h">Features that are one script each</h2>
-        <p>No daemons waiting around. Each feature is a small script you can read, and anything that takes seconds says so.</p>
+        <h2 id="feat-h">Native Rust tools, zero background bloat</h2>
+        <p>No background polling daemons. One multi-call <code>lazyos</code> binary drives every TUI surface, greeter, theme compiler, and installer.</p>
       </div>
       <div class="grid">
         <article class="card">
@@ -337,17 +337,17 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></div>
           <h3>Dictation, offline</h3>
-          <p><code>parecord</code> → <code>whisper-cli</code> → <code>wtype</code>. The model is fetched and verified on first use. No daemon.</p>
+          <p><code>parecord</code> → <code>whisper-cli</code> → <code>wtype</code>. Hold <kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>X</kbd> for push-to-talk or tap for hands-free capture.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3"/><path d="M12 18v3"/><path d="m5.6 5.6 2.1 2.1"/><path d="m16.3 16.3 2.1 2.1"/><path d="M3 12h3"/><path d="M18 12h3"/></svg></div>
           <h3>Slow actions say so twice</h3>
-          <p>A scan or a connection opens a notification that becomes the result, plus a spinner on the bar with the task's name. Both vanish when it's done.</p>
+          <p>Scans and installs show live progress inside the window alongside a Waybar spinner, and headless events emit themed <code>lazyos-notify</code> cards.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h6"/><path d="M8 11h6"/></svg></div>
           <h3>Learn, on the machine</h3>
-          <p>A seven-page manual in the launcher, rendered with glow in the terminal: welcome, rofi, shortcuts, software, the system, troubleshooting, agents.</p>
+          <p>A seven-page manual in the launcher, rendered directly in the terminal: welcome, menus, shortcuts, software, the system, troubleshooting, agents.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 17V7"/><path d="M8 17V4"/><path d="M12 17v-6"/><path d="M16 17V9"/><path d="M20 17v-3"/><path d="M3 20h18"/></svg></div>
@@ -356,8 +356,8 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <h3>One command health check</h3>
-          <p><code>check-system.sh</code> prints OK/WARN/FAIL, one line per check, and verifies the machine still matches the repository it was built from.</p>
+          <h3>Modular health checks</h3>
+          <p><code>check-system.sh</code> prints OK/WARN/FAIL across core, hardware, and desktop checks, reading live system metadata under <code>/etc/lazyos/</code>.</p>
         </article>
       </div>
     </div>
@@ -367,7 +367,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
     <div class="wrap">
       <div class="sec-head">
         <span class="kicker">ON REAL HARDWARE</span>
-        <h2 id="gal-h">Screenshots from the Hayato</h2>
+        <h2 id="gal-h">Screenshots from the Hayato (v0.4)</h2>
       </div>
       <div class="gallery">
         <figure>
@@ -379,8 +379,8 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
           <figcaption>A Wi-Fi scan: the card becomes the answer when the scan ends.</figcaption>
         </figure>
         <figure>
-          <div class="shot"><img src="screenshots/hayato-r1-files.png" width="1920" height="1200" loading="lazy" alt="The rofi file browser listing folders with icons"></div>
-          <figcaption>Files in rofi: text opens in the terminal, everything else in Firefox.</figcaption>
+          <div class="shot"><img src="screenshots/hayato-r1-files.png" width="1920" height="1200" loading="lazy" alt="The file browser listing folders with icons"></div>
+          <figcaption>Files browser: text opens in the terminal, everything else in Firefox.</figcaption>
         </figure>
         <figure>
           <div class="shot"><img src="screenshots/hayato-r1-settings.png" width="1920" height="1200" loading="lazy" alt="The settings menu with radios, night light, touchpad and rotation"></div>
@@ -393,61 +393,60 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
   <section id="install" class="alt" aria-labelledby="inst-h">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">FROM CARD TO EMMC</span>
-        <h2 id="inst-h">Install from a microSD card</h2>
-        <p>The card is the installer. Boot it once, and the same system copies itself onto the internal disk.</p>
+        <span class="kicker">FROM EXTERNAL MEDIA TO DISK</span>
+        <h2 id="inst-h">Flash an image, install to internal storage</h2>
+        <p>Boot the live image from microSD or USB, then clone the running system onto internal storage with our pure-Rust installer.</p>
       </div>
       <div class="steps">
         <div class="step">
           <div>
-            <h3>Download the release</h3>
-            <p>Get <code>google-asurada.img.xz</code> and <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.4.1">the v0.4.1 release</a>.</p>
+            <h3>Download a release image</h3>
+            <p>Get <code>google-asurada.img.xz</code> (Hayato), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases">Releases</a> (<code>v0.5.0</code> shipped <code>google-asurada</code>; subsequent releases build all three targets via our Hybrid Matrix).</p>
           </div>
         </div>
         <div class="step">
           <div>
-            <h3>Verify and write the card</h3>
+            <h3>Verify and write the drive</h3>
             <div class="code">
-              <button class="copy" type="button" data-copy="sha256sum -c SHA256SUMS&#10;xz -dc google-asurada.img.xz | sudo dd of=/dev/mmcblk1 bs=4M conv=fsync">Copy</button>
-<pre><span class="p">$ </span>sha256sum -c SHA256SUMS
-<span class="p">$ </span>xz -dc google-asurada.img.xz | sudo dd of=/dev/mmcblk1 bs=4M conv=fsync</pre>
+              <button class="copy" type="button" data-copy="sha256sum -c --ignore-missing SHA256SUMS&#10;xz -dc &lt;target&gt;.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync">Copy</button>
+<pre><span class="p">$ </span>sha256sum -c --ignore-missing SHA256SUMS
+<span class="p">$ </span>xz -dc &lt;target&gt;.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync</pre>
             </div>
-            <p>Replace <code>/dev/mmcblk1</code> with your card's device. <code>dd</code> overwrites it.</p>
+            <p>Replace <code>&lt;target&gt;.img.xz</code> and <code>/dev/sdX</code> (or <code>/dev/mmcblk1</code>) with your image and card/USB device. <code>dd</code> overwrites the entire drive.</p>
           </div>
         </div>
         <div class="step">
           <div>
-            <h3>Allow external boot on the Chromebook</h3>
-            <p>Enter developer mode, then from a shell:</p>
+            <h3>Boot the external drive</h3>
+            <p>On UEFI or U-Boot boards, choose the flashed drive in your firmware boot menu. On a Chromebook (<code>google-asurada</code>), enter developer mode and allow external boot:</p>
             <div class="code">
               <button class="copy" type="button" data-copy="crossystem dev_boot_usb=1 dev_boot_signed_only=0">Copy</button>
 <pre><span class="p">$ </span>crossystem dev_boot_usb=1 dev_boot_signed_only=0</pre>
             </div>
-            <p>Insert the card and pick <strong>external disk</strong> in the firmware menu.</p>
+            <p>Insert the card and press <kbd>Ctrl</kbd>+<kbd>U</kbd> / pick <strong>external disk</strong> in the firmware menu.</p>
           </div>
         </div>
         <div class="step">
           <div>
             <h3>Log in, then change the password</h3>
-            <p>It comes up to a greetd prompt: user <code>brunux</code>, password <code>debian</code>, passwordless sudo. Run <code>passwd</code> before using it for anything real.</p>
+            <p><code>lazyos-greeter</code> starts automatically: live user <code>brunux</code>, password <code>debian</code>, passwordless sudo. Run <code>passwd</code> before using it daily.</p>
           </div>
         </div>
         <div class="step">
           <div>
             <h3>Install to the internal disk</h3>
-            <p><kbd>Alt</kbd> <kbd>Space</kbd> opens the root menu: pick <strong>Install LazyOS</strong>. It checks the charger, the disk and the kernel first, and says what is missing instead of starting.</p>
-            <p>Type <code>mmcblk0</code> when it asks for the disk's name. <strong>Cancel</strong> is the first row, so a stray Enter writes nothing.</p>
+            <p><kbd>Alt</kbd> <kbd>Space</kbd> opens the root menu: pick <strong>Install LazyOS</strong> (or run <code>lazyos installer</code> in a terminal; headless: <code>sudo lazyos installer apply --clone --confirm</code>). It checks power and free disks, writes the target's boot layout (<code>depthcharge</code>, <code>uefi</code>, or <code>extlinux</code>), and defaults safely to Cancel until confirmed.</p>
+            <p>On Google Hayato, <code>CONFIRM=yes sudo /usr/libexec/lazyos/install-emmc.sh</code> remains available as a manual/debug fallback.</p>
           </div>
         </div>
         <div class="step">
           <div>
             <h3>Let it finish, then reboot</h3>
-            <p>The copy takes minutes and cannot be stopped. A notification and a spinner on the bar follow it; the log opens in a window.</p>
-            <p>It finishes by checking the disk it just wrote. Reboot and pick <strong>internal disk</strong> in the firmware menu.</p>
+            <p>The live clone copies the running system, updates boot metadata, and writes <code>/etc/lazyos/installation</code> last. Remove the external drive and reboot to the internal disk.</p>
           </div>
         </div>
       </div>
-      <p class="note"><strong>Read before you flash.</strong> The firmware is never touched: LazyOS boots through the stock signed kernel partition. Developer mode wipes ChromeOS, and <strong>Install LazyOS</strong> erases the internal disk. Keep a second computer and recovery media at hand; the card you booted is never written.</p>
+      <p class="note"><strong>Read before you flash.</strong> Stock system firmware is never overwritten. Developer mode wipes ChromeOS on Chromebooks, and the installer erases the selected internal disk. Keep a second computer and recovery media at hand; the running boot drive cannot be picked as the target.</p>
     </div>
   </section>
 
@@ -455,17 +454,17 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
     <div class="wrap split">
       <div class="prose">
         <span class="kicker">UNDER THE HOOD</span>
-        <h2 id="hood-h" style="margin: 14px 0 22px">Not a remix. A port.</h2>
-        <p>LazyOS reuses the hardware support of <strong>Nura</strong>, the postmarketOS-based system it started from: the kernel, device tree, patches, modules and boot flow. <strong>Debian supplies everything above the kernel.</strong></p>
-        <p>The port framework is device-agnostic: a new Chromebook is a new <code>devices/&lt;codename&gt;/</code> directory, and a new kernel only when the kernel differs. Every release is checked on real hardware, and the reports live in the repository.</p>
-        <p><a href="https://github.com/Brunux/LazyOS#architecture">Read the architecture</a></p>
+        <h2 id="hood-h" style="margin: 14px 0 22px">Modular by design.</h2>
+        <p>LazyOS pairs Debian <code>forky</code> userland with a clean three-submodule architecture: <a href="https://github.com/Brunux/lazyos-core"><code>lazyos-core</code></a> handles Debian assembly and pluggable boot backends, <a href="https://github.com/Brunux/lazyos-desktop"><code>lazyos-desktop</code></a> owns the <code>swayfx</code> session and Rust <code>lazyos</code> workspace, and <a href="https://github.com/Brunux/lazyos-devices"><code>lazyos-devices</code></a> isolates kernel recipes and board quirks.</p>
+        <p><code>google-asurada</code> retains a tuned <code>7.2.7-mt81</code> kernel (started from postmarketOS/Nura), while <code>arm64-uefi</code> and <code>arm64-extlinux</code> run stock Debian <code>linux-image-arm64</code> updated natively via <code>apt</code>.</p>
+        <p><a href="https://github.com/Brunux/LazyOS#clone--build">Read the architecture</a></p>
       </div>
       <dl class="facts">
-        <div><dt>Base</dt><dd style="margin:0">Debian forky, arm64</dd></div>
-        <div><dt>First device</dt><dd style="margin:0">Google Hayato · MT8192 · <code>google-asurada</code></dd></div>
-        <div><dt>Kernel</dt><dd style="margin:0">postmarketOS MediaTek MT81xx, signed FIT kpart</dd></div>
-        <div><dt>Session</dt><dd style="margin:0">swayfx · waybar · rofi · foot · mako</dd></div>
-        <div><dt>Works</dt><dd style="margin:0">display, input, storage, Wi-Fi, Bluetooth, audio, suspend, eMMC install, backup and restore</dd></div>
+        <div><dt>Base</dt><dd style="margin:0">Debian <code>forky</code>, <code>arm64</code></dd></div>
+        <div><dt>Targets</dt><dd style="margin:0"><code>google-asurada</code> · <code>arm64-uefi</code> · <code>arm64-extlinux</code></dd></div>
+        <div><dt>Kernels</dt><dd style="margin:0"><code>7.2.7-mt81</code> (Hayato) · Debian <code>linux-image-arm64</code> (UEFI / SBC)</dd></div>
+        <div><dt>Session</dt><dd style="margin:0"><code>swayfx</code> · <code>waybar</code> · <code>lazyos</code> TUI/greeter/notify · <code>foot</code></dd></div>
+        <div><dt>Repos</dt><dd style="margin:0"><code>LazyOS</code> umbrella · <code>core/</code> · <code>desktop/</code> · <code>devices/</code></dd></div>
         <div><dt>Firmware</dt><dd style="margin:0">never flashed</dd></div>
       </dl>
     </div>
