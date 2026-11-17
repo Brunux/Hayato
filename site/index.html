@@ -289,7 +289,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
           Source
         </a>
       </div>
-      <p class="meta">Targets: <code>google-asurada</code> (Hayato MT8192) · <code>arm64-uefi</code> · <code>arm64-extlinux</code></p>
+      <p class="meta">Targets: <code>google-asurada</code> (Hayato MT8192) · <code>google-kukui</code> (Kukui/Duet MT8183) · <code>arm64-uefi</code> · <code>arm64-extlinux</code></p>
     </div>
   </div>
 
@@ -447,7 +447,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <div class="step">
           <div>
             <h3>Download a release image</h3>
-            <p>Get <code>google-asurada.img.xz</code> (Hayato), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">v0.5.1 Releases</a>—built across all three targets via our Hybrid Matrix.</p>
+            <p>Get <code>google-asurada.img.xz</code> (Hayato MT8192), <code>google-kukui.img.xz</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">v0.5.1 Releases</a> (and upcoming matrix releases).</p>
           </div>
         </div>
         <div class="step">
@@ -464,7 +464,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <div class="step">
           <div>
             <h3>Boot the external drive</h3>
-            <p>On UEFI or U-Boot boards, choose the flashed drive in your firmware boot menu. On a Chromebook (<code>google-asurada</code>), enter developer mode and allow external boot:</p>
+            <p>On UEFI or U-Boot boards, choose the flashed drive in your firmware boot menu. On a Chromebook (<code>google-asurada</code> or <code>google-kukui</code>), enter developer mode and allow external boot:</p>
             <div class="code">
               <button class="copy" type="button" data-copy="crossystem dev_boot_usb=1 dev_boot_signed_only=0">Copy</button>
 <pre><span class="p">$ </span>crossystem dev_boot_usb=1 dev_boot_signed_only=0</pre>
@@ -502,13 +502,13 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <span class="kicker">UNDER THE HOOD</span>
         <h2 id="hood-h" style="margin: 14px 0 22px">Modular by design.</h2>
         <p>LazyOS pairs Debian <code>forky</code> userland with a clean three-submodule architecture: <a href="https://github.com/Brunux/lazyos-core"><code>lazyos-core</code></a> handles Debian assembly and pluggable boot backends, <a href="https://github.com/Brunux/lazyos-desktop"><code>lazyos-desktop</code></a> owns the <code>swayfx</code> session and Rust <code>lazyos</code> workspace, and <a href="https://github.com/Brunux/lazyos-devices"><code>lazyos-devices</code></a> isolates kernel recipes and board quirks.</p>
-        <p><code>google-asurada</code> retains a tuned <code>7.2.7-mt81</code> kernel (started from postmarketOS/Nura), while <code>arm64-uefi</code> and <code>arm64-extlinux</code> run stock Debian <code>linux-image-arm64</code> updated natively via <code>apt</code>.</p>
+        <p><code>google-asurada</code> and <code>google-kukui</code> share our tuned <code>7.2.7-mt81</code> kernel (started from postmarketOS/Nura), while <code>arm64-uefi</code> and <code>arm64-extlinux</code> run stock Debian <code>linux-image-arm64</code> updated natively via <code>apt</code>.</p>
         <p><a href="https://github.com/Brunux/LazyOS#clone--build">Read the architecture</a></p>
       </div>
       <dl class="facts">
         <div><dt>Base</dt><dd style="margin:0">Debian <code>forky</code>, <code>arm64</code></dd></div>
-        <div><dt>Targets</dt><dd style="margin:0"><code>google-asurada</code> · <code>arm64-uefi</code> · <code>arm64-extlinux</code></dd></div>
-        <div><dt>Kernels</dt><dd style="margin:0"><code>7.2.7-mt81</code> (Hayato) · Debian <code>linux-image-arm64</code> (UEFI / SBC)</dd></div>
+        <div><dt>Targets</dt><dd style="margin:0"><code>google-asurada</code> · <code>google-kukui</code> · <code>arm64-uefi</code> · <code>arm64-extlinux</code></dd></div>
+        <div><dt>Kernels</dt><dd style="margin:0"><code>7.2.7-mt81</code> (Hayato / Kukui) · Debian <code>linux-image-arm64</code> (UEFI / SBC)</dd></div>
         <div><dt>Session</dt><dd style="margin:0"><code>swayfx</code> · <code>waybar</code> · <code>lazyos</code> TUI/greeter/notify · <code>foot</code></dd></div>
         <div><dt>Repos</dt><dd style="margin:0"><code>LazyOS</code> umbrella · <code>core/</code> · <code>desktop/</code> · <code>devices/</code></dd></div>
         <div><dt>Firmware</dt><dd style="margin:0">never flashed</dd></div>

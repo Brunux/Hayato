@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: "Release target (all, google-asurada, arm64-uefi, arm64-extlinux)"
+        description: "Release target (all, google-asurada, google-kukui, arm64-uefi, arm64-extlinux)"
         required: true
         default: "all"
       publish:
@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       targets: ${{ steps.plan.outputs.targets }}
-      need_hayato_kernel: ${{ steps.plan.outputs.need_hayato_kernel }}
+      need_mt81_kernel: ${{ steps.plan.outputs.need_mt81_kernel }}
       should_publish: ${{ steps.plan.outputs.should_publish }}
     steps:
       - uses: actions/checkout@v4
@@ -50,23 +50,23 @@ jobs:
               echo "docs/releases/$tag.md is missing (it is the release body)"
               exit 1
             fi
-            targets='["google-asurada","arm64-uefi","arm64-extlinux"]'
-            need_hayato_kernel="true"
+            targets='["google-asurada","google-kukui","arm64-uefi","arm64-extlinux"]'
+            need_mt81_kernel="true"
             should_publish="true"
           else
             ./build.sh validate
             case "${{ github.event.inputs.target }}" in
               all)
-                targets='["google-asurada","arm64-uefi","arm64-extlinux"]'
-                need_hayato_kernel="true"
+                targets='["google-asurada","google-kukui","arm64-uefi","arm64-extlinux"]'
+                need_mt81_kernel="true"
                 ;;
-              google-asurada)
-                targets='["google-asurada"]'
-                need_hayato_kernel="true"
+              google-asurada|google-kukui)
+                targets='["${{ github.event.inputs.target }}"]'
+                need_mt81_kernel="true"
                 ;;
               arm64-uefi|arm64-extlinux)
                 targets='["${{ github.event.inputs.target }}"]'
-                need_hayato_kernel="false"
+                need_mt81_kernel="false"
                 ;;
               *)
                 echo "Unsupported target: ${{ github.event.inputs.target }}"
@@ -76,7 +76,7 @@ jobs:
             should_publish="false"
           fi
           echo "targets=$targets" >> "$GITHUB_OUTPUT"
-          echo "need_hayato_kernel=$need_hayato_kernel" >> "$GITHUB_OUTPUT"
+          echo "need_mt81_kernel=$need_mt81_kernel" >> "$GITHUB_OUTPUT"
           echo "should_publish=$should_publish" >> "$GITHUB_OUTPUT"
 
   build-desktop:
@@ -104,9 +104,9 @@ jobs:
           path: stages/desktop-stages.tar.zst
           retention-days: 2
 
-  build-hayato-kernel:
+  build-mt81-kernel:
     needs: verify
-    if: needs.verify.outputs.need_hayato_kernel == 'true'
+    if: needs.verify.outputs.need_mt81_kernel == 'true'
     runs-on: ubuntu-24.04-arm
     steps:
       - uses: actions/checkout@v4
@@ -114,25 +114,25 @@ jobs:
           submodules: true
       - name: Install build dependencies
         run: sudo ./core/scripts/00-deps.sh
-      - name: Free space for Hayato kernel build
+      - name: Free space for mediatek-mt81 kernel build
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
           df -h
-      - name: Build mediatek-mt81 kernel once (google-asurada)
+      - name: Build mediatek-mt81 kernel once (google-asurada & google-kukui)
         run: |
           export BUILD_ROOT=/var/tmp/lazyos-build
           DEVICE=google-asurada ./build.sh kernel
           mkdir -p stages
-          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - kernel-stage-mediatek-mt81 | zstd -T0 -6 -q -o stages/hayato-kernel-stage.tar.zst
+          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - kernel-stage-mediatek-mt81 | zstd -T0 -6 -q -o stages/mt81-kernel-stage.tar.zst
       - uses: actions/upload-artifact@v4
         with:
-          name: hayato-kernel-stage
-          path: stages/hayato-kernel-stage.tar.zst
+          name: mt81-kernel-stage
+          path: stages/mt81-kernel-stage.tar.zst
           retention-days: 2
 
   build-target:
-    needs: [verify, build-desktop, build-hayato-kernel]
-    if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-hayato-kernel.result == 'success' || needs.build-hayato-kernel.result == 'skipped') }}
+    needs: [verify, build-desktop, build-mt81-kernel]
+    if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') }}
     runs-on: ubuntu-24.04-arm
     strategy:
       fail-fast: false
@@ -153,17 +153,17 @@ jobs:
           name: desktop-stages
           path: stages
       - uses: actions/download-artifact@v4
-        if: matrix.target == 'google-asurada'
+        if: matrix.target == 'google-asurada' || matrix.target == 'google-kukui'
         with:
-          name: hayato-kernel-stage
+          name: mt81-kernel-stage
           path: stages
       - name: Assemble rootfs, images, and release archive
         run: |
           export BUILD_ROOT=/var/tmp/lazyos-build
           sudo mkdir -p "$BUILD_ROOT/work"
           sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/desktop-stages.tar.zst
-          if [ -f stages/hayato-kernel-stage.tar.zst ]; then
-            sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/hayato-kernel-stage.tar.zst
+          if [ -f stages/mt81-kernel-stage.tar.zst ]; then
+            sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/mt81-kernel-stage.tar.zst
           fi
           export DEVICE="${{ matrix.target }}"
           export SKIP_DESKTOP_BUILD=yes

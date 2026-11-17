@@ -35,6 +35,7 @@ jobs:
             )
           }
           check_profile google-asurada source 7.2.7-mt81 depthcharge 6144
+          check_profile google-kukui source 7.2.7-mt81 depthcharge 6144
           check_profile arm64-uefi debian-pkg debian-pkg uefi 8192
           check_profile arm64-extlinux debian-pkg debian-pkg extlinux 8192
           [ "$(cat VERSION)" = "$(cat core/VERSION)" ]

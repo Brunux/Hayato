@@ -4,8 +4,9 @@
 
 **Website:** [brunux.github.io/LazyOS](https://brunux.github.io/LazyOS/) · **Brand:** [`desktop/brand/`](https://github.com/Brunux/lazyos-desktop/tree/main/brand)
 
-A **Debian arm64** (`forky`) desktop OS built first for the **Google Hayato** Chromebook
-(MediaTek MT8192, `google-asurada`), now organized as a clean umbrella hub over three modular
+A **Debian arm64** (`forky`) desktop OS built for MediaTek ChromeOS Chromebooks
+(`google-asurada` MT8192 & `google-kukui` MT8183) and generic ARM64 systems, now
+organized as a clean umbrella hub over three modular
 public repositories designed for effortless ARM64 mainline porting and small LLM context windows:
 
 | Submodule | Repository | Owns |
@@ -37,8 +38,9 @@ Useful `./build.sh` targets:
 
 ## Flashing a Release Image
 
-Releases ship three targets built on ARM64 runners via our Hybrid Matrix workflow:
+Releases ship four targets built on ARM64 runners via our Hybrid Matrix workflow:
 - **`google-asurada.img.xz`** (`6144 MiB`) — Google Hayato Chromebook (MT8192, custom `mediatek-mt81` kernel with optimizations + `depthcharge`)
+- **`google-kukui.img.xz`** (`6144 MiB`) — Google Kukui Chromebook family (MT8183: Lenovo IdeaPad Duet `krane`, `kodama`, `kakadu`, `katsu`, `jacuzzi`, shared `mediatek-mt81` kernel + `depthcharge`)
 - **`arm64-uefi.img.xz`** (`8192 MiB`) — Generic ARM64 UEFI laptops, desktops, and VMs (Debian `linux-image-arm64` + `systemd-boot` + multi-vendor firmware)
 - **`arm64-extlinux.img.xz`** (`8192 MiB`) — Generic ARM64 U-Boot SBCs (Debian `linux-image-arm64` + `/boot/extlinux/extlinux.conf` + multi-vendor firmware)
 
