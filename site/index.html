@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LazyOS: Debian Linux for ARM64 &amp; ARM Chromebooks · lazy by design</title>
-<meta name="description" content="LazyOS is Debian (forky, arm64) for Google Hayato (MT8192) Chromebooks and mainline ARM64 UEFI/extlinux systems: tuned kernel support on Hayato, Debian linux-image-arm64 on generic targets, a keyboard-first swayfx desktop with pure-Rust lazyos TUI/greeter/installer tools, and free images you boot and install from microSD or USB.">
+<meta name="description" content="LazyOS is Debian (forky, arm64) for Google Hayato (MT8192) &amp; Kukui/Duet (MT8183) Chromebooks and mainline ARM64 UEFI/extlinux systems: tuned mediatek-mt81 kernel support on Chromebooks, Debian linux-image-arm64 on generic targets, a keyboard-first swayfx desktop with pure-Rust lazyos TUI/greeter/installer tools, and free images you boot and install from microSD or USB.">
 <link rel="canonical" href="https://brunux.github.io/LazyOS/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Brunux">
@@ -46,7 +46,7 @@
       "@id": "https://brunux.github.io/LazyOS/#software",
       "name": "LazyOS",
       "alternateName": "lazyOS_",
-      "description": "Debian (forky, arm64) for Google Hayato Chromebooks and mainline ARM64 UEFI/extlinux systems, with a keyboard-first swayfx desktop and pure-Rust TUI suite.",
+      "description": "Debian (forky, arm64) for Google Hayato (MT8192) & Google Kukui/Duet (MT8183) Chromebooks and mainline ARM64 UEFI/extlinux systems, with a keyboard-first swayfx desktop and pure-Rust TUI suite.",
       "url": "https://brunux.github.io/LazyOS/",
       "image": "https://brunux.github.io/LazyOS/brand/social-preview.png",
       "applicationCategory": "Operating system",
@@ -274,7 +274,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
       <span class="eyebrow"><span class="dot" aria-hidden="true"></span>v0.5.1 · Debian forky · arm64</span>
       <h1>lazyOS<span class="cur blink">_</span></h1>
       <p class="lede">Debian arm64 for Chromebooks &amp; Mainline ARM64. Keyboard first. <em>Lazy by design.</em></p>
-      <p class="sub">Real Debian above the kernel, board-tuned support for Hayato plus stock Debian <code>linux-image-arm64</code> for UEFI and U-Boot targets, and a <code>swayfx</code> session driven by our pure-Rust <code>lazyos</code> TUI, greeter, theme engine, and installer.</p>
+      <p class="sub">Real Debian above the kernel, board-tuned support for Google Hayato (MT8192) &amp; Google Kukui / Lenovo IdeaPad Duet (MT8183) Chromebooks plus stock Debian <code>linux-image-arm64</code> for UEFI and U-Boot targets, and a <code>swayfx</code> session driven by our pure-Rust <code>lazyos</code> TUI, greeter, theme engine, and installer.</p>
       <div class="ctas">
         <a class="btn btn-primary" href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"/><path d="m6 11 6 6 6-6"/><path d="M5 20h14"/></svg>
@@ -364,7 +364,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M8 18v-4h8v4"/><path d="M9 6v3h4V6"/></svg></div>
           <h3>Pure-Rust multi-target installer</h3>
-          <p>6-step guided wizard (<code>lazyos installer</code>) &amp; headless <code>--clone</code> mode with pre-flight safety checks for ChromeOS <code>depthcharge</code>, ARM64 <code>uefi</code>, and U-Boot <code>extlinux</code>.</p>
+          <p>6-step guided wizard (<code>lazyos installer</code>) &amp; headless <code>--clone</code> mode with pre-flight safety checks for ChromeOS <code>depthcharge</code> (Hayato &amp; Kukui), ARM64 <code>uefi</code>, and U-Boot <code>extlinux</code>.</p>
         </article>
         <article class="card">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M13 15h4"/></svg></div>
@@ -447,7 +447,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <div class="step">
           <div>
             <h3>Download a release image</h3>
-            <p>Get <code>google-asurada.img.xz</code> (Hayato MT8192), <code>google-kukui.img.xz</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">v0.5.1 Releases</a> (and upcoming matrix releases).</p>
+            <p>Get <code>google-asurada.img.xz</code> (Hayato MT8192), <code>google-kukui.img.xz</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">v0.5.1 Releases</a>—built across all four targets.</p>
           </div>
         </div>
         <div class="step">
@@ -482,7 +482,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
           <div>
             <h3>Install to the internal disk</h3>
             <p><kbd>Alt</kbd> <kbd>Space</kbd> opens the root menu: pick <strong>Install LazyOS</strong> (or run <code>lazyos installer</code> in a terminal; headless: <code>sudo lazyos installer apply --clone --confirm</code>). It checks power and free disks, writes the target's boot layout (<code>depthcharge</code>, <code>uefi</code>, or <code>extlinux</code>), and defaults safely to Cancel until confirmed.</p>
-            <p>On Google Hayato, <code>CONFIRM=yes sudo /usr/libexec/lazyos/install-emmc.sh</code> remains available as a manual/debug fallback.</p>
+            <p>On Depthcharge Chromebooks (<code>google-asurada</code> &amp; <code>google-kukui</code>), <code>CONFIRM=yes sudo /usr/libexec/lazyos/install-emmc.sh</code> remains available as a manual/debug fallback.</p>
           </div>
         </div>
         <div class="step">
