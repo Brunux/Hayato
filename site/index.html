@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>LazyOS: Debian Linux for ARM64 &amp; ARM Chromebooks · lazy by design</title>
-<meta name="description" content="LazyOS is Debian (forky, arm64) for Google Hayato (MT8192) &amp; Kukui/Duet (MT8183) Chromebooks and mainline ARM64 UEFI/extlinux systems: tuned mediatek-mt81 kernel support on Chromebooks, Debian linux-image-arm64 on generic targets, a keyboard-first swayfx desktop with pure-Rust lazyos TUI/greeter/installer tools, and free images you boot and install from microSD or USB.">
+<meta name="description" content="LazyOS is Debian (forky, arm64) for Google Hayato (MT8192) &amp; Kukui/Duet (MT8183) Chromebooks plus generic ARM64 UEFI systems, VMs (QEMU/UTM/Parallels), EDK2-UEFI boards like Raspberry Pi 4/5, and U-Boot SBCs: a keyboard-first swayfx desktop with pure-Rust lazyos TUI/greeter/installer tools and ready-to-flash images.">
 <link rel="canonical" href="https://brunux.github.io/LazyOS/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Brunux">
@@ -46,7 +46,7 @@
       "@id": "https://brunux.github.io/LazyOS/#software",
       "name": "LazyOS",
       "alternateName": "lazyOS_",
-      "description": "Debian (forky, arm64) for Google Hayato (MT8192) & Google Kukui/Duet (MT8183) Chromebooks and mainline ARM64 UEFI/extlinux systems, with a keyboard-first swayfx desktop and pure-Rust TUI suite.",
+      "description": "Debian (forky, arm64) for Google Hayato (MT8192) & Google Kukui/Duet (MT8183) Chromebooks, ARM64 UEFI systems/VMs, Raspberry Pi 4/5 (EDK2 UEFI / U-Boot), and U-Boot SBCs, with a keyboard-first swayfx desktop and pure-Rust TUI suite.",
       "url": "https://brunux.github.io/LazyOS/",
       "image": "https://brunux.github.io/LazyOS/brand/social-preview.png",
       "applicationCategory": "Operating system",
@@ -274,7 +274,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
       <span class="eyebrow"><span class="dot" aria-hidden="true"></span>v0.5.1 · Debian forky · arm64</span>
       <h1>lazyOS<span class="cur blink">_</span></h1>
       <p class="lede">Debian arm64 for Chromebooks &amp; Mainline ARM64. Keyboard first. <em>Lazy by design.</em></p>
-      <p class="sub">Real Debian above the kernel, board-tuned support for Google Hayato (MT8192) &amp; Google Kukui / Lenovo IdeaPad Duet (MT8183) Chromebooks plus stock Debian <code>linux-image-arm64</code> for UEFI and U-Boot targets, and a <code>swayfx</code> session driven by our pure-Rust <code>lazyos</code> TUI, greeter, theme engine, and installer.</p>
+      <p class="sub">Real Debian above the kernel: tuned <code>7.2.7-mt81</code> images for Google Hayato (MT8192) &amp; Google Kukui / Lenovo IdeaPad Duet (MT8183) Chromebooks, plus generic Debian <code>linux-image-arm64</code> + multi-vendor firmware images reaching ARM64 UEFI laptops/VMs (QEMU/UTM/Parallels), Raspberry Pi 4/5 (via EDK2 UEFI or U-Boot), and U-Boot SBCs—driven by our pure-Rust <code>lazyos</code> TUI, greeter, and installer.</p>
       <div class="ctas">
         <a class="btn btn-primary" href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"/><path d="m6 11 6 6 6-6"/><path d="M5 20h14"/></svg>
@@ -289,7 +289,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
           Source
         </a>
       </div>
-      <p class="meta">Targets: <code>google-asurada</code> (Hayato MT8192) · <code>google-kukui</code> (Kukui/Duet MT8183) · <code>arm64-uefi</code> · <code>arm64-extlinux</code></p>
+      <p class="meta">Targets: <code>google-asurada</code> (Hayato MT8192) · <code>google-kukui</code> (Kukui/Duet MT8183) · <code>arm64-uefi</code> (UEFI/VMs/RPi EDK2) · <code>arm64-extlinux</code> (U-Boot SBCs)</p>
     </div>
   </div>
 
@@ -447,7 +447,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <div class="step">
           <div>
             <h3>Download a release image</h3>
-            <p>Get <code>google-asurada.img.xz</code> (Hayato MT8192), <code>google-kukui.img.xz</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi.img.xz</code> (UEFI systems/VMs), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">v0.5.1 Releases</a>—built across all four targets.</p>
+            <p>Get <code>google-asurada.img.xz</code> (Hayato MT8192), <code>google-kukui.img.xz</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi.img.xz</code> (ARM64 UEFI laptops/servers, QEMU/UTM/Parallels VMs, and Raspberry Pi 4/5 with EDK2 UEFI), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs such as Rockchip/Allwinner/Amlogic/Pi U-Boot with SPI or SPL boot) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/LazyOS/releases/tag/v0.5.1">v0.5.1 Releases</a>.</p>
           </div>
         </div>
         <div class="step">
@@ -458,13 +458,13 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
 <pre><span class="p">$ </span>sha256sum -c --ignore-missing SHA256SUMS
 <span class="p">$ </span>xz -dc &lt;target&gt;.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync</pre>
             </div>
-            <p>Replace <code>&lt;target&gt;.img.xz</code> and <code>/dev/sdX</code> (or <code>/dev/mmcblk1</code>) with your image and card/USB device. <code>dd</code> overwrites the entire drive.</p>
+            <p>Replace <code>&lt;target&gt;.img.xz</code> and <code>/dev/sdX</code> (or <code>/dev/mmcblk1</code>) with your image and card/USB device. <code>dd</code> overwrites the entire drive. On <code>arm64-extlinux</code> SBCs without SPI/eMMC U-Boot, flash your board's U-Boot SPL into the reserved <code>1–16 MiB</code> pre-partition gap after <code>dd</code>.</p>
           </div>
         </div>
         <div class="step">
           <div>
             <h3>Boot the external drive</h3>
-            <p>On UEFI or U-Boot boards, choose the flashed drive in your firmware boot menu. On a Chromebook (<code>google-asurada</code> or <code>google-kukui</code>), enter developer mode and allow external boot:</p>
+            <p>On UEFI laptops/VMs (QEMU/UTM/Parallels) or SBCs with U-Boot in SPI/eMMC, choose the flashed drive in your firmware boot menu (for Raspberry Pi 4/5 on <code>arm64-uefi</code>, use RPi4/RPi5 EDK2 UEFI firmware on SPI/SD ESP; on <code>arm64-extlinux</code> boards without SPI U-Boot, write your board's U-Boot SPL into the <code>1–16 MiB</code> gap). On Chromebooks (<code>google-asurada</code> or <code>google-kukui</code>), enter developer mode and allow external boot:</p>
             <div class="code">
               <button class="copy" type="button" data-copy="crossystem dev_boot_usb=1 dev_boot_signed_only=0">Copy</button>
 <pre><span class="p">$ </span>crossystem dev_boot_usb=1 dev_boot_signed_only=0</pre>
@@ -502,7 +502,7 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
         <span class="kicker">UNDER THE HOOD</span>
         <h2 id="hood-h" style="margin: 14px 0 22px">Modular by design.</h2>
         <p>LazyOS pairs Debian <code>forky</code> userland with a clean three-submodule architecture: <a href="https://github.com/Brunux/lazyos-core"><code>lazyos-core</code></a> handles Debian assembly and pluggable boot backends, <a href="https://github.com/Brunux/lazyos-desktop"><code>lazyos-desktop</code></a> owns the <code>swayfx</code> session and Rust <code>lazyos</code> workspace, and <a href="https://github.com/Brunux/lazyos-devices"><code>lazyos-devices</code></a> isolates kernel recipes and board quirks.</p>
-        <p><code>google-asurada</code> and <code>google-kukui</code> share our tuned <code>7.2.7-mt81</code> kernel (started from postmarketOS/Nura), while <code>arm64-uefi</code> and <code>arm64-extlinux</code> run stock Debian <code>linux-image-arm64</code> updated natively via <code>apt</code>.</p>
+        <p><code>google-asurada</code> and <code>google-kukui</code> share our tuned <code>7.2.7-mt81</code> kernel (started from postmarketOS/Nura), while <code>arm64-uefi</code> and <code>arm64-extlinux</code> pair Debian's mainline <code>linux-image-arm64</code> and Devicetree bundle with broad multi-vendor firmware (<code>brcm80211</code>, <code>qcom-soc</code>, <code>atheros</code>, <code>iwlwifi</code>, <code>realtek</code>, <code>mediatek</code>) to give Raspberry Pi 4/5 (via EDK2 UEFI or U-Boot), Rockchip/SBCs, ARM64 UEFI laptops, and QEMU/UTM VMs a ready-to-boot Debian arm64 image with automatic <code>apt upgrade</code> kernel sync.</p>
         <p><a href="https://github.com/Brunux/LazyOS#clone--build">Read the architecture</a></p>
       </div>
       <dl class="facts">
