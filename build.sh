@@ -67,6 +67,8 @@ case "$cmd" in
 		;;
 	validate)
 		"$LAZYOS_DEVICES_DIR/scripts/validate-devices.sh"
+		bash "$LAZYOS_CORE_DIR/tests/run.sh"
+		bash "$LAZYOS_DEVICES_DIR/tests/run.sh"
 		for f in "$LAZYOS_CORE_DIR"/scripts/*.sh "$LAZYOS_CORE_DIR"/boot/*.sh "$LAZYOS_DESKTOP_DIR"/scripts/*.sh; do
 			bash -n "$f"
 		done
