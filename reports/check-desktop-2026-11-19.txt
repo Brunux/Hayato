@@ -1,0 +1,494 @@
+
+==> Session
+  OK    greetd is active
+  OK    greeter vt = 7
+  OK    greeter user _greetd exists
+  WARN  [Session] /etc/greetd/config.toml does not invoke lazyos-greeter yet
+  OK    lazyos-greeter is installed
+  OK    lazyos-greeter --check passes
+  OK    Settings exposes Login screen (Greeter) defaults
+  OK    session locale is UTF-8 (en_US.UTF-8)
+  OK    compositor is swayfx version 0.6 (based on sway 1.12.0)
+./scripts/check-desktop.sh: line 134: /etc/lazyos/device: No such file or directory
+  OK    GPU renderer is Mali-G57 MC5 (Panfrost)
+  OK    sway configuration is valid
+  OK    Xwayland present (X11 programs can run)
+  OK    every command the sway configuration invokes is installed
+  OK    workstyle installed (workstyle 0.8.2)
+  OK    the sway configuration starts workstyle
+  OK    workstyle is running
+  OK    the bar draws the whole workspace name (number and icons)
+  OK    workspace icons use 8 codepoints in workstyle configuration
+  OK    sway addresses workspaces by number, so renaming them does not break a binding
+  SKIP  kitty is not installed (the session terminal is foot)
+  OK    a notification daemon owns org.freedesktop.Notifications (lazyos-notify)
+  OK    notification icons resolve in the LazyOS theme (lazyos --icon-names)
+  OK    every notification in ~/.config/bin carries an icon
+  OK    notifications can carry a picture (lazyos-notify native rendering)
+  OK    D-Bus service auto-activation is configured for lazyos-notify
+  OK    bar menus complete (framework plus nmcli, bluetoothctl, jq)
+  OK    a captive Wi-Fi sign-in page is found from NetworkManager's redirect
+  OK    the bar's busy card is the stop button (custom/busy on-click)
+  OK    busy records the stop command (mode 0600) the spinner runs
+  OK    busy cancelled tells a running task from a stopped one
+  OK    after a stop, busy says the task was cancelled (the producer reports nothing)
+  OK    bar-busy stop runs the registered stop line and clears the card
+  OK    idle screen complete (tte, LazyOS art, launcher, sway-lock, terminal profile)
+  OK    idle screen ends on the pointer too (mouse reporting on, and off again on exit)
+  OK    idle screen restores the pointer on exit (captures the prior hide_cursor and puts it back)
+  OK    idle screen launcher returns at once (swayidle -w reaches the 300 s lock)
+  OK    idle chain armed (150 s idle screen, 300 s lock, 360 s panel off, lock before sleep)
+  OK    fullscreen video inhibits the idle chain (Firefox, papers, mpv)
+  OK    the bar carries a keep-awake toggle (idle_inhibitor) and 4px end spacing
+  OK    volume and brightness keys draw an overlay (bin/osd, three volume icons, the theme's brightness icon)
+  OK    the overlay can carry its icon and its level bar (lazyos-notify)
+  OK    both brightness directions pass a step brightnessctl accepts (set 5%- set 5%+)
+  OK    night light wired (helper, login line, after-resume, Settings switch)
+  OK    night-light status tells off, off schedule, on warm and off warm apart
+  OK    night-light config reads the mode and warmth Settings writes
+  FAIL  [Session] lazyos-notify --config read 'default_timeout=8000 max_visible=3 card_width=380 history_limit=500': the notification settings would be ignored
+  FAIL  [Session] lazyos-notify --control is missing: the notification keys would do nothing
+  OK    the notification keys act on the newest card, dismiss it, or clear the stack
+  OK    clipboard history can be paused and its watcher goes through the helper
+  OK    Settings exposes DNS, SSH, date & time, updates, storage, touchpad, reduced motion, language, hostname, default apps, password, notifications, clipboard history and per-monitor workspaces
+  OK    Settings has the seven sections (network, display-sound, appearance, input, power-idle, system, accessibility)
+  OK    Appearance exposes theme, wallpaper, bar and window effects
+  OK    Appearance status reads the effects and bar state
+  OK    idle/lock reads its config and defaults to the system 150/300/360 s
+  OK    CLI tools complete (eza, bat, fd, rg, fzf, zoxide, starship, btop, ...)
+  OK    all 23 private-use glyphs of the prompt are drawn by fonts foot is given
+  OK    foot automatically copies selection to clipboard (selection-target=both)
+  OK    non-Latin text has a font (Arabic, Hebrew, Indic; CJK is an install away)
+  OK    editors installed (nvim, vim, vi, nano)
+  OK    EDITOR is nvim (eff, git commit, crontab -e)
+  OK    ls is eza in an interactive shell
+  OK    zoxide initialises after starship and cd - stays bash's (hook survives)
+  OK    launcher complete (native framework: lazyos menu apps/window/run)
+  FAIL  [Session] the Search key does not run '$launcher' in ~/.config/sway/config (it opens the file search, or nothing)
+  FAIL  [Session] Alt+Search is missing its F20 press binding or its Super_L+Mod1 release fallback in ~/.config/sway/config
+  OK    Alt+d is not unbound (the launcher stays on $mod+d)
+  OK    lazyos-files is `lazyos menu files` (spec 009)
+  OK    lazyos-find is `lazyos menu find` (spec 009)
+  OK    lazyos-grep is `lazyos menu grep` (spec 009)
+  OK    lazyos-view is `lazyos open` (spec 009)
+  OK    file search available (fd), which the list's --search and the walk run
+  OK    the preview's thumbnail cache is writable (/home/brunux/.cache/thumbnails/large)
+  FAIL  [Session] no 'Super_L+Shift exec ...lazyos-find' binding in ~/.config/sway/config: the key does nothing
+  OK    keyd maps Alt+Search to F20
+  OK    Alt+Ctrl+G searches inside the files (lazyos-grep)
+  OK    ripgrep present, which the search inside files runs
+  OK    download complete (yt-dlp, ffmpeg, node, lazyos-download)
+  OK    yt-dlp is told to use node (JS runtimes)
+  OK    the home folders are there (Documents, Downloads, Music, Videos)
+  OK    the file actions have their tools (tar, unzip, ffmpeg, udisksctl)
+  OK    notes menu (lazyos-notes) is executable
+  OK    Notes offers the new row
+  OK    Notes offers the daily row
+  OK    Notes offers the ink row
+  OK    Notes offers the annotate row
+  OK    Notes offers the export row
+  OK    Notes offers the search row
+  OK    Notes offers the folder row
+  OK    notes live in /home/brunux/Documents/Notes
+  FAIL  [Session] editxr is missing: Notes cannot edit a quick note
+  OK    document tool installed: xournalpp
+  OK    document tool installed: foliate
+  OK    developer menu complete (tar, zstd, gpg, udisksctl, lazyos-dev, lazyos-profile)
+  OK    gpg round-trips the Developer menu's passphrase pipeline (AES256, fd 3)
+  OK    the profile export still includes ~/.ssh and ~/.gnupg (ENTRIES)
+  OK    the profile export includes the file manager (favnyr settings and workspaces)
+  OK    the profile export covers the agents' homes and account directories (transcripts excluded)
+  OK    the profile export covers the Firefox profile (site data, session and caches excluded)
+  OK    the passphrase prompt cannot land on an invisible terminal (tpgid test, session fallback)
+  OK    bin/lazyos-profile supports target-direct streaming full-home export (--include-home)
+  OK    home export skips rootless container storage and keeps Documents
+  OK    the Developer menu is reachable three ways (root menu, Alt+Ctrl+D, launcher)
+  OK    the Developer launcher entry asks for a picture the theme carries
+  OK    the manual has the profile section (04-software.md)
+  FAIL  [Session] format a disk incomplete: parted mkfs.exfat mkfs.ext4 (the Places row does nothing)
+  OK    format a disk refuses fixed storage and the disk this system runs from (system::disk)
+  SKIP  disk menu PATH not asked (mkswap is not installed; the next check fails)
+  FAIL  [Session] auxiliary swap incomplete: parted mkswap swapon swapoff blkid (the menu cannot prepare or activate a card)
+  OK    no auxiliary swap configured
+  OK    Places lists the Auxiliary swap row (lazyos menu places)
+  OK    lazyos installer registered in lazyos --help (spec 018)
+  OK    lazyos-installer resolves to lazyos installer in symlinks table
+  OK    lazyos installer --check evaluates hardware & disk safety (ok: boot=depthcharge target=/dev/mmcblk1 source=/dev/mmcblk0p3 soc="Google Hayato rev1" mem=3.7 GiB power="Battery 24% (unplugged)" tools=ok)
+  FAIL  [Session] installer utilities incomplete for depthcharge: parted mkfs.ext4 blkid blockdev e2fsck mkfs.ext2
+  OK    root menu has the Install LazyOS row
+  OK    the install icon is in the LazyOS theme (system-software-install)
+  OK    manual pages searchable (apropos, man), which the Learn menu's second row opens
+  OK    openssl present, which the Password row generates with
+  OK    dig present (bind9-dnsutils), which DNS troubleshooting asks for
+  OK    manual installed (7 pages) and lazyos-learn present
+  OK    keybindings view (lazyos-keys) is executable
+  OK    file browser (lazyos-files) is executable
+  OK    session menus complete (settings, notifications, free space, processes, time zone, places, media, calculator, layout, power, about, DNS, packages, colour, reminders, theme)
+  OK    every script in ~/.config/bin is executable
+  OK    reminders complete (systemd-analyze, notify-send, jq, the clock icon)
+  OK    systemd parses the calendar expressions the reminder menu writes
+  OK    root menu reaches DNS, Packages, Colour, About, Reminders, Auxiliary swap, Format, Display, Time zone, VNC, Settings and SSH
+  OK    every root-menu row runs a program that is installed
+  OK    lazyos menu keys parses the sway configuration (127 bindings, no empty rows)
+  OK    lazyos menu about holds its popup windows open (--hold)
+  OK    the About windows name a close key this keyboard answers (Alt+Q)
+  OK    capture menu complete (grimshot, swappy, tesseract, zbarimg, wf-recorder, qrencode)
+  OK    the screenshot keys go through bin/screenshot
+  OK    no key calls grimshot directly
+  OK    the Screenshot (area) launcher entry uses bin/screenshot
+  OK    the recorder is one argv (wf-recorder ... -f FILE), never a shell line
+  OK    an area recording passes the slurp geometry as its own -g argument
+  OK    a recording saves the pid of wf-recorder itself (comm=wf-recorder)
+  OK    the recording writes a timestamped mp4 under ~/Videos
+  OK    an area recording hands the slurp geometry to wf-recorder itself
+  OK    lazyos menu capture --status sees the live recorder
+  OK    Stop finalises the recorder (SIGINT, then wait) and clears the state
+  OK    Stop reports the saved file only after the recorder is gone
+  OK    a microphone recording hands the default source to wf-recorder
+  OK    the webcam overlay starts as the lazyos-webcam window
+  OK    the recording saves the webcam overlay's own pid
+  OK    Stop ends the webcam overlay and clears its pid
+  OK    system audio records the default sink's monitor source
+  OK    no camera starts when the webcam overlay is off
+  OK    audio off leaves wf-recorder with no audio source
+  OK    a camera that exits fails the start instead of recording without an overlay
+  OK    no card is drawn into a recording (critical ones still show; nothing is held back after it stops)
+  OK    lazyos menu capture --status names the recorder and its file
+  OK    screen sharing complete (wayvnc, bin/lazyos-vnc)
+  OK    screen sharing defaults to read-only (wayvnc --disable-input)
+  OK    remote control is the explicit second start (no --disable-input)
+  OK    both screen-sharing modes listen on the loopback address only
+  OK    the ssh tunnel command is on the menu row and in the manual (5900, loopback)
+  OK    Settings carries the Share this screen row
+  OK    the root menu reaches Share this screen
+  OK    the bar has the screen-sharing indicator (custom/vnc)
+  OK    the sharing indicator collapses when nothing is shared
+  OK    the bar distinguishes remote control from read-only sharing
+  OK    clipboard history and emoji picker complete (cliphist, wl-clipboard, wtype, emojis.tsv)
+  WARN  [Session] the cliphist watcher is not running: the clipboard list stays empty (config.d/27-clipboard.conf starts it with the session)
+  OK    file(1) is installed (a clipboard image is saved with its extension)
+  OK    a colour emoji font is installed (Noto Color Emoji)
+  OK    the emoji table matches the font it was filtered against
+  OK    touchpad swipes wired (3-finger left/right workspaces, up/down Ctrl+Tab / Ctrl+Shift+Tab in Firefox)
+  OK    no user drop-in repeats a system bindgesture (a duplicate raises the red config-error bar on reload)
+  OK    tablet mode wired (wvkbd-mobintl, tablet-mode, bindswitch tablet:on/off)
+  OK    accelerometer present (/sys/bus/iio/devices/iio:device1, cros-ec-accel) for tablet rotation
+  OK    tablet mode switches the physical keyboard off per identifier, leaving the tablet switch enabled (after wvkbd is up)
+  OK    every switch device is enabled (the tablet switch is not suspended with a keyboard)
+  OK    tablet mode off restores the rotation without the state directory
+  OK    tablet-mode off repairs a missing state directory (rotation upright, both inputs back)
+  SKIP  no rotation calibration (/home/brunux/.config/lazyos/tablet.conf): the built-in -Y reference is in use
+  OK    welcome window lists the nine keys and says it is once per install
+  OK    welcome marker works (failure leaves none, success writes the machine id, third run stays quiet)
+  OK    manual renderer complete (glow with the solarized glamour style)
+  OK    browser installed (firefox-esr), used by lazyos-files and xdg-open
+  OK    xdg-open shim is installed (URLs and paths go to the browser)
+  OK    browser policies configured (vertical tabs and compact density in /home/brunux/Dev/LazyOS/desktop/uis/sway/files/usr/share/firefox-esr/distribution/policies.json)
+  OK    browser port 2828 is not listening (no Marionette automation daemon)
+  OK    thumbnails can be generated (ffmpeg for images/video, pdftocairo for PDF page 1)
+  OK    picture viewer present (chafa draws sixels in foot)
+  OK    viewers installed (imv for a picture, papers for a document, mpv for a video)
+  OK    the imv short name resolves (/usr/local/bin/imv -> the package dispatcher)
+  OK    the viewer keys are hinted once per session (lazyos-image-hint)
+  OK    mpv is an MPRIS player (mpv-mpris at /etc/mpv/scripts/mpris.so)
+  OK    media player installed (mpv), what lazyos-files opens a video with
+  OK    document reader installed (papers), what a double click on a PDF uses
+  OK    webcam found (/dev/video0, uvcvideo: USB2.0 HD UVC WebCam: USB2.0 HD)
+  OK    camera application installed (guvcview 2.2.2-1+b3)
+  OK    the camera wrapper runs (bin/lazyos-camera, executable)
+  OK    Camera is in the launcher (org.lazyos.camera.desktop)
+  OK    the Camera entry has its picture (camera-web in the LazyOS theme)
+  OK    the root menu carries the Camera row (Alt+Space)
+  INFO  no camera portal (No such interface “org.freedesktop.portal.Camera” on object at path /org/freedesktop/portal/desktop): a Flatpak app cannot use the camera; guvcview, ffmpeg and Firefox read /dev/video0 directly
+  OK    file browser icons present (the LazyOS theme has every row name)
+  OK    GTK3 programs use the solarized palette (gtk-3.0/gtk.css)
+  OK    GTK3 settings name the LazyOS icons and a dark base (favnyr reads them too)
+  OK    GTK4 windows prefer the dark palette (gtk-4.0/settings.ini)
+  OK    GTK4 windows use the solarized palette (gtk-4.0/gtk.css)
+  OK    file manager installed (favnyr is executable)
+  OK    Alt+Ctrl+Shift+F opens the file manager (favnyr)
+  OK    removable media can be mounted (udisks2 answers on the system bus)
+  OK    a plugged USB drive mounts itself (udev rule, unit, helper, polkit rule)
+  OK    auto-mount matches USB disks only (never the eMMC or the SD slot)
+  OK    the udev rule wants the auto-mount unit
+  OK    the auto-mount helper mounts as the session user (setpriv + udisksctl)
+  FAIL  [Session] the auto-mount helper is missing: findfs (a plugged stick fails to mount)
+  OK    polkit lets the auto-mount helper mount a removable disk (plugdev)
+  OK    the session user is in plugdev (the group the auto-mount rule names)
+  OK    polkitd is running (the auto-mount rule is in force)
+  OK    Settings has the auto-mount switch
+  OK    fuser is available, so a refused unmount names the process holding the disk
+  OK    favnyr opens a terminal with foot (TERMINAL=foot in /etc/environment)
+  OK    the LazyOS theme carries every icon the file manager asks for
+  OK    open-with handler installed (lazyos-view: bat, imv, papers, mpv, firefox-esr)
+  OK    the launcher names the window 'Files (window)'
+  OK    a double click on an image reaches lazyos-view (mimeapps.list)
+  OK    a double click on a PDF reaches papers (mimeapps.list)
+  WARN  [Session] inode/directory defaults to '(nothing)', not pcmanfm.desktop (favnyr shadow): 'Open containing folder' does nothing
+  OK    dictation tools present (whisper-cli, wtype, parecord)
+  OK    dictation normalises the level (ffmpeg dynaudnorm)
+  OK    speech model present (ggml-tiny.en.bin)
+  OK    local model ready (Alt+Ctrl+M, the root menu row, the launcher entry and its icon)
+  OK    the model runs on four threads (the A76 cluster)
+  OK    the model's KV cache is q8_0 behind flash attention (4k context fits next to the session)
+  OK    the local model matches its pinned SHA256 (1 file(s))
+  OK    translate ready (Alt+Ctrl+T: curl, jq, wl-paste, the binding, the Settings row, the globe icon)
+  OK    translate target is 'es', a language both engines take
+  OK    the translation endpoint answers (Google first, MyMemory as the fallback)
+  SKIP  no disk swap: hibernation needs a swap labelled lazyos_swap (see sway-hibernate)
+  OK    bin/sway-hibernate is executable
+  OK    agents menu (lazyos-agents) is executable
+  OK    the agents menu draws the session's glyph rows (lazyos menu agents)
+  OK    the agents menu asks the framework to render markup rows
+  OK    coding agent CLI(s) installed: opencode
+  OK    OpenCode ships with the image (v2.3.2)
+  OK    the Agents menu puts ~/.opencode/bin on PATH
+  OK    the agents menu starts a session with the default agent (lazyos-agents --default)
+  OK    the root menu's AI group starts a session with the default agent
+  OK    agent console (lazyos-quake) is executable
+  OK    the agent console reads absent, hidden and visible from sway's tree
+  OK    the agent console drops from the top (34-agent-console.conf)
+  OK    Alt+grave opens the agent console
+  OK    Alt+Ctrl+grave still shows the scratchpad
+  OK    no agent outlived an Ask question (no LAZYOS_ASK process without its --ask-run)
+  OK    launcher entries present (session actions, nmtui, lazygit, tmux, about)
+  OK    the root menu has a launcher entry (LazyOS Menu -> bar-menu)
+  OK    waybar backlight device backlight-lcd0 exists
+  OK    the icon theme ships its cache (the first launcher scan is a read)
+  OK    the system font cache exists (the first font lookup does not walk every face)
+  OK    no declined daemon is running (mako, udiskie, swaync, dunst, picom, blueman, packagekit, indexers)
+  OK    the user units are the expected ones (PipeWire, WirePlumber, portals, gvfs)
+
+==> The framework
+  OK    lazyos is installed (/home/brunux/Dev/LazyOS/desktop/rust/target/debug/lazyos)
+  FAIL  [The framework] lazyos reports 0.5.1 but the image was built from 0.5.0 (a stale /usr/bin/lazyos)
+  OK    lazyos --help lists the menu
+  OK    /usr/bin/lazyos-menu -> lazyos menu
+  OK    /usr/bin/bar-menu -> lazyos menu
+  OK    /usr/bin/lazyos-power -> lazyos menu power
+  OK    /usr/bin/lazyos-format -> lazyos menu format
+  OK    /usr/bin/lazyos-swap -> lazyos menu swap
+  OK    /usr/bin/lazyos-display -> lazyos menu display
+  OK    /usr/bin/lazyos-tz -> lazyos menu tz
+  OK    /usr/bin/lazyos-dns -> lazyos menu dns
+  OK    /usr/bin/lazyos-vnc -> lazyos menu vnc
+  OK    /usr/bin/lazyos-settings -> lazyos menu settings
+  OK    /usr/bin/lazyos-ssh -> lazyos menu ssh
+  OK    /home/brunux/.config/bin/lazyos-quake -> lazyos quake
+  OK    /home/brunux/.config/bin/lazyos-notes -> lazyos menu notes
+  OK    /usr/bin/lazyos-files -> lazyos menu files
+  OK    /usr/bin/lazyos-find -> lazyos menu find
+  OK    /usr/bin/lazyos-grep -> lazyos menu grep
+  OK    /usr/bin/lazyos-view -> lazyos open
+  OK    /usr/bin/lazyos-task -> lazyos task attach
+  OK    /usr/bin/lazyos-media -> lazyos menu media
+  OK    /usr/bin/lazyos-notify-history -> lazyos menu notify
+  OK    /usr/bin/lazyos-clip -> lazyos menu clip
+  OK    /usr/bin/lazyos-emoji -> lazyos menu emoji
+  OK    /usr/bin/lazyos-capture -> lazyos menu capture
+  OK    /usr/bin/lazyos-qr -> lazyos menu qr
+  OK    /usr/bin/lazyos-remind -> lazyos menu remind
+  OK    /usr/bin/lazyos-calc -> lazyos menu calc
+  OK    /usr/bin/lazyos-color -> lazyos menu colour
+  OK    /usr/bin/bar-audio -> lazyos menu audio
+  OK    /usr/bin/bar-bt -> lazyos menu bluetooth
+  OK    /usr/bin/lazyos-apps -> lazyos menu apps
+  OK    /usr/bin/lazyos-window -> lazyos menu window
+  OK    /usr/bin/lazyos-run -> lazyos menu run
+  OK    /usr/bin/lazyos-learn -> lazyos menu learn
+  OK    /usr/bin/lazyos-keys -> lazyos menu keys
+  OK    /usr/bin/lazyos-pkg -> lazyos menu pkg
+  OK    /usr/bin/lazyos-dev -> lazyos menu dev
+  OK    /usr/bin/lazyos-about -> lazyos menu about
+  OK    /usr/bin/bar-net -> lazyos menu net
+  OK    /usr/bin/lazyos-agents -> lazyos menu agents
+  OK    /usr/bin/lazyos-places -> lazyos menu places
+  OK    /usr/bin/lazyos-clean -> lazyos menu clean
+  OK    /usr/bin/lazyos-kill -> lazyos menu kill
+  OK    /usr/bin/lazyos-download -> lazyos menu download
+  OK    /usr/bin/lazyos-layout -> lazyos menu layout
+  OK    /usr/bin/lazyos-file-actions -> lazyos menu file-actions
+  OK    /usr/bin/translate -> lazyos menu translate
+  OK    /usr/bin/dictate -> lazyos menu dictate
+  OK    /usr/bin/lazyos-theme-picker -> lazyos menu theme
+  OK    /usr/bin/lazyos-installer -> lazyos installer
+  OK    /usr/bin/lazyos-install-run -> lazyos installer
+  OK    /usr/bin/lazyos-install-log -> lazyos installer
+  OK    /usr/bin/lazyos-greeter -> lazyos greeter
+  OK    lazyos --help lists task attach (the task surface reattaches by id)
+  OK    lazyos --help lists ask (one question to the default agent)
+  OK    the root menu keeps every row bar-menu had (52 rows, four groups)
+  OK    the root menu has the Ask row (ai group)
+  OK    ~/.config/bin/bar-menu is the framework's root menu (Alt+Space, the bar's button)
+  OK    ~/.config/bin/bar-audio is a framework symlink the table knows
+  OK    ~/.config/bin/bar-bt is a framework symlink the table knows
+  OK    ~/.config/bin/bar-menu is a framework symlink the table knows
+  OK    ~/.config/bin/bar-net is a framework symlink the table knows
+  OK    ~/.config/bin/dictate is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-about is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-agents is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-apps is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-calc is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-capture is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-clean is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-clip is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-color is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-dev is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-display is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-dns is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-download is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-emoji is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-file-actions is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-files is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-find is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-format is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-grep is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-installer is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-install-log is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-install-run is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-keys is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-kill is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-layout is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-learn is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-media is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-menu is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-notes is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-notify-history is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-pkg is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-places is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-power is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-qr is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-quake is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-remind is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-run is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-settings is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-ssh is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-swap is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-task is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-theme-picker is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-tz is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-view is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-vnc is a framework symlink the table knows
+  OK    ~/.config/bin/lazyos-window is a framework symlink the table knows
+  OK    ~/.config/bin/translate is a framework symlink the table knows
+  OK    no script shadows a name the command table installs
+  OK    every surface specs 010-012 port is a command (menu settings…power, media…dev, apps…palette)
+  OK    every surface spec 017 ports is a command (menu net…dictate)
+  OK    lazyos menu net --status returns valid JSON for waybar (spec 017)
+  OK    lazyos menu clean --dry-run returns cache estimations (spec 017)
+  OK    lazyos menu places --rows prints places table (spec 017)
+  OK    interactive TUI surfaces own their progress without external toasts (spec 020)
+  OK    lazyos --glyphs declares half-block QR codepoints U+2580/U+2584 (spec 020)
+  OK    all 11 action+list menus separate tool actions into ActionStrip (spec 020)
+  OK    QR PNG saving and dictation push-to-talk/notification actions present (spec 020)
+  OK    $launcher runs `lazyos menu apps` (spec 012)
+  OK    $runner runs `lazyos menu run` (spec 012)
+  OK    $switcher runs `lazyos menu window` (spec 012)
+  OK    sway floats and centres lazyos-pick
+  OK    sway floats and centres lazyos-task
+  OK    the frame's characters render (no installed font is missing one)
+  OK    the rows' glyphs render (117 codepoints, every one covered by Symbols Nerd Font Mono, Font Awesome 6 Free Solid, Font Awesome 6 Brands Regular)
+  OK    the alphabet's font changed since build pin (Symbols Nerd Font Mono) but still covers all 117 glyph codepoints
+  OK    all 117 alphabet names resolve to installed font codepoints (0 text fallbacks)
+  OK    every command draws through the App shell (no Frame in lazyos-cli)
+  OK    every notify-send in ~/.config/bin that names an app also names a picture (-i)
+  OK    lazyos notify can name the file a click opens (--open PATH)
+  OK    a busy result carries the open-path hint for its written file
+  OK    a saved profile or diagnostics card names its file for a click
+  OK    lazyos-notify resolves /usr/share/icons/LazyOS and Nerd Font glyphs natively
+  OK    lazyos --help lists notify (a card from the command line, with the house rules)
+  OK    the LazyOS theme draws every picture a card can ask for (39 names)
+  OK    no Rust call site builds a card without a picture (no_icon() is only asked for explicitly)
+
+==> Games
+  OK    the game library is installed
+  OK    the game host is the installed one (/usr/bin/lazyos-games)
+  OK    the library scan answers (938 games)
+  OK    the sample LazyOS game is listed
+  OK    every retro row names a core
+  OK    the ROM scan roots are reported
+  OK    a zip in its platform folder is a game
+  OK    a zip on a disc platform is ignored (the cue inside cannot find its bins)
+  OK    the game theme and the sample game are installed
+  OK    the TUI library answers --rows
+  OK    the Controller screen answers --rows
+  OK    the pad table has sixteen buttons
+  OK    the kernel has the PlayStation HID driver (hid_sony)
+  OK    the kernel has the DualShock 4 driver (hid_playstation)
+  OK    BlueZ can cable-pair a PlayStation pad (sixaxis is built in)
+  OK    RetroArch is installed (1.22.2 Nov 18 2026)
+  OK    the kiosk RetroArch overlay is the Wayland one
+  OK    every libretro core the library lists is installed
+  OK    the DualShock 4 profile is installed
+  OK    the experimental N64 core is installed
+  OK    the arcade core is installed (FBNeo)
+  OK    wtype is installed (the controller mapper's key injector)
+  FAIL  [Games] lazyos gamepad is not running: the framework menus cannot be navigated with a gamepad
+
+==> The theme engine
+  OK    the active theme is tokyo-night (Tokyo Night)
+  OK    every surface is generated and carries the theme header
+  OK    every surface is byte-identical to a fresh render
+  OK    every built-in theme parses and clears its contrast floor
+  OK    the binding for `lazyos theme next` is present
+  OK    the binding for `lazyos theme wallpaper next` is present
+  OK    the visual theme picker is available (lazyos menu theme --list)
+
+==> The agent's tools (lazyos mcp)
+  OK    lazyos mcp serves 18 tools, manifest m-56dc68bf6b0df7c9
+  OK    no apply-level tool is exposed (every tool is read, act or propose)
+  OK    lazyos mcp answers initialize and tools/list (18 tools)
+  OK    every window a tool opens is installed and executable
+  FAIL  [The agent's tools (lazyos mcp)] opencode.json has no enabled local mcp.lazyos running ["lazyos","mcp"]
+  OK    the agent's instructions describe this manifest (m-56dc68bf6b0df7c9)
+  OK    07-agents.md explains what the agent can read, do and only propose
+  OK    no screenshot outlived the server that took it
+
+==> The brand
+  OK    os-release says LazyOS 0.5.0 (ID=lazyos)
+  OK    desktop wallpaper present
+  FAIL  [The brand] sway does not name Pictures/Wallpapers/lazyos.png (output * bg)
+  OK    lock screen wallpaper present
+  OK    lock screen keeps the mountain wallpaper
+  OK    the theme carries the mark (lazyos.png, lazyos.svg)
+  OK    fastfetch config present
+  OK    fastfetch wordmark present
+  OK    the greeter is configured for LazyOS
+  OK    virtual terminals greet LazyOS
+  OK    no org.nureb.* entries survive
+
+==> Fonts and icons
+  OK    font family present: JetBrains Mono
+  OK    font family present: FontAwesome
+  OK    font family present: Font Awesome 6 Free Solid
+  OK    font family present: Font Awesome 6 Brands Regular
+  OK    font family present: Material Design Icons
+  OK    font family present: Symbols Nerd Font
+  OK    font family present: Liberation Mono
+  FAIL  [Fonts and icons] 10-nerd-font-symbols.conf is active in /etc/fonts/conf.d: monospace queries resolve to symbols-only font
+  OK    monospace resolves to text font (DejaVu Sans Mono)
+  OK    Liberation Mono resolves to text font (Liberation Mono)
+  FAIL  [Fonts and icons] Roboto Mono resolves to Symbols Nerd Font (code blocks in Firefox render as boxes)
+  OK    the old picker library is retired (native lazyos glyph system in effect)
+  OK    launcher icons complete (LazyOS theme, every session entry resolves)
+  OK    command palette icons present (the run mode resolves binaries by name)
+
+==> Desktop Display & Audio Stack
+  OK    lazyos-display is executable
+  OK    Settings has the display arrangement row
+  OK    the saved arrangement is read at login (config.d included)
+  OK    wdisplays is installed (manual arrangement)
+  OK    the display menu brings the panel back with no monitor (no dead end)
+  OK    a key turns the internal panel back on with no picture (blind recovery)
+  OK    lazyos-display --panel-on exists
+  OK    sway-suspend helper is executable
+
+==> Audio
+  OK    audio server: PulseAudio (on PipeWire 1.6.9)
+  OK    sound card: alsa_card.platform-sound
+  OK    ALSA codec: mt8192_mt6359 mt8192mt6359rt1 mt8192_mt6359_rt1015p_rt5682
+  OK    card active profile: HiFi
+  OK    sinks: alsa_output.platform-sound.HiFi__Headphones__sink alsa_output.platform-sound.HiFi__Speaker__sink 
+  OK    alsa 'default' PCM available (pipewire-alsa)
+
+==> Summary  449 OK, 3 WARN, 16 FAIL
