@@ -178,9 +178,9 @@ The one near miss is “grey on grey” in the selected row, which is the first 
       on `fd-find` or `ripgrep`; `Ctrl+I` is the one key, and the keybar drops the
       useless “open”/“copy path” hints while the tool is missing.
 - [x] Snapshot net, first pass: `tests/screens.rs` renders 24 screens at 80×24 and
-      152×45. Seven have golden files (Capture, QR, Reminders, Calculator, Developer,
-      Notifications, Clipboard); seventeen are smoke renders because their rows depend on
-      the machine (Media, Applications, Learn, Games, Keys, Colour, Emoji, About, Clean,
+      152×45. Six have golden files (QR, Reminders, Calculator, Developer, Notifications,
+      Clipboard); eighteen are smoke renders because their rows depend on
+      the machine (Capture, Media, Applications, Learn, Games, Keys, Colour, Emoji, About, Clean,
       Audio, Bluetooth, Network, Window, Run, Kill, Controller, Packages). The screens touched in Phases 0–1
       (menu, palette, ask, files, find, grep, notes, pickers, task) already had goldens.
       The remaining surfaces (Agents, Places, Download, Layout, File actions,
@@ -237,8 +237,8 @@ The one near miss is “grey on grey” in the selected row, which is the first 
 - **Unit** (`lazyos-cli/src/system/settings.rs`): every settings key belongs to one section.
 - **Snapshot** (`lazyos-cli/tests/`): `menu`, `ask-no-agent`, `files-empty`, `find-no-fd`,
   `grep-no-ripgrep`, `picker-format-*`, `notes-*` at 80×24 and 152×45.
-- **Screen net** (`lazyos-cli/tests/screens.rs`): 24 more screens at both grids, seven with
-  goldens and seventeen as smoke renders; an isolated home keeps the rows deterministic and a
+- **Screen net** (`lazyos-cli/tests/screens.rs`): 24 more screens at both grids, six with
+  goldens and eighteen as smoke renders; an isolated home keeps the rows deterministic and a
   path normalisation keeps the capture snapshot free of the runner's temp directory.
 - **Integration**: the menu test that opens Ask with no agent on `PATH` and asserts the Agents
   choice.
