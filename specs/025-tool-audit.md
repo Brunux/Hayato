@@ -283,7 +283,8 @@ family had nothing to fix.
 
 ## Merge gate
 
-The PR is not mergeable until each line has an answer, and none of them is a code change:
+The PR is not mergeable until each line has an answer. They were meant to be device steps, but
+running them found one real bug in the check itself, fixed below:
 
 - [ ] **The selection cue reads on the device.** The fill stays the theme's tint (1.15–1.56:1) and
       the 3:1 cue is the accent bar plus the bold label. Snapshot text cannot prove this; it needs
@@ -292,15 +293,28 @@ The PR is not mergeable until each line has an answer, and none of them is a cod
 - [x] **`./build.sh validate` is green** on the Hayato (2026-11-19): the devices validation, the
       core and devices test suites and the shell syntax pass, and it ends with
       `Umbrella validation passed.`
-- [ ] **`desktop/scripts/check-desktop.sh` is green on the Hayato.** It was run on 2026-11-19 and
-      reports **449 OK, 3 WARN, 16 FAIL**; the raw output is
-      `reports/check-desktop-2026-11-19.txt`. None of the failures is this change: the biggest is
-      that the machine runs `/usr/bin/lazyos` 0.5.1 while the image it was built from is 0.5.0, so
-      the installed framework is older than this tree (`lazyos-notify --config`, `--control` and
-      the Search-key bindings are all missing from it), and the rest are packages this card does
-      not carry (`parted`, `mkfs.exfat`, `editxr`, `findfs`) plus greetd not invoking
-      `lazyos-greeter`. A green run needs this build staged into the image, which is a device
-      step, not a code one.
+- [ ] **`desktop/scripts/check-desktop.sh` is green on the Hayato.** Run on 2026-11-19 with the
+      installed binaries it reports **449 OK, 3 WARN, 16 FAIL**
+      (`reports/check-desktop-2026-11-19.txt`); with this tree's binaries and the JSONC fix below
+      it reports **452 OK, 3 WARN, 13 FAIL**
+      (`reports/check-desktop-2026-11-19-tree-binaries.txt`). Reading the two together separates
+      the causes, and only one of them was code:
+      - **A stale `/usr/bin/lazyos-notify`.** The installed binary printed four config fields and
+        ignored `--control`; the tree's prints six. Two FAILs disappear when the tree's binary is
+        on `PATH`. `/usr/bin/lazyos` itself is 0.5.1, the same as this tree.
+      - **A false negative in the check, fixed here.** `~/.config/opencode/opencode.json` is
+        JSONC — it documents itself with `//` comments — and strict `jq` rejected it, so a working
+        `mcp.lazyos` registration was reported as missing. The check now strips comments and
+        trailing commas before parsing; that FAIL is now an OK.
+      - **The image is older than the tree.** `/etc/debian-aarch64-revision` records
+        `version 0.5.0` while the binary says 0.5.1, and the machine's
+        `~/.config/sway/config` predates the Search-key and `lazyos-find` bindings. Those FAILs
+        are closed by installing this build, not by changing it.
+      - **Packages this card does not carry**: `parted`, `mkfs.exfat`, `editxr`, `findfs`, so
+        Format, Auxiliary swap, the installer's tool list, Notes and auto-mount report
+        incomplete. Also open: `lazyos gamepad` is not running, greetd does not invoke
+        `lazyos-greeter`, the brand wallpaper is not named by sway, and the font config resolves
+        monospace to a symbols-only font.
 - [x] **The new dependency is probed.** Settings → Accessibility starts `wvkbd-mobintl`, and
       `scripts/check-desktop.sh` already FAILs when it is missing: its tablet-mode check counts
       `wvkbd-mobintl`, `bin/tablet-mode` and the `bindswitch` as the three pieces that must all be
