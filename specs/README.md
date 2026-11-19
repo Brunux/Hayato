@@ -149,6 +149,7 @@ boundary (008).
 | 022 debian arm64 | packaged `linux-image-arm64` kernel recipe & `arm64-uefi` / `arm64-extlinux` targets | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
 | 023 rust installer | pure-Rust data-driven installer engine (`deviceinfo`, `disk`, `identity`, `boot`) keeping `install-emmc.sh` fallback | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
 | 024 hybrid release | 3-stage Hybrid Matrix CI release pipeline (`google-asurada`, `arm64-uefi`, `arm64-extlinux`) & umbrella integration | `claude-sonnet-5-5` (high) | `claude-opus-5-5` |
+| 025 tool audit | measured contrast + derived tokens + empty states across 33 screens | `deepinfra/deepseek-ai/DeepSeek-V4.1-Flash-1017` | `claude-sonnet-5-5` |
 
 The assignment is still a **starting hypothesis**: each PR records the model, the effort, the
 harness and whether the criteria and tests passed on the first review, and the table is revised
@@ -224,6 +225,7 @@ specs.
 | 022 | [`022-debian-arm64-targets.md`](022-debian-arm64-targets.md) — Debian `linux-image-arm64` kernel recipe & `arm64-uefi` / `arm64-extlinux` targets | 8 | in progress |
 | 023 | [`023-rust-installer-engine.md`](023-rust-installer-engine.md) — pure-Rust data-driven installer engine (`deviceinfo`, `disk`, `identity`, `boot`) | 8 | in progress |
 | 024 | [`024-hybrid-release-matrix.md`](024-hybrid-release-matrix.md) — 3-stage Hybrid Matrix CI release pipeline & umbrella integration | 8 | in progress |
+| 025 | [`025-tool-audit.md`](025-tool-audit.md) — readable tokens, honest states, one header grammar across the 59 commands | 9 | in progress |
 
 The status column is the word that opens each file's `**Status**` line, and CI fails when the two
 disagree (`The index status is the spec's status`, `.github/workflows/specs.yml`). `merged` means
