@@ -1,6 +1,6 @@
 # Spec 025 — Tool audit: readable tokens, honest states, one header grammar
 
-- **Status**: in progress (Phases 0–2 implemented; snapshot net started, 14 screens)
+- **Status**: in progress (Phases 0–2 implemented; snapshot net covers 22 screens)
 - **Phase**: post-0.5 (polish of the ported framework)
 - **Depends on**: 002 (design system), 004 (theme engine), 007 (menu/ask), 009 (search), 010/011/012/017 (pickers and surfaces)
 - **Model**: `deepinfra/deepseek-ai/DeepSeek-V4.1-Flash-1017` (this session) — the audit is mostly
@@ -177,15 +177,14 @@ The one near miss is “grey on grey” in the selected row, which is the first 
 - [x] Find/Grep install action: `menu pkg --search <package>` opens the package search
       on `fd-find` or `ripgrep`; `Ctrl+I` is the one key, and the keybar drops the
       useless “open”/“copy path” hints while the tool is missing.
-- [x] Snapshot net, first pass: `tests/screens.rs` renders 14 screens at 80×24 and
+- [x] Snapshot net, first pass: `tests/screens.rs` renders 22 screens at 80×24 and
       152×45. Seven have golden files (Capture, QR, Reminders, Calculator, Developer,
-      Notifications, Clipboard); seven are smoke renders because their rows depend on
-      the machine (Media, Applications, Learn, Games, Keys, Colour, Emoji). The screens
-      touched in Phases 0–1 (menu, palette, ask, files, find, grep, notes, pickers, task)
-      already had goldens. The remaining surfaces (About, Clean, Audio, Bluetooth,
-      Network, Window, Run, Packages, Agents, Places, Kill, Download, Layout, File
-      actions, Translate, Dictate, Theme, Controller, Installer, Greeter) are the next
-      mechanical pass.
+      Notifications, Clipboard); fifteen are smoke renders because their rows depend on
+      the machine (Media, Applications, Learn, Games, Keys, Colour, Emoji, About, Clean,
+      Audio, Bluetooth, Network, Window, Run, Kill). The screens touched in Phases 0–1
+      (menu, palette, ask, files, find, grep, notes, pickers, task) already had goldens.
+      The remaining surfaces (Packages, Agents, Places, Download, Layout, File actions,
+      Translate, Dictate, Theme, Controller, Installer, Greeter) are the next pass.
 - [x] Empty-state cards are 76 wide and ellipsize instead of cutting a word; the
       Reminders, Notifications and Clipboard hints fit at 80 columns.
 - [x] Settings: the picker question is “What do you want to change?” and Accessibility
@@ -238,8 +237,8 @@ The one near miss is “grey on grey” in the selected row, which is the first 
 - **Unit** (`lazyos-cli/src/system/settings.rs`): every settings key belongs to one section.
 - **Snapshot** (`lazyos-cli/tests/`): `menu`, `ask-no-agent`, `files-empty`, `find-no-fd`,
   `grep-no-ripgrep`, `picker-format-*`, `notes-*` at 80×24 and 152×45.
-- **Screen net** (`lazyos-cli/tests/screens.rs`): 14 more screens at both grids, seven with
-  goldens and seven as smoke renders; an isolated home keeps the rows deterministic and a
+- **Screen net** (`lazyos-cli/tests/screens.rs`): 22 more screens at both grids, seven with
+  goldens and fifteen as smoke renders; an isolated home keeps the rows deterministic and a
   path normalisation keeps the capture snapshot free of the runner's temp directory.
 - **Integration**: the menu test that opens Ask with no agent on `PATH` and asserts the Agents
   choice.
