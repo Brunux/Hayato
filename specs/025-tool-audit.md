@@ -1,6 +1,6 @@
 # Spec 025 — Tool audit: readable tokens, honest states, one header grammar
 
-- **Status**: in progress (Phases 0–3 implemented; snapshot net covers 30 of 33 screens; merge gate open)
+- **Status**: in progress (Phases 0–3 implemented; snapshot net covers all 33 screens; merge gate: the selection cue and a staged check run)
 - **Phase**: post-0.5 (polish of the ported framework)
 - **Depends on**: 002 (design system), 004 (theme engine), 007 (menu/ask), 009 (search), 010/011/012/017 (pickers and surfaces)
 - **Model**: `deepinfra/deepseek-ai/DeepSeek-V4.1-Flash-1017` (this session) — the audit is mostly
@@ -216,22 +216,26 @@ warn); before the lift the worst was Nord's danger at 3.05.
 - [x] Find/Grep install action: `menu pkg --search <package>` opens the package search
       on `fd-find` or `ripgrep`; `Ctrl+I` is the one key, and the keybar drops the
       useless “open”/“copy path” hints while the tool is missing.
-- [x] Snapshot net, first pass — `tests/screens.rs` renders 24 screens at
-      80×24 and 152×45. Five have golden files (Reminders, Calculator, Developer, Notifications,
-      Clipboard); nineteen are smoke renders because their rows depend on the machine (Capture,
-      QR, Media, Applications, Learn, Games, Keys, Colour, Emoji, About, Clean, Audio, Bluetooth,
-      Network, Window, Run, Kill, Controller, Packages). The screens touched in Phases 0–1
+- [x] Snapshot net — `tests/screens.rs` renders 27 screens at 80×24 and 152×45. Seven have
+      golden files (Reminders, Calculator, Developer, Notifications, Clipboard, Theme, Greeter);
+      twenty are smoke renders because their rows depend on the machine (Capture, QR, Media,
+      Applications, Learn, Games, Keys, Colour, Emoji, About, Clean, Audio, Bluetooth, Network,
+      Window, Run, Kill, Controller, Packages, Installer). The screens touched in Phases 0–1
       (menu, palette, ask, files, find, grep, notes, pickers, task) already had goldens.
 - [x] The six picker surfaces, now goldens in `tests/pickers.rs`: Agents, Places, Download,
       Layout, File actions and Translate config. Each one builds its rows in a `questions(...)`
       function that takes the data (the places found, the layout list, the clipboard link, the
       agent's installed set), so the test draws the real screen without a mounted disk, a
       clipboard or an agent on `PATH`. **30 of 33 screens.**
-- [ ] The three that are blocked by hardware or by a side effect: Theme (constructing it writes
-      OSC palette sequences to stdout), Installer (needs a real `Preflight`), Greeter and
-      `menu greeter` (need greetd). `menu dictate` has no screen — it toggles the recorder and
-      returns — and `menu translate` without `config` runs the translator, so neither is a
-      missing snapshot.
+- [x] The last three, each solved by making the side effect or the missing data explicit:
+      **Theme** writes the palette to the terminal with OSC as soon as it is constructed, so it
+      gained `with_design_silent` (the same screen, no write) and a golden;
+      **Installer** takes a `Preflight`, so a fixture one is built from `DeviceInfo::default()`
+      and a target disk, and it is a smoke render because the wizard reads the live locale,
+      keymap, user and hostname; **Greeter** takes a `GreeterSetup` that is already data and has
+      `set_clock_for_test`, so its preview is a golden with the clock fixed. **All 33 screens.**
+      `menu dictate` has no screen — it toggles the recorder and returns — and `menu translate`
+      without `config` runs the translator, so neither was ever a missing snapshot.
 - [x] Empty-state cards are 76 wide and ellipsize instead of cutting a word; the
       Reminders, Notifications and Clipboard hints fit at 80 columns.
 - [x] Settings: the picker question is “What do you want to change?” and Accessibility
@@ -253,8 +257,10 @@ Found by re-reading this spec against the code after Phases 0–2 merged.
       essential progress and is exempt from reduced motion; the floor test is the mechanical half.
 - [x] The 59 commands are inventoried against the families below, so “audited all 59” is
       checkable rather than asserted.
-- [x] The six picker surfaces are drawn from data and snapshotted (see Phase 2, **30 of 33**).
-- [ ] The three surfaces that need hardware or have a side effect: Theme, Installer, Greeter.
+- [x] The six picker surfaces are drawn from data and snapshotted (see Phase 2).
+- [x] The last three screens, by making the side effect and the missing data explicit: a silent
+      Theme picker, a fixture `Preflight` for the Installer, a fixed clock for the Greeter.
+      **33 of 33.**
 
 ### Coverage: 59 commands, 10 families
 
@@ -283,14 +289,24 @@ The PR is not mergeable until each line has an answer, and none of them is a cod
       the 3:1 cue is the accent bar plus the bold label. Snapshot text cannot prove this; it needs
       a look at the Hayato. If it reads weak, the next step is a `selection_fill` token in the
       theme, not a computed lift (see Risks).
-- [ ] **`desktop/scripts/check-desktop.sh` is green on the Hayato**, and `./build.sh validate` in
-      the umbrella.
+- [x] **`./build.sh validate` is green** on the Hayato (2026-11-19): the devices validation, the
+      core and devices test suites and the shell syntax pass, and it ends with
+      `Umbrella validation passed.`
+- [ ] **`desktop/scripts/check-desktop.sh` is green on the Hayato.** It was run on 2026-11-19 and
+      reports **449 OK, 3 WARN, 16 FAIL**; the raw output is
+      `reports/check-desktop-2026-11-19.txt`. None of the failures is this change: the biggest is
+      that the machine runs `/usr/bin/lazyos` 0.5.1 while the image it was built from is 0.5.0, so
+      the installed framework is older than this tree (`lazyos-notify --config`, `--control` and
+      the Search-key bindings are all missing from it), and the rest are packages this card does
+      not carry (`parted`, `mkfs.exfat`, `editxr`, `findfs`) plus greetd not invoking
+      `lazyos-greeter`. A green run needs this build staged into the image, which is a device
+      step, not a code one.
 - [x] **The new dependency is probed.** Settings → Accessibility starts `wvkbd-mobintl`, and
       `scripts/check-desktop.sh` already FAILs when it is missing: its tablet-mode check counts
       `wvkbd-mobintl`, `bin/tablet-mode` and the `bindswitch` as the three pieces that must all be
       there (`tablet mode incomplete: …`). No second probe was added; one dependency, one check.
-- [ ] **A `reports/` entry** for the visible change (the task outcome card and the status colours),
-      which is what AGENTS.md asks for when a change can be seen on the device.
+- [x] **A `reports/` entry.** `reports/check-desktop-2026-11-19.txt` is the check's output on this
+      Hayato, verbatim, which is the report the folder's README asks for.
 - [ ] **Manual paragraphs** name the visible behaviour, not the token: `02-menus.md` for the
       outcome card and `Ctrl+I`, `04-software.md` for Accessibility.
 
@@ -330,8 +346,9 @@ The PR is not mergeable until each line has an answer, and none of them is a cod
       the surface and the hero carries the spinner, the notice or the measured facts.
 - [x] `cargo test -p lazyos-ui -p lazyos-cli` is green; `cargo clippy --all-targets -D warnings`
       is green.
-- [ ] The merge gate above: `check-desktop.sh` and `./build.sh validate` on the Hayato, the
-      `check-system.sh` probe for `wvkbd-mobintl`, and a `reports/` entry.
+- [ ] The merge gate above: the selection cue looked at on the Hayato, and a green
+      `check-desktop.sh` once this build is staged into the image (the probe for `wvkbd-mobintl`
+      and the `reports/` entry are done).
 - [x] The manual paragraph in `desktop/uis/sway/files/usr/share/doc/lazyos/02-menus.md` and the
       `desktop/AGENTS.md` bullet are in the same change.
 
@@ -347,9 +364,11 @@ The PR is not mergeable until each line has an answer, and none of them is a cod
 - **Unit** (`lazyos-cli/src/system/settings.rs`): every settings key belongs to one section.
 - **Snapshot** (`lazyos-cli/tests/`): `menu`, `ask-no-agent`, `files-empty`, `find-no-fd`,
   `grep-no-ripgrep`, `picker-format-*`, `notes-*` at 80×24 and 152×45.
-- **Screen net** (`lazyos-cli/tests/screens.rs`): 24 more screens at both grids, five with
-  goldens and nineteen as smoke renders; an isolated home keeps the rows deterministic and a
-  path normalisation keeps the capture snapshot free of the runner's temp directory.
+- **Screen net** (`lazyos-cli/tests/screens.rs`): 27 screens at both grids, seven with goldens
+  and twenty as smoke renders; an isolated home keeps the rows deterministic and a path
+  normalisation keeps the capture snapshot free of the runner's temp directory. The Greeter fixes
+  its clock with `set_clock_for_test`; the Installer takes a fixture `Preflight`; the Theme picker
+  is constructed with `with_design_silent`, so the net never writes OSC to the terminal.
 - **Picker goldens** (`lazyos-cli/tests/pickers.rs`): `picker-places`, `picker-layout`,
   `picker-translate`, `picker-download`, `picker-file-actions`, `picker-agents`, each at 80×24 and
   152×45, drawn from data rather than from this machine.
