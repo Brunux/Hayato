@@ -255,8 +255,9 @@ Found by re-reading this spec against the code after Phases 0–2 merged.
 
 ### Coverage: 59 commands, 10 families
 
-Every path in `lazyos-cli/src/command.rs`'s `COMMANDS` table appears exactly once. `H/T/C/S/St/A/Cp`
-are the scorecard columns; “where” is the phase that answered the finding.
+Every path in `lazyos-cli/src/command.rs`'s `COMMANDS` table appears exactly once; the count in
+each family's name is the check. “Where” is the phase that answered the finding, or `—` when the
+family had nothing to fix.
 
 | Family | Commands | Finding | Where |
 |---|---|---|---|
