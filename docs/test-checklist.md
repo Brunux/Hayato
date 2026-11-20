@@ -227,7 +227,7 @@ one a person notices on the battery.
 | fullscreen a YouTube page in Firefox for six minutes | the same: the screen stays awake (the `fullscreen` scope is deliberate - the browser merely open does not inhibit) |
 | open a PDF in `papers` and go fullscreen | the same |
 | leave a page playing in a Firefox **background** tab | it does **not** inhibit: the screen sleeps. That is deliberate |
-| click the **coffee cup** on the bar | it turns yellow and the tooltip says the screen is kept awake; wait past six minutes - no idle screen, no lock, no panel off |
+| click the **coffee cup** on the bar | it takes the accent colour of the current workspace and the tooltip says the screen is kept awake; wait past six minutes - no idle screen, no lock, no panel off |
 | click it again | it turns dim; the timers run again from the next idle period |
 | `systemctl suspend`, then wake | the panel is on at the lock: `after-resume` turned it on (a suspend is not an idle timeout) |
 
@@ -256,8 +256,9 @@ What a failure means:
   `/etc/sway/config.d/32-idle-inhibit.conf` is missing; `check-system.sh` FAILs
   on the rules. The coffee cup is the manual override for anything else.
 * **the coffee cup does nothing**: `idle_inhibitor` is not in waybar's
-  `modules-right` (FAIL) or `style.css` lost `#idle_inhibitor.activated` (WARN -
-  then it stays dim, because both states draw the same glyph). The module holds
+  `modules-right` (FAIL) or `style.css` lost `#idle_inhibitor.activated` /
+  `.deactivated` (WARN - then it stays dim and you cannot tell on
+  from off). The module holds
   the inhibitor on the bar's own surface; there is no separate process and no
   `swaymsg` command to check.
 
