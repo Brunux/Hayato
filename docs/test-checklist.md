@@ -139,18 +139,18 @@ A FAIL here means `scripts/check-system.sh` reports it: the binary
 
 | Step | Expected |
 |---|---|
-| look at the desktop | the keyboard wallpaper on base03: one lit key carrying the cyan z_ mark, and `Hayato_`, `lazy by design` and the arcade line bottom left; the bar, foot, rofi and the menus are still solarized (the brand did not repaint the session) |
+| look at the desktop | the eagle wallpaper: the cyan golden eagle, wings raised, on the background colour, with `Hayato_` and `light. fast. fun.` under it; the bar, foot and the menus are Tokyo Night, the same palette as the mark |
 | `Alt+Ctrl+L`, then unlock | the **mountain photograph**, not the brand wallpaper - the lock is deliberately the other surface |
-| `Alt+d`, type `About Hayato` | the **About Hayato** row has the mark as its icon (not a hole); Enter opens the card with the block-character z_ (cyan z, orange cursor) and `Hayato_` on the left, `OS · Hayato <version>` among the facts, and the 16-colour palette at the bottom |
+| `Alt+d`, type `About Hayato` | the **About Hayato** row has the mark as its icon (not a hole); Enter opens the card with the block-character eagle and `Hayato_` on the left, `OS · Hayato <version>` among the facts, and the 16-colour palette at the bottom |
 | `Alt+d`, type `Hayato Menu` | the row with the same mark; Enter opens the root menu - the list `Alt+Space` shows, reachable by typing (`org.hayato.menu.desktop`) |
 | `cat /etc/os-release` | `ID=hayato`, `PRETTY_NAME="Hayato <version>"`, and `VERSION_ID` equal to the `version` line of `/etc/debian-aarch64-revision` |
 | `hostname` | `hayato` |
-| log out to the greeter | the greeting is `Hayato · lazy by design`, not "Welcome back to Debian" |
-| `Ctrl+Alt+F2` (keyd's VT keys), log in on the text console | the banner is `Hayato <version> · lazy by design` and `hayato · tty2` |
+| log out to the greeter | the greeting is `Hayato · light. fast. fun.`, not "Welcome back to Debian" |
+| `Ctrl+Alt+F2` (keyd's VT keys), log in on the text console | the banner is `Hayato <version> · light. fast. fun.` and `hayato · tty2` |
 
 The launcher's **About Hayato** and the root menu's **About** open the same card;
 the launcher entry is the one that carries `Icon=hayato`. A flat colour instead of
-the keyboard wallpaper is `Pictures/Wallpapers/hayato.png` missing (or `swaybg`
+the brand wallpaper is `Pictures/Wallpapers/hayato.png` missing (or `swaybg`
 failing), which `scripts/make-brand.sh` renders from `brand/wallpaper.svg`; a flat
 colour instead of the photograph at the lock is `mountains.jpg` missing, and that
 file ships in the repository. A hole
@@ -365,7 +365,7 @@ ordered list to follow when the second `ping` is the one that fails.
 | Step | Expected |
 |---|---|
 | Enter on **Pick a pixel**, click anywhere | a notification with the hex, and `wl-paste` holds it |
-| Enter on one of the Solarized swatch rows | the hex is copied (the launcher lists them by name) |
+| Enter on one of the Tokyo Night swatch rows | the hex is copied (the launcher lists them by name) |
 
 ## Reminders - root menu -> **Reminders**
 
@@ -426,7 +426,7 @@ with an explicit `--prefix ~/.local`, so npm never needs root and never touches
 | Enter on an EPUB | Firefox: `papers` reads no EPUB |
 | Enter on an HTML file | `bat` (it is text), not Firefox |
 | Enter on a `.deb` | Firefox, as a download prompt: the browser is what a package is for here |
-| Enter on a text file | `bat` in the popup window (`BAT_THEME=ansi`, solarized) |
+| Enter on a text file | `bat` in the popup window (`BAT_THEME=ansi`, Tokyo Night) |
 | open a deep path (`~/Dev/Hayato/uis/sway/files/home/.config/bin`) | the window is drawn wide enough that the **end** of the name is readable: rofi cannot scroll a row sideways, so `lib-rofi.sh`'s `ui_width` sizes the list instead of letting rofi cut it with `…` |
 | spam `Alt+Ctrl+F` on a directory of large photos | the application keeps responding while the rows fill in (four decoders at a time) |
 | **Alt+1** on a directory | the actions for it: disk usage, compress, copy the path, a terminal here. Enter still *opens* the row; only Alt+1 asks |
@@ -569,7 +569,7 @@ with files means `fd`/`fdfind` is missing (`check-system.sh` FAILs).
 |---|---|
 | press **Search+Shift** | a floated, centred foot window with an `fzf` prompt showing `~ > ` and rows filling in as the walk runs |
 | type part of a path, two segments | the list narrows while you type, with no pause between keystrokes (the whole tree is the pool: nothing is capped at 500 rows) |
-| put the cursor on a text file | the right 55 % shows its first lines through `bat` (`BAT_THEME=ansi`, solarized) |
+| put the cursor on a text file | the right 55 % shows its first lines through `bat` (`BAT_THEME=ansi`, Tokyo Night) |
 | put it on a photo or a PDF | the preview draws a picture in the pane (symbols, not sixels - it survives the next redraw) |
 | put it on a `.zip` or a binary | the pane names the type and the size instead of trying to draw it |
 | **Ctrl+Y** | `copied the path` in the header; `wl-paste` is `~/relative/path` |
@@ -589,7 +589,7 @@ correctly absent.
 
 | Step | Expected |
 |---|---|
-| press **Alt+Ctrl+Shift+F** | pcmanfm opens on `$HOME`, in the solarized palette (base03 window, cyan selection), JetBrains Mono, Hayato icons |
+| press **Alt+Ctrl+Shift+F** | pcmanfm opens on `$HOME`, in the Tokyo Night palette (background window, cyan selection), JetBrains Mono, Hayato icons |
 | press **Alt+Ctrl+F** | the file list (`rofi-files`), not the window |
 | tap **Search** on its own | the launcher, not the window |
 | press **Alt+Search** | the file search, not the window |
@@ -615,7 +615,7 @@ one white window in the session.
 
 | Step | Expected |
 |---|---|
-| open a PDF (Alt+Ctrl+F, Enter on a `.pdf`) | the reader opens **dark**: base03 page background, base1 text, the headerbar in base02 and the cyan accent on the selected control |
+| open a PDF (Alt+Ctrl+F, Enter on a `.pdf`) | the reader opens **dark**: background page, text colour, the headerbar on the surface colour and the cyan accent on the selected control |
 | `papers`, then **Print** | the print dialog opens with no printer available and says so (no `cups` in the image): not a crash, and not a silent no-op |
 | `ls ~/.config/gtk-4.0/` | `settings.ini` and `gtk.css` |
 | `grep prefer-dark ~/.config/gtk-4.0/settings.ini` | `gtk-application-prefer-dark-theme=1` |
@@ -841,7 +841,7 @@ Fold the keyboard all the way back.
 
 | Step | Expected |
 |---|---|
-| fold it back | the on-screen keyboard appears at the bottom (solarized, `JetBrains Mono`), the touchpad **and the physical keyboard** do nothing, one notification: "Tablet mode: the keyboard is up and the screen follows the device" |
+| fold it back | the on-screen keyboard appears at the bottom (Tokyo Night, `JetBrains Mono`), the touchpad **and the physical keyboard** do nothing, one notification: "Tablet mode: the keyboard is up and the screen follows the device" |
 | type on the folded keys | nothing arrives in the focused window (the keys are under the screen now) |
 | type in foot on the on-screen keyboard | letters land in the focused window; `Cmp` then `a` opens `á à â ä …` and tapping one inserts it; `Cmp` then `?` reaches `¿` |
 | turn the device 90° clockwise, 90° back, upside down, and lay it flat | the screen follows within about a second, and the flat reading puts it back to `normal` |
@@ -928,7 +928,7 @@ allowlist is the agreement, not the names.
 | `gio mime image/png`, `gio mime application/pdf`, `gio mime inode/directory` | `org.hayato.view.desktop`, `org.gnome.Papers.desktop`, `pcmanfm.desktop`. This is GIO's own answer, not the file read back: a `hayato-view` without its executable bit makes GIO say "no default application" |
 | `dig +short example.com` and `host example.com` | an address. `dig` comes from `bind9-dnsutils`; `resolvectl` is deliberately absent because NetworkManager owns `resolv.conf`, and its absence is not a gap |
 | a menu whose rows are long (Files on a deep path, a grep match with a long line) | the window is wide enough for the end of the path; a row cut with `…` mid-detail means `ui_width` stopped sizing that list |
-| lock (`Alt+Ctrl+L`, the Lock key, and the 300 s idle timer) | the **mountain photograph** on base03, then back to the session; no idle screen left behind (it is stopped before the lock) |
+| lock (`Alt+Ctrl+L`, the Lock key, and the 300 s idle timer) | the **mountain photograph** on the background colour, then back to the session; no idle screen left behind (it is stopped before the lock) |
 | idle for 150 s without touching anything | the **Hayato** wordmark, the caption and the arcade line, with an effect rebuilding them and another one after it (a still frame means `tte` did not start) |
 | press any key while the idle screen animates | it closes at once, not at the end of the effect |
 | stay idle past the lock and then a minute more | the panel goes dark (360 s) and the first input brings it back with the lock still up (see *The idle chain*) |

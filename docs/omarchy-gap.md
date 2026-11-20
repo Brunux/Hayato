@@ -175,7 +175,7 @@ different ones.
 |---|---|
 | Notifications stacked by sender | mako's `group-by=app-name` in `~/.config/mako/config`; the card's header is the application name. |
 | Notification history and Do Not Disturb | `rofi-notify` (Alt+Ctrl+N) lists mako's `max-history=20`; DND is a row in `rofi-quick` and a `makoctl mode`. |
-| Apps opaque, terminals transparent | the carriers are already split that way: foot 0.87, rofi 0.82, waybar 0.71, mako 0.88, and the GTK3/GTK4 fills are opaque base03. |
+| Apps opaque, terminals transparent | the carriers are already split that way: foot 0.87, rofi 0.82, waybar 0.71, mako 0.88, and the GTK3/GTK4 fills are opaque. |
 | Scratchpad console on `Super+Grave` | `Alt+grave` (`Alt+minus` as the alias). |
 | `Super+Shift+S` for a screenshot | `Alt+Shift+S` (area), `Alt+Shift+F` (full), both through `screenshot` + `grimshot -n`. |
 | A second close chord | `Alt+Q` is the only close, and it is the documented one: foot's `Ctrl+Shift+W` never reached the held About windows on this keyboard. |
