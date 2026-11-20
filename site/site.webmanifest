@@ -1,7 +1,7 @@
 {
   "name": "Hayato",
   "short_name": "Hayato_",
-  "description": "Debian arm64 for ARM Chromebooks and Mainline ARM64. Keyboard first. Lazy by design.",
+  "description": "Debian arm64 for ARM Chromebooks and Mainline ARM64. Keyboard first. Light. Fast. Fun.",
   "start_url": "./",
   "display": "browser",
   "background_color": "#002b36",

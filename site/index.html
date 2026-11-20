@@ -218,6 +218,7 @@ footer { padding: 72px 0 56px; border-top: 1px solid var(--line); }
 footer .wrap { display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-start; }
 footer .big { font-size: 34px; font-weight: 800; letter-spacing: -0.05em; color: var(--text); }
 footer p { color: var(--muted); font-size: 14px; margin-top: 8px; }
+footer .name { max-width: 34ch; color: var(--body); }
 footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
 .arcade { margin-top: 18px; color: var(--muted); font-size: 14px; }
 .play { font-family: "Silkscreen", var(--mono); font-weight: 700; font-size: 1.3em; line-height: 1; color: var(--cursor); letter-spacing: 0.02em; margin: 0 0.1em; }
@@ -276,9 +277,9 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
       <p class="lede">Debian arm64 for Chromebooks &amp; Mainline ARM64. Keyboard first. <em>Light. Fast. Fun.</em></p>
       <p class="sub">Real Debian above the kernel: tuned <code>7.2.7-mt81</code> images for Google Hayato (MT8192) &amp; Google Kukui / Lenovo IdeaPad Duet (MT8183) Chromebooks, plus generic Debian <code>linux-image-arm64</code> + multi-vendor firmware images reaching ARM64 UEFI laptops/VMs (QEMU/UTM/Parallels), Raspberry Pi 4/5 (via EDK2 UEFI or U-Boot), and U-Boot SBCs—driven by our pure-Rust <code>hayato</code> TUI, greeter, and installer.</p>
       <div class="ctas">
-        <a class="btn btn-primary" href="https://github.com/Brunux/Hayato/releases/tag/v0.6.0">
+        <a class="btn btn-primary" href="https://github.com/Brunux/Hayato/releases">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"/><path d="m6 11 6 6 6-6"/><path d="M5 20h14"/></svg>
-          Download v0.5.1
+          Download
         </a>
         <a class="btn btn-ghost" href="#features">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
@@ -523,6 +524,8 @@ footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; fo
       <div class="big">Hayato<span class="cur">_</span></div>
       <p>light. fast. fun.</p>
       <p class="arcade">» press any key to <span class="play">play</span> «</p>
+      <p class="name">Hayato is an old word for a falconer - the person whose bird comes back to the
+      hand. The eagle is the mascot; the name is the idea: light, fast, fun.</p>
     </div>
     <ul>
       <li><a href="https://github.com/Brunux/Hayato">Source on GitHub</a></li>
