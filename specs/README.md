@@ -227,6 +227,7 @@ specs.
 | 023 | [`023-rust-installer-engine.md`](023-rust-installer-engine.md) — pure-Rust data-driven installer engine (`deviceinfo`, `disk`, `identity`, `boot`) | 8 | in progress |
 | 024 | [`024-hybrid-release-matrix.md`](024-hybrid-release-matrix.md) — 3-stage Hybrid Matrix CI release pipeline & umbrella integration | 8 | in progress |
 | 025 | [`025-tool-audit.md`](025-tool-audit.md) — readable tokens, honest states, one header grammar across the 59 commands | 9 | in progress |
+| 026 | [`026-hayato-rebrand.md`](026-hayato-rebrand.md) — the rename to Hayato, the golden-eagle mark, Tokyo Night and three wallpapers per theme | 9 | in progress |
 
 The status column is the word that opens each file's `**Status**` line, and CI fails when the two
 disagree (`The index status is the spec's status`, `.github/workflows/specs.yml`). `merged` means

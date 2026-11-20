@@ -3,6 +3,7 @@
 - **Status**: in progress (code, brand, theme and wallpapers on `brand/hayato`; image build and GitHub renames pending)
 - **Phase**: 9
 - **Depends on**: spec 004 (theme engine), spec 021 (greeter), spec 024 (release matrix)
+- **Model**: built by `deepinfra/deepseek-ai/DeepSeek-V4.1-Flash-1017`; reviewer `claude-opus-5-5` (high)
 - **Branch**: `brand/hayato`
 - **Supersedes**: the naming rules in `docs/plan-rebrand.md` (Nureb → LazyOS), for the second rename
 
@@ -76,6 +77,18 @@ this is one rename in one release, 0.6.0.
 5. Every built-in theme lists exactly three wallpapers, all present, none carrying a brand word
    (`cargo test -p hayato-theme --test wallpapers`).
 6. `check-desktop.sh`, `check-core.sh`, `check-device.sh` and `./build.sh validate` pass.
+
+## Tests
+
+- `cargo test --workspace --all-targets` in `desktop/`: the rename's own suites plus
+  `hayato-theme/tests/wallpapers.rs` (three per theme, files present, no brand word) and
+  `hayato-theme/tests/surfaces.rs` (a missing wallpaper falls back, or leaves sway its own
+  background, instead of failing the whole config).
+- `cargo clippy -D warnings` and `cargo fmt --check`.
+- `scripts/fetch-wallpapers.py --check`: every theme declares exactly three, all present.
+- `scripts/make-brand.sh` regenerates every brand file from `mark-48.txt`.
+- `./build.sh validate`: devices, core and umbrella checks, plus the guard that the old name is
+  not in the product tree.
 
 ## The three witnesses
 
