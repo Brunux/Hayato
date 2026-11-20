@@ -76,13 +76,15 @@ case "$cmd" in
 		# The old brand name lives in history (reports/, docs/releases/, the
 		# old specs and design notes) and nowhere in the product. This is the
 		# guard for specs/026-hayato-rebrand.md: a stray identifier in the
-		# tree is a path that resolves to nothing on the device.
+		# tree is a path that resolves to nothing on the device. CI config is
+		# not product: specs.yml names the old doc path on purpose, so the
+		# witness keeps covering the specs written before the rename.
 		stale=$(grep -rIl --exclude-dir=.git --exclude-dir=target \
 			-e 'lazyos' -e 'LazyOS' -e 'LAZYOS' \
 			"$HAYATO_DESKTOP_DIR/uis" "$HAYATO_DESKTOP_DIR/rust" \
 			"$HAYATO_CORE_DIR/scripts" "$HAYATO_CORE_DIR/boot" \
 			"$HAYATO_DEVICES_DIR/devices" "$HAYATO_DEVICES_DIR/kernels" \
-			"$ROOT_DIR/site" "$ROOT_DIR/.github" 2>/dev/null || true)
+			"$ROOT_DIR/site" 2>/dev/null || true)
 		if [ -n "$stale" ]; then
 			echo "error: the old brand name is still in the product tree:" >&2
 			echo "$stale" >&2
