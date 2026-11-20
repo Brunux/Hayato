@@ -14,7 +14,7 @@
 ## Witnesses (all three, as every feature here ships them)
 
 - [ ] `scripts/check-system.sh` FAILs when this feature's dependency disappears — line:
-- [ ] manual paragraph in `uis/sway/files/usr/share/doc/lazyos/<page>.md`:
+- [ ] manual paragraph in `uis/sway/files/usr/share/doc/hayato/<page>.md`:
 - [ ] `AGENTS.md` bullet:
 
 ## Tests

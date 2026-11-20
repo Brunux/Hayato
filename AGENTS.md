@@ -1,19 +1,19 @@
-# AGENTS.md — `LazyOS` Umbrella Repository
+# AGENTS.md — `Hayato` Umbrella Repository
 
 ## Architecture & LLM Routing Map
-`Brunux/LazyOS` is the umbrella orchestrator tying together **three focused sub-repositories**
+`Brunux/Hayato` is the umbrella orchestrator tying together **three focused sub-repositories**
 as Git submodules so models and contributors work inside the relevant bounded domain (~10% of the
 old monorepo context) before updating submodule pins here.
 
 | Task Domain | Submodule / Repo | Enter Here First |
 |---|---|---|
-| Wayland desktop (`swayfx`), Rust `lazyos` TUI/CLI/greeter/notify/theme/MCP, icons, glyphs, user manual (`doc/lazyos/`), `30-desktop.sh` | `desktop/` (`Brunux/lazyos-desktop`) | `desktop/AGENTS.md` |
-| Kernel recipes (`arm64-mainline` + fragments, `mediatek-mt81`), board definitions (`devices/<codename>/`), udev/keyd/IRQ/board overlays, `20-device.sh` | `devices/` (`Brunux/lazyos-devices`) | `devices/AGENTS.md` |
-| Debian arm64 rootfs assembly, pluggable boot backends (`boot/{depthcharge,uefi,extlinux}.sh`), installers, backup/restore, release imaging, `10-core.sh` | `core/` (`Brunux/lazyos-core`) | `core/AGENTS.md` |
-| Website (`site/`), release notes (`docs/releases/`), hardware test logs (`reports/`), design specs (`specs/`), root `./build.sh` wrapper | `.` (`Brunux/LazyOS`) | This file |
+| Wayland desktop (`swayfx`), Rust `hayato` TUI/CLI/greeter/notify/theme/MCP, icons, glyphs, user manual (`doc/hayato/`), `30-desktop.sh` | `desktop/` (`Brunux/hayato-desktop`) | `desktop/AGENTS.md` |
+| Kernel recipes (`arm64-mainline` + fragments, `mediatek-mt81`), board definitions (`devices/<codename>/`), udev/keyd/IRQ/board overlays, `20-device.sh` | `devices/` (`Brunux/hayato-devices`) | `devices/AGENTS.md` |
+| Debian arm64 rootfs assembly, pluggable boot backends (`boot/{depthcharge,uefi,extlinux}.sh`), installers, backup/restore, release imaging, `10-core.sh` | `core/` (`Brunux/hayato-core`) | `core/AGENTS.md` |
+| Website (`site/`), release notes (`docs/releases/`), hardware test logs (`reports/`), design specs (`specs/`), root `./build.sh` wrapper | `.` (`Brunux/Hayato`) | This file |
 
 ## Quick Routing Rules
-- **UI, Rust binary (`lazyos`), theme, Waybar, Sway bindings, or manual pages (`01`–`07`)**:
+- **UI, Rust binary (`hayato`), theme, Waybar, Sway bindings, or manual pages (`01`–`07`)**:
   Work exclusively inside `desktop/`. Pin Cargo builds/Clippy/tests on 8-core ARM64 hosts to big
   cores: `taskset -c 4-7 cargo <cmd> --manifest-path desktop/rust/Cargo.toml -j 4`.
 - **Adding a new ARM mainline board or updating kernel config/patches/board quirks**:
@@ -23,7 +23,7 @@ old monorepo context) before updating submodule pins here.
   Work inside `core/`. Use the uniform `boot_*` backend interface rather than assuming ChromeOS `cgpt`.
 - **Every user-facing change ships with three witnesses**:
   1. Executable witness (`check-core.sh` / `check-device.sh` / `check-desktop.sh` + unit tests).
-  2. Documentation update in `desktop/uis/sway/files/usr/share/doc/lazyos/`.
+  2. Documentation update in `desktop/uis/sway/files/usr/share/doc/hayato/`.
   3. Concise architectural rule in the owning repository's `AGENTS.md`.
 
 ## Umbrella Conventions
@@ -31,7 +31,7 @@ old monorepo context) before updating submodule pins here.
 - Keep `VERSION`, `core/VERSION`, and `desktop/VERSION` aligned when tagging releases (`vX.Y.Z`).
 - Make changes and commit inside the owning submodule first (`core/`, `desktop/`, or `devices/`),
   verify standalone + umbrella checks (`./build.sh validate`), and then bump submodule gitlink pins
-  in `LazyOS`.
+  in `Hayato`.
 - Release CI uses a 3-stage Hybrid Matrix (`.github/workflows/release.yml`): shared `desktop` and
   `mediatek-mt81` kernel (`google-asurada`, `google-kukui`) build once, then `google-asurada`,
   `google-kukui`, `arm64-uefi`, and `arm64-extlinux` (`debian-arm64`) assemble in parallel before

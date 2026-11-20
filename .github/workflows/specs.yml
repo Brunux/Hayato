@@ -50,7 +50,9 @@ jobs:
               { echo "FAIL $file: no model assigned (a claude-* ID, specs/README.md §6)"; status=1; }
             grep -qE "scripts/check-(system|core|desktop)\.sh|check-device\.sh" "$file" ||
               { echo "FAIL $file: no check-system witness"; status=1; }
-            grep -q "usr/share/doc/lazyos" "$file" ||
+            # The manual moved from doc/lazyos/ to doc/hayato/ in 0.6; a spec
+            # written before the rename keeps its own path.
+            grep -qE "usr/share/doc/(hayato|lazyos)" "$file" ||
               { echo "FAIL $file: no manual witness"; status=1; }
             grep -q "AGENTS.md" "$file" ||
               { echo "FAIL $file: no AGENTS.md witness"; status=1; }

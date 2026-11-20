@@ -92,12 +92,12 @@ jobs:
         run: |
           sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
           df -h
-      - name: Build shared desktop once (swayfx, workstyle, lazyos)
+      - name: Build shared desktop once (swayfx, workstyle, hayato)
         run: |
-          export BUILD_ROOT=/var/tmp/lazyos-build
+          export BUILD_ROOT=/var/tmp/hayato-build
           ./build.sh desktop
           mkdir -p stages
-          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - swayfx-stage workstyle-stage lazyos-stage | zstd -T0 -6 -q -o stages/desktop-stages.tar.zst
+          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - swayfx-stage workstyle-stage hayato-stage | zstd -T0 -6 -q -o stages/desktop-stages.tar.zst
       - uses: actions/upload-artifact@v4
         with:
           name: desktop-stages
@@ -120,7 +120,7 @@ jobs:
           df -h
       - name: Build mediatek-mt81 kernel once (google-asurada & google-kukui)
         run: |
-          export BUILD_ROOT=/var/tmp/lazyos-build
+          export BUILD_ROOT=/var/tmp/hayato-build
           DEVICE=google-asurada ./build.sh kernel
           mkdir -p stages
           tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - kernel-stage-mediatek-mt81 | zstd -T0 -6 -q -o stages/mt81-kernel-stage.tar.zst
@@ -159,7 +159,7 @@ jobs:
           path: stages
       - name: Assemble rootfs, images, and release archive
         run: |
-          export BUILD_ROOT=/var/tmp/lazyos-build
+          export BUILD_ROOT=/var/tmp/hayato-build
           sudo mkdir -p "$BUILD_ROOT/work"
           sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/desktop-stages.tar.zst
           if [ -f stages/mt81-kernel-stage.tar.zst ]; then
@@ -203,7 +203,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: needs.verify.outputs.should_publish != 'true'
         with:
-          name: lazyos-release-preview
+          name: hayato-release-preview
           path: release-files/*
           retention-days: 7
       - name: Publish GitHub Release

@@ -34,7 +34,7 @@ jobs:
           rm -rf _site
           cp -a site _site
           mkdir -p _site/brand _site/screenshots
-          cp desktop/brand/lazyos.svg desktop/brand/social-preview.png _site/brand/
+          cp desktop/brand/hayato.svg desktop/brand/social-preview.png _site/brand/
           [ -f desktop/brand/apple-touch-icon.png ] && cp desktop/brand/apple-touch-icon.png _site/apple-touch-icon.png
           cp docs/screenshots/*.png _site/screenshots/
       - uses: actions/configure-pages@v5
