@@ -363,7 +363,7 @@ from `/proc/<pid>/status` while the decode ran, which is the number that decides
 can run at once.
 
 The fan-out that makes it fast is also what would make it heavy: eight 24 MP PNGs at once is
-~1 GB on a 4 GB machine. `lazyos-thumbnail` therefore gates itself to **four** decoders with `flock`
+~1 GB on a 4 GB machine. `hayato-thumbnail` therefore gates itself to **four** decoders with `flock`
 slots (measured: max 4 concurrent ffmpeg over 8 requests), which is ~200 MB for the realistic case
 (12 MP phone JPEGs, ~50 MB each at `-lowres 2`) and finishes a screenful in about a second. `flock`
 releases the slot when the process dies, so a killed listing cannot leave the browser waiting on a
@@ -392,7 +392,7 @@ host with forky's rofi 2.0.0-0.2:
 
 ### The rules that follow
 
-* **Four decoders, not eight.** `SLOTS=4` in `lazyos-thumbnail`; the constant is the knob if a bigger
+* **Four decoders, not eight.** `SLOTS=4` in `hayato-thumbnail`; the constant is the knob if a bigger
   folder ever feels slow, and it is bounded by the worst decode (131 MB for a 24 MP PNG) rather
   than the average.
 * **`-lowres 2` for JPEG only.** It is a quarter-size decode in one step (53 ms against 179 ms and
@@ -411,7 +411,7 @@ host with forky's rofi 2.0.0-0.2:
 
 ## 9. The terminal file search
 
-`Search+Shift` runs `~/.config/bin/lazyos-find`, which is `fd` piped into `fzf` with a preview pane.
+`Search+Shift` runs `~/.config/bin/hayato-find`, which is `fd` piped into `fzf` with a preview pane.
 It answers the same question the file list (`Alt+Search`) does, in a different way: `rofi-files --search` is
 bounded (500 rows, 92 ms end to end, icons and thumbnails) and lives in a menu, while this one is
 uncapped with a preview and lives in a terminal. The numbers below decide the settings that are not
@@ -461,7 +461,7 @@ seventh row is a browser cache entry.
 The pane is 55 % of the width and shows one of three things: the first 300 lines of a text file
 through `bat` (`--paging=never`, `--style=numbers`, `BAT_THEME=ansi`), a picture or a PDF page, or
 `file`'s mimetype plus `du` for anything else. A preview is drawn **for the row under the cursor
-only**, so the cost is one decode of the 128 px thumbnail `lazyos-thumbnail` already keeps for
+only**, so the cost is one decode of the 128 px thumbnail `hayato-thumbnail` already keeps for
 `rofi-files`: the same cache path (`~/.cache/thumbnails/normal/<md5>.png`), the same generator, and
 a picture is decoded once ever, whichever of the two asked for it.
 
@@ -501,7 +501,7 @@ Deboma's screensaver is `omarchy-screensaver`: a fullscreen terminal looping `tt
 long as the machine is idle. Measured on this host, that loop is 78 MB of Python and 74-86 % of one
 core on a 200x60 canvas, which is what the battery notices. This port keeps the animation and changes
 what it costs: Debian's `tte` at **30 fps**, looping the seven curated effects over
-`~/.config/lazyos/screensaver.txt` with `--reuse-canvas`.
+`~/.config/hayato/screensaver.txt` with `--reuse-canvas`.
 
 ### Method
 
@@ -510,7 +510,7 @@ around a shell that runs each effect once in the shipped order. CPU is `getrusag
 whole tree (bash's `time` accumulates each `tte` child), so Python start-up is included; memory is the
 tallest `VmHWM` any `tte` process reaches. Nothing else runs on the machine during the measurement.
 
-One *cycle* below is each effect once, in the order `lazyos-screensaver` draws them.
+One *cycle* below is each effect once, in the order `hayato-screensaver` draws them.
 
 ### What a cycle costs at 30 fps
 
@@ -544,7 +544,7 @@ clear and repaint between effects.
 ### Not ported, on purpose
 
 * **Deboma's launcher.** `hyprctl monitors`, a special workspace per monitor and a socket2 event
-  stream for one output. The window rule fullscreens `[app_id="org.lazyos.screensaver"]` instead.
+  stream for one output. The window rule fullscreens `[app_id="org.hayato.screensaver"]` instead.
 * **`ttfx` and its shim.** Omarchy's scripts call the Rust port by that name; this one calls Debian's
   `tte` directly, so there is nothing to shim and no second dependency.
 * **A 120 fps option.** A faster loop would be a setting nobody can see the cost of; the loop is
@@ -570,7 +570,7 @@ changes. That is the whole loop, and it is the session's second resident process
 
 ### Method
 
-The shipped binary (`workstyle 0.8.2-1lazyos1`, `/usr/bin/workstyle`) started by the session with
+The shipped binary (`workstyle 0.8.2-1hayato1`, `/usr/bin/workstyle`) started by the session with
 the shipped config, one foot window in workspace 1 and Firefox in workspace 2. RSS and PSS are
 `/proc/<pid>/status` and `/proc/<pid>/smaps_rollup` on the running daemon; CPU is `utime+stime` from
 `/proc/<pid>/stat` sampled 60 s apart with nothing else running. The rename itself is what `swaymsg`
@@ -705,7 +705,7 @@ when idle, and wakes at 10 fps only for the 300 ms opening sweep (tachyonfx). An
 therefore costs nothing, which is the same rule the session's "nothing resident" already applies
 to processes.
 
-The golden snapshots (`lazyos-ui/tests/snapshots/`, every widget at 80x24 and 152x45) are the
+The golden snapshots (`hayato-ui/tests/snapshots/`, every widget at 80x24 and 152x45) are the
 other half of the budget: the frame test says a tick is cheap, and the snapshots say what that
 cheap frame actually looks like, so a change that moves a border is visible in review instead of
 being inferred from a timing.
@@ -803,7 +803,7 @@ of its own fields:
 | allocations per keystroke | ~20,000 (four per row) | **1-2**, independent of the row count |
 | 200 rows instead of 5,000 | only the time changes | same allocations |
 
-Three changes, each with a witness in `lazyos-ui/tests/filter.rs`:
+Three changes, each with a witness in `hayato-ui/tests/filter.rs`:
 
 - **The needle folds once per change**, never per row; the row test takes the folded form.
 - **An ASCII needle takes a byte path** (`eq_ignore_ascii_case` over the bytes, with a single-byte
@@ -831,7 +831,7 @@ release, 25 ms in debug (the debug number is the tripwire; `--release` is the de
 
 The sixel spike pulled `image` 0.25 with its **default features**, which is every decoder and
 encoder the crate has - AVIF via `ravif`, EXR, TIFF, WebP, GIF, QOI, PNM, TGA, DDS, HDR - to draw
-two things: the theme's PNG icons and the pictures `lazyos-thumbnail` produces (PNG, and JPEG
+two things: the theme's PNG icons and the pictures `hayato-thumbnail` produces (PNG, and JPEG
 straight from ffmpeg).
 
 | `image` features | clean build | `target/` | stripped binary |
@@ -857,15 +857,15 @@ carries pictures.
 
 ## 14. What a card costs - a notification without a bus client (spec 006)
 
-A card is the one vocabulary the toast and the window share (`lazyos_ui::card`). Sending it is the
+A card is the one vocabulary the toast and the window share (`hayato_ui::card`). Sending it is the
 only part of that which could have needed a dependency: the session bus. Two ways were built and
 measured on this device (aarch64, release builds, `rustc` 1.97.1, a fresh target directory each).
 
-| | baseline (`lazyos-cli` before spec 006) | `zbus` client in the binary | `notify-send` (shipped) |
+| | baseline (`hayato-cli` before spec 006) | `zbus` client in the binary | `notify-send` (shipped) |
 |---|---|---|---|
-| clean `cargo build --release -p lazyos-cli` | 1 m 06 s | 2 m 46 s (16 m 54 s CPU) | 1 m 03 s (6 m 30 s CPU) |
+| clean `cargo build --release -p hayato-cli` | 1 m 06 s | 2 m 46 s (16 m 54 s CPU) | 1 m 03 s (6 m 30 s CPU) |
 | `Cargo.lock` packages | 264 | 306 (**+42**) | 264 (unchanged) |
-| release binary | 1,661,336 B | 4,305,592 B (**+2.64 MB**) | 1,742,728 B (**+81 KB**, the card and `lazyos notify`) |
+| release binary | 1,661,336 B | 4,305,592 B (**+2.64 MB**) | 1,742,728 B (**+81 KB**, the card and `hayato notify`) |
 | one card | not measured | not measured | 20-34 ms (six runs, idle), a process per card |
 
 `zbus` 5.16 with the default `async-io` executor and no `tokio` was the first choice, because it
@@ -881,6 +881,6 @@ press. The argument vector is pinned by unit tests (`card::send`), a stub `notif
 the CLI asks for (`tests/notify.rs`), and the real program runs against a private bus with a
 monitor watching (`the_card_is_addressed_to_the_notification_service_on_the_session_bus`).
 
-**How to check it took:** `cargo build --release -p lazyos-cli` in an empty `CARGO_TARGET_DIR`, then
-`ls -l target/release/lazyos`, and `grep -c '^name' rust/Cargo.lock` against the committed count.
+**How to check it took:** `cargo build --release -p hayato-cli` in an empty `CARGO_TARGET_DIR`, then
+`ls -l target/release/hayato`, and `grep -c '^name' rust/Cargo.lock` against the committed count.
 A change that adds a crate for the send path shows up in the lock before it shows up in the binary.

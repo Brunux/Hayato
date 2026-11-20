@@ -1,13 +1,13 @@
 {
-  "name": "LazyOS",
-  "short_name": "lazyOS_",
+  "name": "Hayato",
+  "short_name": "Hayato_",
   "description": "Debian arm64 for ARM Chromebooks and Mainline ARM64. Keyboard first. Lazy by design.",
   "start_url": "./",
   "display": "browser",
   "background_color": "#002b36",
   "theme_color": "#002b36",
   "icons": [
-    { "src": "brand/lazyos.svg", "type": "image/svg+xml", "sizes": "any" },
+    { "src": "brand/hayato.svg", "type": "image/svg+xml", "sizes": "any" },
     { "src": "apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
   ]
 }

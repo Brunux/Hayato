@@ -66,7 +66,7 @@ A spec is done when **all** of these are true:
 3. **The three witnesses** exist, as every feature in this repository ships them:
    - a `scripts/check-system.sh` line that **FAILs** when the feature's dependency disappears
      (a binary, a generated file, a binding, a symlink, a manifest entry);
-   - a paragraph in `uis/sway/files/usr/share/doc/lazyos/` (the manual a person reads on the
+   - a paragraph in `uis/sway/files/usr/share/doc/hayato/` (the manual a person reads on the
      device);
    - a bullet in `AGENTS.md` that says **why** it is built that way.
 4. The **old path still works** while the port is in flight: the spec adds the symlink (or the
@@ -145,11 +145,12 @@ boundary (008).
 | 018 TUI installer | full TUI wizard: user, password, timezone, disk safety, progress | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
 | 019 notification daemon | layer-shell + D-Bus server + tiny-skia 2D card rendering + actions | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
 | 020 frictionless UX | auto-discovery, in-window progress/TaskView, retire TUI toasts, layout consistency | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
-| 021 greeter | native `lazyos-greeter` over `greetd` IPC | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
+| 021 greeter | native `hayato-greeter` over `greetd` IPC | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
 | 022 debian arm64 | packaged `linux-image-arm64` kernel recipe & `arm64-uefi` / `arm64-extlinux` targets | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
 | 023 rust installer | pure-Rust data-driven installer engine (`deviceinfo`, `disk`, `identity`, `boot`) keeping `install-emmc.sh` fallback | `claude-opus-5-5` (high) | `claude-sonnet-5-5` |
 | 024 hybrid release | 3-stage Hybrid Matrix CI release pipeline (`google-asurada`, `arm64-uefi`, `arm64-extlinux`) & umbrella integration | `claude-sonnet-5-5` (high) | `claude-opus-5-5` |
 | 025 tool audit | measured contrast + derived tokens + empty states across 33 screens | `deepinfra/deepseek-ai/DeepSeek-V4.1-Flash-1017` | `claude-sonnet-5-5` |
+| 026 rebrand | one rename to Hayato, golden-eagle mark, Tokyo Night default, three wallpapers per theme | `deepinfra/deepseek-ai/DeepSeek-V4.1-Flash-1017` | `claude-opus-5-5` |
 
 The assignment is still a **starting hypothesis**: each PR records the model, the effort, the
 harness and whether the criteria and tests passed on the first review, and the table is revised
@@ -201,14 +202,14 @@ specs.
 
 | # | Spec | Phase (plan §16) | Status |
 |---|---|---|---|
-| 001 | [`001-core.md`](001-core.md) — the `lazyos` binary and its host | 2 | merged |
+| 001 | [`001-core.md`](001-core.md) — the `hayato` binary and its host | 2 | merged |
 | 002 | [`002-design-system.md`](002-design-system.md) — tokens, widgets, snapshots | 2 | merged |
 | 003 | [`003-glyphs.md`](003-glyphs.md) — the Nerd Font alphabet | 2 | merged |
 | 004 | [`004-theme-engine.md`](004-theme-engine.md) — `theme.toml` and the generators | 2 | merged |
 | 005 | [`005-taskview.md`](005-taskview.md) — the task surface | 2 | merged |
 | 006 | [`006-notifications.md`](006-notifications.md) — cards and icons | 2 | merged |
 | 007 | [`007-menu-ask.md`](007-menu-ask.md) — root menu, palette, Ask strip | 2 | in progress |
-| 008 | [`008-mcp.md`](008-mcp.md) — `lazyos mcp` and the OpenCode contract | 2 | in progress |
+| 008 | [`008-mcp.md`](008-mcp.md) — `hayato mcp` and the OpenCode contract | 2 | in progress |
 | 009 | [`009-search.md`](009-search.md) — files, find, grep | 3 | in progress |
 | 010 | [`010-system-pickers.md`](010-system-pickers.md) — system dialogs | 3 | in progress |
 | 011 | [`011-media-pickers.md`](011-media-pickers.md) — media and utilities | 3 | in progress |
@@ -221,7 +222,7 @@ specs.
 | 018 | [`018-tui-installer.md`](018-tui-installer.md) — full TUI installer: user setup, timezone, disk safety, progress | 4-5 | merged |
 | 019 | [`019-notification-daemon.md`](019-notification-daemon.md) — eye-candy layer-shell notification daemon, actions, progress | 5 | merged |
 | 020 | [`020-frictionless-ux.md`](020-frictionless-ux.md) — intuitive, frictionless, self-contained UX overhaul | 6 | draft |
-| 021 | [`021-greeter.md`](021-greeter.md) — native `lazyos-greeter` over `greetd` IPC | 7 | in progress |
+| 021 | [`021-greeter.md`](021-greeter.md) — native `hayato-greeter` over `greetd` IPC | 7 | in progress |
 | 022 | [`022-debian-arm64-targets.md`](022-debian-arm64-targets.md) — Debian `linux-image-arm64` kernel recipe & `arm64-uefi` / `arm64-extlinux` targets | 8 | in progress |
 | 023 | [`023-rust-installer-engine.md`](023-rust-installer-engine.md) — pure-Rust data-driven installer engine (`deviceinfo`, `disk`, `identity`, `boot`) | 8 | in progress |
 | 024 | [`024-hybrid-release-matrix.md`](024-hybrid-release-matrix.md) — 3-stage Hybrid Matrix CI release pipeline & umbrella integration | 8 | in progress |

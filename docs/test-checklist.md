@@ -13,16 +13,16 @@ question: every one of its checks maps to a bug this port has already hit.
 ## Before anything else
 
 ```sh
-cat /etc/debian-aarch64-revision ~/Dev/LazyOS/REVISION ~/Dev/LazyOS/VERSION
-/usr/local/sbin/check-system.sh ~/Dev/LazyOS
+cat /etc/debian-aarch64-revision ~/Dev/Hayato/REVISION ~/Dev/Hayato/VERSION
+/usr/local/sbin/check-system.sh ~/Dev/Hayato
 ```
 
 * the revision must be the build you meant to test. The tree at
-  `~/Dev/LazyOS` is a snapshot (`git archive HEAD`), not a checkout, so compare
+  `~/Dev/Hayato` is a snapshot (`git archive HEAD`), not a checkout, so compare
   that hash with `git log --oneline -1` on the machine that wrote the card;
-* the snapshot and the system must be one build: `~/Dev/LazyOS/REVISION` carries
+* the snapshot and the system must be one build: `~/Dev/Hayato/REVISION` carries
   the same lines as `/etc/debian-aarch64-revision` (commit, device, UI, kernel,
-  version, date), `~/Dev/LazyOS/VERSION` is the `VERSION_ID` in
+  version, date), `~/Dev/Hayato/VERSION` is the `VERSION_ID` in
   `/etc/os-release` and the version in `/etc/issue`, and on the build host
   `git rev-parse v<version>^{commit}` is the commit `REVISION` names. A
   disagreement means the card was assembled from two builds - stop here;
@@ -41,7 +41,7 @@ one way that costs the most.
 | Step | Expected |
 |---|---|
 | `sudo cp -a <checkout>/uis/sway/files/. /` | `/`, `/etc` and `/usr` still answer `stat -c '%a %U:%G'` as `755 root:root`. `rsync -a <tree>/ /` applies the **source directory's** owner and mode to the destination root, which is how `/` became `brunux:brunux 775` |
-| `sudo scripts/install-lazyos.sh /` (and `install-swayfx.sh /` first, on a card that has no framework) | `/usr/bin/lazyos` answers `--version` with `/etc/debian-aarch64-revision`'s version |
+| `sudo scripts/install-hayato.sh /` (and `install-swayfx.sh /` first, on a card that has no framework) | `/usr/bin/hayato` answers `--version` with `/etc/debian-aarch64-revision`'s version |
 | `sudo -n true` and `stat -c '%a' /usr/bin/sudo` | still works, `4755` - a `chown -R` over `/etc` or `/usr` clears the setuid bit from every file it touches (`sudo`, `su`, `mount`, `passwd`, `chsh`, `unix_chkpwd`, the dbus helper…), and `check-system.sh`'s *Root filesystem* section lists all twelve |
 | reboot, then `ls -ld /run/lock` and `pactl list cards short` | `/run/lock` exists and the card is on `HiFi` with a real sink. A root-owned `/` is what keeps `systemd-tmpfiles-setup` at exit 0; while it was not, `/run` was created without `/run/lock`, `alsactl` had no lock, the UCM boot sequence never ran and the only sink was *Dummy Output* |
 | carry the maintainer's own edits back afterwards | `~/.bashrc` (hand-written `PATH` lines) and `~/.config/waybar/config.jsonc` (the modules this card has switched off) are the two files on this machine that differ from the overlay, so neither may be overwritten: `diff -r` the overlay's `home/` against `$HOME` before and after the copy |
@@ -56,7 +56,7 @@ itself, which is the whole reason the card exists.
 ## The framework's windows - the root menu, the agent's tools, the file questions
 
 Specs 007, 008 and 009 replaced `bar-menu`, the three file scripts and
-`lazyos-view` with one binary (`lazyos`) whose old names are links to it. What a
+`hayato-view` with one binary (`hayato`) whose old names are links to it. What a
 person can judge here is not "does it draw" - the golden snapshots and the
 glyph check cover that - but whether the window behaves like the menu it
 replaced.
@@ -66,18 +66,18 @@ replaced.
 | `Alt+Space` | the root menu in foot, 44 rows in four groups (`open`, `ai`, `system`, `session`), **a glyph on every row** and every label starting in the same column; the `ai` group holds **Agent session** and **Dictation** together |
 | type `blue` | the list filters as you type, case folded, and **Bluetooth** is above *Settings* - the ranker wants an exact word prefix before a substring |
 | `Escape` on the power confirm | back to the menu, not out of the window: `Escape` steps back through `Outcome::Consumed` |
-| `lazyos menu --rows` | one `key<TAB>group<TAB>label<TAB>command` line per row, printed without opening a window |
+| `hayato menu --rows` | one `key<TAB>group<TAB>label<TAB>command` line per row, printed without opening a window |
 | launch the same row three times, then reopen the menu | it has moved up (frecency is written on a launch and boosts from the **third** one); a single mistaken Enter must not reorder anything |
 | `Alt+Shift+D` | the command palette, same ranker and the binary icons; `Escape` closes with 1 |
 | the Ask strip: type a question, Enter | the window says which agent will answer, then the answer in the same window, `c` copies it; `Escape` or `Alt+Q` ends it and `pgrep -f '[L]AZYOS_ASK'` is empty afterwards |
-| `lazyos menu files`, `lazyos menu find`, `lazyos menu grep` | a folder list with thumbnails, the fzf window with its preview pane, and one row per match; Enter on a match opens the file **with the line marked and in view**, not at the top |
-| `lazyos open <a picture>`, `<a pdf>`, `<a film>`, `<a page>` | `imv`, `papers`, `mpv` and the browser - the same table a double click resolves (`gio mime`) |
-| `LAZYOS_UI=1 lazyos menu files` from a terminal *inside a framework window* | exit 3 and a card, never a second window: the guard is the host's `LAZYOS_UI=1` |
-| `lazyos mcp --tools` | the manifest with its version; the number is the one `~/.config/opencode/AGENTS.md` pins |
+| `hayato menu files`, `hayato menu find`, `hayato menu grep` | a folder list with thumbnails, the fzf window with its preview pane, and one row per match; Enter on a match opens the file **with the line marked and in view**, not at the top |
+| `hayato open <a picture>`, `<a pdf>`, `<a film>`, `<a page>` | `imv`, `papers`, `mpv` and the browser - the same table a double click resolves (`gio mime`) |
+| `HAYATO_UI=1 hayato menu files` from a terminal *inside a framework window* | exit 3 and a card, never a second window: the guard is the host's `HAYATO_UI=1` |
+| `hayato mcp --tools` | the manifest with its version; the number is the one `~/.config/opencode/AGENTS.md` pins |
 | from an OpenCode session: `task_list`, then `task_open`, then `task_stop` on a running one | the TaskView with its title, timer, checklist and result; a stop turns the state to `Stopped` and the task's process is gone |
 | `menu_open --filter blue`, `view_open <file>` | the menu in front of you with the filter typed, and the file in its viewer - both without a shell |
 | `swaymsg reload`, then ask the agent again | the tools keep working: the compositor socket is resolved per call, not inherited once |
-| `swaymsg exit` and log back in, then `pgrep -c -f 'lazyos mcp'` | one server per client session, none left over: a stale server would hold a dead socket |
+| `swaymsg exit` and log back in, then `pgrep -c -f 'hayato mcp'` | one server per client session, none left over: a stale server would hold a dead socket |
 
 `check-system.sh` covers the half a script can see - the links, the rows, the
 manifest pin, the glyphs the theme draws, the refused tools - and the golden
@@ -92,10 +92,10 @@ terminal or a slow first launcher, which is why they are a step of their own.
 
 | Step | Expected |
 |---|---|
-| `ls -l /usr/share/icons/LazyOS/icon-theme.cache` | the file exists and is newer than the PNGs beside it (it is built after the theme is overlaid) |
+| `ls -l /usr/share/icons/Hayato/icon-theme.cache` | the file exists and is newer than the PNGs beside it (it is built after the theme is overlaid) |
 | `ls -l /var/cache/fontconfig \| head` | files, not an empty directory: `fc-cache -f -s` ran in the chroot |
 | `time rofi -show drun` (Escape at once) | the list draws without a visible scan of the theme; a card that takes a beat on first open is the cache missing |
-| `sudo gtk-update-icon-cache -q -t -f /usr/share/icons/LazyOS` | regenerates the index (this is the command the build runs); `check-system.sh` stops warning |
+| `sudo gtk-update-icon-cache -q -t -f /usr/share/icons/Hayato` | regenerates the index (this is the command the build runs); `check-system.sh` stops warning |
 
 A missing cache is a `WARN` in `check-system.sh` (the image is still correct,
 just slower on first use). `rootfs-setup.sh` is the place both are built; a
@@ -106,13 +106,13 @@ broken image. The manual is `05-system.md` § *The first launch*.
 
 | Step | Expected |
 |---|---|
-| log in on a card that has never been logged into | one foot window (`--app-id=lazyos-welcome`) with nine keys: `Alt+Space` menu, `Search`/`Alt+D` launcher, `Alt+Search` file search, `Alt+Ctrl+F` file list, `Alt+Ctrl+T` translate, `Alt+Return` terminal, `Alt+Q` close, `Alt+Escape` power, `Alt+Ctrl+K` bindings. Enter closes it |
+| log in on a card that has never been logged into | one foot window (`--app-id=hayato-welcome`) with nine keys: `Alt+Space` menu, `Search`/`Alt+D` launcher, `Alt+Search` file search, `Alt+Ctrl+F` file list, `Alt+Ctrl+T` translate, `Alt+Return` terminal, `Alt+Q` close, `Alt+Escape` power, `Alt+Ctrl+K` bindings. Enter closes it |
 | log out and back in | no window: it is once per install, not once per login |
-| `cat ~/.local/state/lazyos/welcome` | the content of `/etc/machine-id` |
+| `cat ~/.local/state/hayato/welcome` | the content of `/etc/machine-id` |
 | delete that file, log out and back in | the window returns |
 | `sudo -n rm /etc/machine-id; sudo -n systemd-machine-id-setup` (or a rebuilt card) | a new id, so the window appears again - which is what makes it per install |
 
-A window that never appears on a fresh card is `lazyos-welcome` without its
+A window that never appears on a fresh card is `hayato-welcome` without its
 executable bit (it is started by `config.d/30-welcome.conf`); one that appears on
 **every** login is the marker being written before the window could be read
 rather than after it closes. `check-system.sh` runs the script against a stub
@@ -139,23 +139,23 @@ A FAIL here means `scripts/check-system.sh` reports it: the binary
 
 | Step | Expected |
 |---|---|
-| look at the desktop | the keyboard wallpaper on base03: one lit key carrying the cyan z_ mark, and `lazyOS_`, `lazy by design` and the arcade line bottom left; the bar, foot, rofi and the menus are still solarized (the brand did not repaint the session) |
+| look at the desktop | the keyboard wallpaper on base03: one lit key carrying the cyan z_ mark, and `Hayato_`, `lazy by design` and the arcade line bottom left; the bar, foot, rofi and the menus are still solarized (the brand did not repaint the session) |
 | `Alt+Ctrl+L`, then unlock | the **mountain photograph**, not the brand wallpaper - the lock is deliberately the other surface |
-| `Alt+d`, type `About LazyOS` | the **About LazyOS** row has the mark as its icon (not a hole); Enter opens the card with the block-character z_ (cyan z, orange cursor) and `lazyOS_` on the left, `OS · LazyOS <version>` among the facts, and the 16-colour palette at the bottom |
-| `Alt+d`, type `LazyOS Menu` | the row with the same mark; Enter opens the root menu - the list `Alt+Space` shows, reachable by typing (`org.lazyos.menu.desktop`) |
-| `cat /etc/os-release` | `ID=lazyos`, `PRETTY_NAME="LazyOS <version>"`, and `VERSION_ID` equal to the `version` line of `/etc/debian-aarch64-revision` |
-| `hostname` | `lazyos` |
-| log out to the greeter | the greeting is `LazyOS · lazy by design`, not "Welcome back to Debian" |
-| `Ctrl+Alt+F2` (keyd's VT keys), log in on the text console | the banner is `LazyOS <version> · lazy by design` and `lazyos · tty2` |
+| `Alt+d`, type `About Hayato` | the **About Hayato** row has the mark as its icon (not a hole); Enter opens the card with the block-character z_ (cyan z, orange cursor) and `Hayato_` on the left, `OS · Hayato <version>` among the facts, and the 16-colour palette at the bottom |
+| `Alt+d`, type `Hayato Menu` | the row with the same mark; Enter opens the root menu - the list `Alt+Space` shows, reachable by typing (`org.hayato.menu.desktop`) |
+| `cat /etc/os-release` | `ID=hayato`, `PRETTY_NAME="Hayato <version>"`, and `VERSION_ID` equal to the `version` line of `/etc/debian-aarch64-revision` |
+| `hostname` | `hayato` |
+| log out to the greeter | the greeting is `Hayato · lazy by design`, not "Welcome back to Debian" |
+| `Ctrl+Alt+F2` (keyd's VT keys), log in on the text console | the banner is `Hayato <version> · lazy by design` and `hayato · tty2` |
 
-The launcher's **About LazyOS** and the root menu's **About** open the same card;
-the launcher entry is the one that carries `Icon=lazyos`. A flat colour instead of
-the keyboard wallpaper is `Pictures/Wallpapers/lazyos.png` missing (or `swaybg`
+The launcher's **About Hayato** and the root menu's **About** open the same card;
+the launcher entry is the one that carries `Icon=hayato`. A flat colour instead of
+the keyboard wallpaper is `Pictures/Wallpapers/hayato.png` missing (or `swaybg`
 failing), which `scripts/make-brand.sh` renders from `brand/wallpaper.svg`; a flat
 colour instead of the photograph at the lock is `mountains.jpg` missing, and that
 file ships in the repository. A hole
-where the About row's icon should be is `lazyos.png` missing from
-`/usr/share/icons/LazyOS/48x48/apps/`.
+where the About row's icon should be is `hayato.png` missing from
+`/usr/share/icons/Hayato/48x48/apps/`.
 Debian's swirl in the About card is `~/.config/fastfetch/config.jsonc` missing.
 `check-system.sh` FAILs on the first two, on an `os-release` that is Debian's
 again, and on an `org.nureb.*` entry that survived the rename; it WARNs when the
@@ -191,8 +191,8 @@ A card that only works on the left port has the udev rule, the helper or
 | Step | Expected |
 |---|---|
 | plug a DisplayPort monitor into the **left** port | the desktop extends onto it; `swaymsg -t get_outputs` names `DP-1` with its mode |
-| move the cable to the **right** port, replug twice, then plug it in after login | a picture every time. `sudo i2cget -f -y 7 0x2c 0xb4` reads `0x21` on the left and `0x12` on the right, and `journalctl -t lazyos-dp-mux` is empty |
-| with a window on the monitor, suspend (`Alt+Shift+Escape`) and wake it | the monitor comes back **on its own**, showing the lock screen: no replug, no command. `journalctl -t lazyos-dp-resume` has one line - the crosspoint write plus the 720p round trip that retrains the link |
+| move the cable to the **right** port, replug twice, then plug it in after login | a picture every time. `sudo i2cget -f -y 7 0x2c 0xb4` reads `0x21` on the left and `0x12` on the right, and `journalctl -t hayato-dp-mux` is empty |
+| with a window on the monitor, suspend (`Alt+Shift+Escape`) and wake it | the monitor comes back **on its own**, showing the lock screen: no replug, no command. `journalctl -t hayato-dp-resume` has one line - the crosspoint write plus the 720p round trip that retrains the link |
 | the same, after the wake | the window is still on the monitor. A window that came back on the internal panel means the hook disabled the output instead of changing its mode |
 | Settings (`Alt+Ctrl+O`) -> **Display arrangement** -> **Monitor on the left** | the picture moves at once, `swaymsg -t get_outputs` shows `DP-1` at a negative x, and the Settings row now reads "left of the panel" |
 | log out and back in | the monitor is still on the left: `~/.config/sway/config.d/40-display.conf` holds its resolution, scale and position, and `sway -C -c ~/.config/sway/config` accepts the file |
@@ -214,7 +214,7 @@ one a person notices on the battery.
 
 | Step | Expected |
 |---|---|
-| leave the machine alone for 2½ minutes | the **LazyOS** wordmark starts animating; nothing else changes |
+| leave the machine alone for 2½ minutes | the **Hayato** wordmark starts animating; nothing else changes |
 | move the mouse or drag a finger on the trackpad | the wordmark goes away **at once**, without a key, and the 150 s starts over; the pointer is hidden again a moment later |
 | tap the touchscreen while the wordmark runs | the same - the tap is a click, and a click ends the screen |
 | leave it for five minutes | the session is **locked** (the mountain photograph), and the idle screen is gone (not animating underneath) |
@@ -233,7 +233,7 @@ one a person notices on the battery.
 
 What a failure means:
 
-* **the wordmark ignores the mouse**: `~/.config/bin/lazyos-screensaver` lost its
+* **the wordmark ignores the mouse**: `~/.config/bin/hayato-screensaver` lost its
   `?1003h`/`?1006h` escapes (a terminal reports the pointer only when the
   program asks), so only keys end the screen. `check-system.sh` FAILs on the
   missing enable; the restore (`?1003l`) is the other half, because `--run` in a
@@ -246,7 +246,7 @@ What a failure means:
 * **the mouse does nothing at the lock**: it is not meant to. `swaylock` ignores
   the pointer and the password ends it; a move only turns the panel back on.
 * **the lock appears but the panel stays lit**: the `timeout 360` line is missing
-  from `/etc/sway/config.d/23-lazyos-screensaver.conf`; `check-system.sh` FAILs
+  from `/etc/sway/config.d/23-hayato-screensaver.conf`; `check-system.sh` FAILs
   on it. `swaymsg -t get_outputs` still reports the output as on.
 * **the panel stays dark after a key**: the `resume` line (or the
   `after-resume` one for a suspend) is missing; the first is inside the swayidle
@@ -280,7 +280,7 @@ after the lock*.
 
 An **empty** list is the watcher, not the menu: `pgrep -fx 'wl-paste --watch cliphist store'`
 (`etc/sway/config.d/27-clipboard.conf` starts it once per session). An image
-that does not open is `~/.config/bin/lazyos-view` (not executable) or `imv`; a
+that does not open is `~/.config/bin/hayato-view` (not executable) or `imv`; a
 saved file ending in `.bin` means `file` is missing and the extension could not
 be read from the contents.
 
@@ -307,7 +307,7 @@ Tofu boxes instead of glyphs mean `fonts-noto-color-emoji` is missing (a FAIL in
 | select a long paragraph (half a screen) | the card and a floated `foot` read window with the translation and the selection underneath; Alt+Q closes it |
 | **Settings** (`Alt+Ctrl+O`) → **Translate** | the list opens with the current language marked and the how-to rows; pick **Spanish**, Escape, open Settings again, and the row says `into Spanish` |
 | select English text and press `Alt+Ctrl+T` | `English → Spanish`, which is the configured direction |
-| `cat ~/.config/lazyos/translate.conf` | `target=es` |
+| `cat ~/.config/hayato/translate.conf` | `target=es` |
 | disconnect Wi-Fi, select text, press the key | one critical card, *No answer from the translator: is the network up?*, and nothing on the clipboard |
 | press the key, then click the bar's spinner while `Translating…` is up | the card disappears and nothing is reported (a stopped translation is not a failure) |
 
@@ -401,7 +401,7 @@ the reason, and the menu shows it instead of claiming success.
 |---|---|
 | open the root menu (`Alt+Space`) | an `ai` heading with **Agents** and **Dictation** together, above `system`; **Agents** opens its menu |
 | `Alt+Ctrl+Shift+A` with no agent installed | the five agents, each row reading `Name — install <npm>`, then **Set the default agent…** and **Open a terminal in ~/Work**; Escape leaves nothing running |
-| from a terminal, `rofi-agents --new claude`, then the name `work` | `~/.local/share/lazyos/agents/claude/work` exists and is empty, and `~/.local/share/lazyos/agents/claude/default` holds `work` |
+| from a terminal, `rofi-agents --new claude`, then the name `work` | `~/.local/share/hayato/agents/claude/work` exists and is empty, and `~/.local/share/hayato/agents/claude/default` holds `work` |
 | with Claude Code or Codex installed, its row grows **accounts…** | `● work  (default)` is listed; `rofi-agents --env claude work` prints `CLAUDE_CONFIG_DIR` at the directory |
 | launch the installed Claude Code row | foot opens in `~/Work` (or `$HOME` when `~/Work` does not exist) with `CLAUDE_CONFIG_DIR` pointing at `agents/claude/work` |
 
@@ -415,11 +415,11 @@ with an explicit `--prefix ~/.local`, so npm never needs root and never touches
 | Step | Expected |
 |---|---|
 | open `~/Pictures` | rows with a **32 px** thumbnail for images, videos and PDFs; the icon is the picture, not a mimetype glyph |
-| open a directory, then Escape, then `Alt+Ctrl+F` again | it reopens that directory, not `$PWD`; a fresh home with no state file starts in `$HOME` (`cat ~/.local/state/lazyos/files-last`) |
+| open a directory, then Escape, then `Alt+Ctrl+F` again | it reopens that directory, not `$PWD`; a fresh home with no state file starts in `$HOME` (`cat ~/.local/state/hayato/files-last`) |
 | press `Alt+Search` (the file search) from another directory, then `Alt+Ctrl+F` | still the directory the list last had: `--search` writes nothing to that state file |
 | open a directory of source files or dotfiles | **every** row still has an icon (a page, an executable, a folder), so the names line up in one column - no bare text list |
 | reopen the same directory | instant: the thumbnails come from `~/.cache/thumbnails/normal/` and are not decoded again |
-| Enter on an image | **imv** in its own window (zoom, pan, rotate; the arrow keys walk the folder). The first picture of a session also raises a notification naming those keys (`lazyos-image-hint`), and only the first. A foot window drawing sixels means imv could not get an EGL context, which is the fallback |
+| Enter on an image | **imv** in its own window (zoom, pan, rotate; the arrow keys walk the folder). The first picture of a session also raises a notification naming those keys (`hayato-image-hint`), and only the first. A foot window drawing sixels means imv could not get an EGL context, which is the fallback |
 | Enter on an SVG | **imv** as well, not `bat`: an SVG is a text file, but the image family is decided before the text test |
 | Enter on a **video** (`.mp4`, `.mkv`) | **mpv** in its own window with sound; `q` closes it. Firefox means mpv is missing |
 | Enter on a PDF, a DjVu or a comic | **papers**, with search, zoom and print. Firefox means papers is missing |
@@ -427,7 +427,7 @@ with an explicit `--prefix ~/.local`, so npm never needs root and never touches
 | Enter on an HTML file | `bat` (it is text), not Firefox |
 | Enter on a `.deb` | Firefox, as a download prompt: the browser is what a package is for here |
 | Enter on a text file | `bat` in the popup window (`BAT_THEME=ansi`, solarized) |
-| open a deep path (`~/Dev/LazyOS/uis/sway/files/home/.config/bin`) | the window is drawn wide enough that the **end** of the name is readable: rofi cannot scroll a row sideways, so `lib-rofi.sh`'s `ui_width` sizes the list instead of letting rofi cut it with `…` |
+| open a deep path (`~/Dev/Hayato/uis/sway/files/home/.config/bin`) | the window is drawn wide enough that the **end** of the name is readable: rofi cannot scroll a row sideways, so `lib-rofi.sh`'s `ui_width` sizes the list instead of letting rofi cut it with `…` |
 | spam `Alt+Ctrl+F` on a directory of large photos | the application keeps responding while the rows fill in (four decoders at a time) |
 | **Alt+1** on a directory | the actions for it: disk usage, compress, copy the path, a terminal here. Enter still *opens* the row; only Alt+1 asks |
 | **Alt+1** → **Compress** on a folder | a `busy` card, then `folder.tar.xz` beside it, and the bar spinner while it packs (click the spinner to stop it) |
@@ -442,7 +442,7 @@ that opens the row means `-kb-custom-1 Alt+1` was dropped from `rofi-files`.
 `check-system.sh` warns about both.
 
 A list with no pictures at all means `-show-icons`/`thumbnail://` was dropped from
-`rofi-files`, or `lazyos-thumbnail` is not executable; `check-system.sh` warns
+`rofi-files`, or `hayato-thumbnail` is not executable; `check-system.sh` warns
 about both. A row with **no** icon in a text-only directory means the theme is
 missing that name (`check-system.sh` checks the table against the PNGs).
 
@@ -477,7 +477,7 @@ missing that name (`check-system.sh` checks the table against the PNGs).
 | boot from the card and wipe the eMMC's partition table (`sudo parted -s /dev/mmcblk0 mktable gpt`), then open it | still "Nothing to format": the eMMC is fixed storage and the disk this system depends on, which is the case the kernel-partition rule alone missed; `scripts/install-emmc.sh` is how it is written again |
 | insert a USB stick, leave it unmounted | the stick, with its model and size |
 | pick it → **Cancel** | nothing at all is written |
-| pick it → **exFAT** → the confirmation | a card, then "is empty (exfat, label LAZYOS)"; the stick mounts again from Places |
+| pick it → **exFAT** → the confirmation | a card, then "is empty (exfat, label HAYATO)"; the stick mounts again from Places |
 | the same with **ext4** | `mkfs.ext4`, and the disk mounts on a Linux machine |
 
 Neither menu may ever list `mtdblock0` (the SPI flash) or `mmcblk0boot0`/`mmcblk0boot1`
@@ -495,12 +495,12 @@ card the system is running from either, whatever their partition tables say.
 | boot from the eMMC with the card that installed it inserted | "Nothing to offer ... carries a bootable kernel partition (the card that installed this system)": the card is removable and unmounted, and only its kernel partition excludes it |
 | open it with the boot card and a spare, unmounted card/SD | the spare card only, with model and size |
 | pick it → **Cancel** | no partition table is written |
-| pick it → **The whole card** → the confirmation | a busy card, then a notification with the partition and "priority 10"; `swapon --show` lists it, `blkid -L lazyos_swap` resolves it |
-| `grep lazyos_swap /etc/fstab` | one marked block: `LABEL=lazyos_swap none swap sw,nofail,x-systemd.device-timeout=15s,pri=10 0 0` |
+| pick it → **The whole card** → the confirmation | a busy card, then a notification with the partition and "priority 10"; `swapon --show` lists it, `blkid -L hayato_swap` resolves it |
+| `grep hayato_swap /etc/fstab` | one marked block: `LABEL=hayato_swap none swap sw,nofail,x-systemd.device-timeout=15s,pri=10 0 0` |
 | **Hibernate** from the power menu (`Alt+Escape`) on the default card (swap on, no `resume=`) | a notification naming the missing `resume=` and the kpart rebuild it needs; the machine stays up, it does not suspend |
 | `sway-hibernate --status` with that fresh swap (nothing has been swapped to it yet) | `swap_kb` is the partition's size in KiB (about 8.4 million for a 8 GiB card), never `0`, and `hibernate=no` only because `resume=no` |
-| rebuild the kpart with `CONFIRM=yes RESUME=yes ~/Dev/LazyOS/scripts/install-kpart.sh` (`05-system.md` § Suspend and hibernate), reboot, **Hibernate** | `--status` says `hibernate=yes`; the card names the partition, the machine powers off, and powering it back on restores the same session |
-| run `CONFIRM=yes ~/Dev/LazyOS/scripts/install-kpart.sh` again without `RESUME=` and reboot | `cat /proc/cmdline` still carries `resume=LABEL=lazyos_swap`: a kernel update does not silently stop the machine resuming |
+| rebuild the kpart with `CONFIRM=yes RESUME=yes ~/Dev/Hayato/scripts/install-kpart.sh` (`05-system.md` § Suspend and hibernate), reboot, **Hibernate** | `--status` says `hibernate=yes`; the card names the partition, the machine powers off, and powering it back on restores the same session |
+| run `CONFIRM=yes ~/Dev/Hayato/scripts/install-kpart.sh` again without `RESUME=` and reboot | `cat /proc/cmdline` still carries `resume=LABEL=hayato_swap`: a kernel update does not silently stop the machine resuming |
 | reboot with the card in | `swapon --show` lists it again without touching the menu (priority 10, below zram's 100) |
 | remove the card and reboot | the boot still reaches the session (a swap unit may show as failed only if `nofail` was lost); it waits at most 15 s for the card |
 | run the menu again | the status row (device, size, priority) and **Turn it off**, not the disk picker |
@@ -509,22 +509,22 @@ card the system is running from either, whatever their partition tables say.
 
 Never pull the card while the swap is active: the pages living on it are lost. Turn
 it off from the same menu first. Hibernate additionally needs
-`resume=LABEL=lazyos_swap` on the kernel command line - the swap row does not edit
+`resume=LABEL=hayato_swap` on the kernel command line - the swap row does not edit
 the kernel partition, so the default card refuses with that message. A partition
 labelled `nureb_swap` (an old card) is still usable as swap, but that `resume=`
-will not find it: re-label it (`sudo swaplabel -L lazyos_swap <device>`) or let
+will not find it: re-label it (`sudo swaplabel -L hayato_swap <device>`) or let
 the swap menu recreate it.
 
-## Install LazyOS - root menu -> **Install LazyOS**
+## Install Hayato - root menu -> **Install Hayato**
 
 Boot from the card; the menu writes `/dev/mmcblk0`, the internal disk.
 
 | Step | Expected |
 |---|---|
 | open it on the eMMC install (the system runs from the target) | "Cannot install yet": the target is the disk this system is running from, and the Install row is not offered |
-| boot from the card and open it | the machine report - target, room needed, charger and battery, the three kernel files, the installer's tools, a `sudo` that will not prompt - and **Cancel** selected; **Install LazyOS** offered only if every gate passed |
+| boot from the card and open it | the machine report - target, room needed, charger and battery, the three kernel files, the installer's tools, a `sudo` that will not prompt - and **Cancel** selected; **Install Hayato** offered only if every gate passed |
 | press Enter on a report row (they carry no action) | the menu re-opens and re-checks; it does not close |
-| pick **Install LazyOS** and answer the typed name wrongly | a critical toast, nothing written; the menu is still there |
+| pick **Install Hayato** and answer the typed name wrongly | a critical toast, nothing written; the menu is still there |
 | answer `mmcblk0` | a toast that the copy started and the bar spinner; open the menu again and pick the log row for the live log. `systemctl is-active udisks2` says inactive while it runs |
 | while it runs, `systemctl show -p LoadState udisks2` and `findmnt -rn -S /dev/mmcblk0p3` | `masked-runtime` and no mount: the two states `disk_release()` refuses to start with |
 | when it finishes | the card says it finished; `lsblk -o NAME,PARTLABEL /dev/mmcblk0` names `pmOS_kernel`, `pmOS_boot` and `pmOS_root`; `sudo futility show /dev/mmcblk0p1` says *Body verification succeeded*; `udisks2` is `active`/`enabled` again with no runtime mask |
@@ -536,7 +536,7 @@ The four report rows are gates, not decoration: below 20 % on battery the instal
 is refused, and a `sudo` that would prompt makes the Install row disappear rather
 than fail after the disk has been formatted. The copy is not interruptible (a
 killed `rsync` or `mkfs` leaves a disk that looks written and is not) and the log
-stays in `~/.local/state/lazyos/install-<timestamp>.log`.
+stays in `~/.local/state/hayato/install-<timestamp>.log`.
 
 ## Search key - the launcher
 
@@ -577,9 +577,9 @@ with files means `fd`/`fdfind` is missing (`check-system.sh` FAILs).
 | type `config` | dotfiles are found here (`~/.config/...`), unlike the file list (Alt+Search) |
 | Escape | the window closes and nothing opens |
 | press Search+Shift twice in a row | two windows, and no `fzf` process left after both close |
-| `lazyos-find` from a foot prompt | the same search runs *in that terminal* instead of a new window |
+| `hayato-find` from a foot prompt | the same search runs *in that terminal* instead of a new window |
 
-A window that flashes and closes means `bin/lazyos-find` lost its executable
+A window that flashes and closes means `bin/hayato-find` lost its executable
 bit; an empty list on a home with files means `fzf` is missing
 (`check-system.sh` FAILs both). `fd`'s `.cache`, `.git`, `node_modules` and
 `.local/share/containers` are excluded, so a file inside one of them is
@@ -589,7 +589,7 @@ correctly absent.
 
 | Step | Expected |
 |---|---|
-| press **Alt+Ctrl+Shift+F** | pcmanfm opens on `$HOME`, in the solarized palette (base03 window, cyan selection), JetBrains Mono, LazyOS icons |
+| press **Alt+Ctrl+Shift+F** | pcmanfm opens on `$HOME`, in the solarized palette (base03 window, cyan selection), JetBrains Mono, Hayato icons |
 | press **Alt+Ctrl+F** | the file list (`rofi-files`), not the window |
 | tap **Search** on its own | the launcher, not the window |
 | press **Alt+Search** | the file search, not the window |
@@ -600,13 +600,13 @@ correctly absent.
 | look at a folder of photos | thumbnails; a PDF or a video keeps its mimetype icon (libfm decodes images only - that is not a bug) |
 | insert a USB stick | it appears in the sidebar already mounted (`udisks2`); nothing on it runs by itself |
 | `dpkg -l pcmanfm gvfs` | both installed; `gvfs-backends` absent on purpose |
-| `ls ~/.config/mimeapps.list` | no such file: only `/etc/xdg/mimeapps.list` decides, so `org.lazyos.view.desktop` is the system default. A file left from a pre-v0.3.0 card keeps the old viewer for every association it names |
+| `ls ~/.config/mimeapps.list` | no such file: only `/etc/xdg/mimeapps.list` decides, so `org.hayato.view.desktop` is the system default. A file left from a pre-v0.3.0 card keeps the old viewer for every association it names |
 
 A window that looks like Adwaita's light grey means `~/.config/gtk-3.0/gtk.css` is
-missing; icons that are empty squares mean a name the LazyOS theme does not carry
+missing; icons that are empty squares mean a name the Hayato theme does not carry
 (`check-system.sh` warns with the list). A double click that does nothing means
-`~/.config/bin/lazyos-view` is not executable: `gio mime image/png` then answers
-"no default application" instead of naming `org.lazyos.view.desktop`.
+`~/.config/bin/hayato-view` is not executable: `gio mime image/png` then answers
+"no default application" instead of naming `org.hayato.view.desktop`.
 
 ## The document reader - GTK4, the palette and printing
 
@@ -634,10 +634,10 @@ queue; the manual is `04-software.md` § *Files in a window* and
 
 | Step | Expected |
 |---|---|
-| **insert a USB stick** | a mako card `USB drive: <label> mounted at /run/media/<you>/<label>` within a second, and no process left behind (`systemctl status 'lazyos-automount@*'` is `inactive (dead)`) |
+| **insert a USB stick** | a mako card `USB drive: <label> mounted at /run/media/<you>/<label>` within a second, and no process left behind (`systemctl status 'hayato-automount@*'` is `inactive (dead)`) |
 | open **Places** (root menu, or `rofi-places`) with the stick in | the stick is a **disk** row (already mounted) and there is **no Mount row for it**; an SD card in the internal slot still shows a **Mount** row, because auto-mount is USB only |
 | Settings -> **Auto-mount USB drives** -> off, unplug and replug the stick | no notification, no mount, and Places shows a **Mount** row for it; turn the switch back on and replug |
-| `cat ~/.config/lazyos/automount.conf` | `enabled=no` or `enabled=yes` - one line, and a missing file means on |
+| `cat ~/.config/hayato/automount.conf` | `enabled=no` or `enabled=yes` - one line, and a missing file means on |
 | `ls -ld /run/media/*/` and `findmnt -rn -S /dev/sdX1 -o OPTIONS` | the directory is under your name and the options carry `uid=<you>`, not `uid=0`: the helper mounts as the account, not as root |
 | insert a stick formatted without a partition table (a bare `mkfs.vfat /dev/sdX`) | it mounts too: the rule has a `DEVTYPE=="disk"` line for exactly that shape |
 | **insert the rescue card into the internal microSD slot** | nothing mounts by itself, and the eMMC is never a candidate: the udev rule matches `SUBSYSTEMS=="usb"` and `check-system.sh` fails if that line goes |
@@ -668,7 +668,7 @@ archive refuses as about what it saves.
 | `Alt+Ctrl+D` | three rows: **Export my profile**, **Restore a profile**, **Save a diagnostics bundle**, and the dim line saying the archive carries the keys |
 | **Export my profile** with a stick inserted | the target list offers its partitions (a mounted one by label, an unmounted one as **Mount LABEL**) and `~/Downloads`; the eMMC and the card this system boots from are never in it |
 | pick the stick | the busy card turns to **Waiting for the passphrase…** and a masked rofi prompt appears - launched from the key, never a prompt on the VT (that was the bug: `[ -t 0 ]` is true for tty7 in a sway `exec`) |
-| type the passphrase twice | a busy card, then the path and size of `lazyos-profile-<host>-<date>.tar.zst.gpg`; a `.txt` manifest sits beside it |
+| type the passphrase twice | a busy card, then the path and size of `hayato-profile-<host>-<date>.tar.zst.gpg`; a `.txt` manifest sits beside it |
 | `ls -l` on the stick | both files are `0600` (on exFAT the bits are a no-op, which is why the archive is encrypted) |
 | `sed -n '1,12p'` the manifest | date, host, image revision, the paths and `apt-mark showmanual` - and no key material |
 | `gpg -d <archive> \| tar --zstd -t` with the passphrase | `.ssh/`, `.gnupg/`, `.bashrc`, `.config/...`, the agents' homes and `.config/mozilla/firefox/<profile>/` with `places.sqlite`, `logins.db` and `key4.db`; `tar -tv` shows `-rw-------` on `id_ed25519` |
@@ -677,9 +677,9 @@ archive refuses as about what it saves.
 | export with no stick inserted, pick `~/Downloads` | the archive lands there; copying it to a stick later is the same file |
 | **Restore a profile**, pick the archive | the passphrase, then the count of files and **Cancel as the first row** |
 | **Escape** at the confirmation | "Nothing was restored", and the files are untouched |
-| **Restore** over a file you changed | the file comes back, the card says to log out and back in, and `~/.cache/lazyos/backups/profile-before-restore-<date>.tar.zst` holds the version from before |
-| `~/.config/bin/lazyos-profile import <archive>` from ssh | the same work with a terminal prompt (typed `restore`), no rofi |
-| **Save a diagnostics bundle** | `lazyos-report-<host>-<date>.tar.zst` with `report.txt`, `journal.txt`, `dmesg.txt`, `hardware.txt`, `sysinfo.txt` and a `README.txt`; `report.txt` has the `check-system.sh` summary and no colour escapes |
+| **Restore** over a file you changed | the file comes back, the card says to log out and back in, and `~/.cache/hayato/backups/profile-before-restore-<date>.tar.zst` holds the version from before |
+| `~/.config/bin/hayato-profile import <archive>` from ssh | the same work with a terminal prompt (typed `restore`), no rofi |
+| **Save a diagnostics bundle** | `hayato-report-<host>-<date>.tar.zst` with `report.txt`, `journal.txt`, `dmesg.txt`, `hardware.txt`, `sysinfo.txt` and a `README.txt`; `report.txt` has the `check-system.sh` summary and no colour escapes |
 | `check-system.sh` | `developer menu complete`, the gpg round-trip, `--dry-run` naming `.ssh`/`.gnupg`, the agents' homes, the Firefox profile and the three ways in, all OK; no `unexpected user unit` after the round-trip |
 | after a report run | `systemctl --user is-active gpg-agent.service` is `inactive` if it was not running before the check |
 
@@ -771,12 +771,12 @@ brightness keys change the value but show nothing*.
 | Enter on it | the menu reopens saying `localhost:5900 · read-only`, with **Stop sharing**; a notification names the port and the `ssh -L` command; an **eye appears on the bar** |
 | `~/.config/bin/rofi-vnc status` | `localhost:5900 · read-only` |
 | `ss -ltn \| grep 5900` | `127.0.0.1:5900` and **not** `0.0.0.0:5900` |
-| from the laptop: `ssh -L 5900:127.0.0.1:5900 brunux@lazyos`, then a VNC viewer on `localhost:5900` | the screen, live. Typing in the viewer does **nothing** (it is read-only), and the pointer in the viewer does not move anything here |
+| from the laptop: `ssh -L 5900:127.0.0.1:5900 brunux@hayato`, then a VNC viewer on `localhost:5900` | the screen, live. Typing in the viewer does **nothing** (it is read-only), and the pointer in the viewer does not move anything here |
 | right click on the bar's eye | stopped: the notification says so, the eye is gone, `ss` shows nothing, `rofi-vnc status` answers `off` |
 | start it twice | the second says *Already sharing* instead of starting a second server |
 | `kill -9` the wayvnc process, then open the menu | the menu says `off` (a stale pid is not trusted) and offers to share again - never *Not serving* |
 | occupy the port first (`python3 -m http.server 5900 --bind 127.0.0.1`), then start | the notification quotes wayvnc's bind error instead of claiming success |
-| log out with it on, log in again | nothing is shared and `rofi-vnc status` says `off`: the state lives in `$XDG_RUNTIME_DIR/lazyos-vnc` |
+| log out with it on, log in again | nothing is shared and `rofi-vnc status` says `off`: the state lives in `$XDG_RUNTIME_DIR/hayato-vnc` |
 
 What a failure means:
 
@@ -790,7 +790,7 @@ What a failure means:
 * **`ss` shows `0.0.0.0:5900`**: the script was edited; that is an unauthenticated
   desktop on the network and `check-system.sh` FAILs on it.
 * **the viewer cannot connect**: the tunnel is closed (it has to stay open), or the
-  viewer was pointed at `lazyos:5900` instead of `localhost:5900` - the port is on the
+  viewer was pointed at `hayato:5900` instead of `localhost:5900` - the port is on the
   loopback address by design. `06-troubleshooting.md` has the ordered list.
 
 ## Remote login - ssh
@@ -803,7 +803,7 @@ same login carries the VNC tunnel above. The image's default credentials are
 |---|---|
 | `systemctl is-enabled ssh` and `systemctl is-active ssh` | `enabled` and `active` |
 | `ss -ltn \| grep ':22 '` | sshd listening on `0.0.0.0:22` (or `[::]:22`) |
-| from another computer: `ssh brunux@lazyos`, password `debian` | a shell; `sudo -n true` answers without a prompt |
+| from another computer: `ssh brunux@hayato`, password `debian` | a shell; `sudo -n true` answers without a prompt |
 | `passwd` there, then reconnect with the new password | the old one is refused |
 | `check-system.sh \| grep ssh` | the `---- remote login is enabled` info line (a WARN if enabled but not running) |
 | as a test: `sudo systemctl disable --now ssh`, then `ss` again | no port 22; re-enable it with `sudo systemctl enable --now ssh` |
@@ -852,7 +852,7 @@ Fold the keyboard all the way back.
 | fold it back into a laptop | keyboard gone, touchpad **and keyboard** back (type), screen upright, "Tablet mode off" |
 | `pgrep -x wvkbd-mobintl` and `pgrep -af 'tablet-mode poller'` afterwards | nothing |
 | Settings (`Alt+Ctrl+O`) -> **Tablet mode** | toggles by hand; the row reads `on · screen 90` or `off` |
-| Settings -> **Calibrate rotation** (listed only in tablet mode) | hold it upright and it says so; `~/.config/lazyos/tablet.conf` then holds `normal=<axis><sign>` |
+| Settings -> **Calibrate rotation** (listed only in tablet mode) | hold it upright and it says so; `~/.config/hayato/tablet.conf` then holds `normal=<axis><sign>` |
 | Settings -> **Rotation** | still turns the screen by hand, independently |
 
 What a failure means:
@@ -866,7 +866,7 @@ What a failure means:
 * **rotation inverted or turned the wrong way** (the 2026-10-21 card came up
   upside down): run **Settings → Calibrate rotation** while holding the screen
   upright, or `~/.config/bin/tablet-mode calibrate`. It writes the reference to
-  `~/.config/lazyos/tablet.conf` and applies it at once, and it needs no rebuild.
+  `~/.config/hayato/tablet.conf` and applies it at once, and it needs no rebuild.
   `tablet-mode calibration` says `calibrated …` or `default …`; deleting the file
   goes back to the built-in mapping. The four `transform` values in `orient()`
   are now derived from that one reference.
@@ -925,11 +925,11 @@ allowlist is the agreement, not the names.
 | root menu (`Alt+Space`) | **Colour**, **DNS**, **Packages**, **Reminders**, **About**, **Download**, **Password** and **Search inside files** are all there, and the `ai` heading has **Agents** and **Dictation** together, above `system` |
 | `Alt+Ctrl+G` and then `Alt+1` inside that menu | nothing is taken by sway: the menu answers, the workspace does not change |
 | `Alt+Ctrl+F`, then `Alt+1` | the actions menu, not workspace 1 (the `global-kb` fix reached both menus) |
-| `gio mime image/png`, `gio mime application/pdf`, `gio mime inode/directory` | `org.lazyos.view.desktop`, `org.gnome.Papers.desktop`, `pcmanfm.desktop`. This is GIO's own answer, not the file read back: a `lazyos-view` without its executable bit makes GIO say "no default application" |
+| `gio mime image/png`, `gio mime application/pdf`, `gio mime inode/directory` | `org.hayato.view.desktop`, `org.gnome.Papers.desktop`, `pcmanfm.desktop`. This is GIO's own answer, not the file read back: a `hayato-view` without its executable bit makes GIO say "no default application" |
 | `dig +short example.com` and `host example.com` | an address. `dig` comes from `bind9-dnsutils`; `resolvectl` is deliberately absent because NetworkManager owns `resolv.conf`, and its absence is not a gap |
 | a menu whose rows are long (Files on a deep path, a grep match with a long line) | the window is wide enough for the end of the path; a row cut with `…` mid-detail means `ui_width` stopped sizing that list |
 | lock (`Alt+Ctrl+L`, the Lock key, and the 300 s idle timer) | the **mountain photograph** on base03, then back to the session; no idle screen left behind (it is stopped before the lock) |
-| idle for 150 s without touching anything | the **LazyOS** wordmark, the caption and the arcade line, with an effect rebuilding them and another one after it (a still frame means `tte` did not start) |
+| idle for 150 s without touching anything | the **Hayato** wordmark, the caption and the arcade line, with an effect rebuilding them and another one after it (a still frame means `tte` did not start) |
 | press any key while the idle screen animates | it closes at once, not at the end of the effect |
 | stay idle past the lock and then a minute more | the panel goes dark (360 s) and the first input brings it back with the lock still up (see *The idle chain*) |
 | volume, mute and brightness keys | the value changes and the overlay appears; the bar's scroll still changes the value with no card |

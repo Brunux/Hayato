@@ -1,11 +1,11 @@
 #!/bin/bash
-# Root umbrella wrapper for LazyOS.
+# Root umbrella wrapper for Hayato.
 # Resolves submodules (core/, desktop/, devices/) and delegates build or verification commands.
 #
 # Usage:
 #   ./build.sh                 build kernel, desktop, rootfs, and kpart (default)
 #   ./build.sh kernel          build device kernel stage only
-#   ./build.sh desktop         build swayfx, workstyle, and lazyos binaries
+#   ./build.sh desktop         build swayfx, workstyle, and hayato binaries
 #   ./build.sh rootfs          build and populate rootfs
 #   ./build.sh image [IMG]     build sanitized disk image
 #   ./build.sh release [DIR]   build release artifacts + SHA256SUMS
@@ -16,12 +16,12 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
-export LAZYOS_ROOT_DIR="$ROOT_DIR"
-export LAZYOS_CORE_DIR="${LAZYOS_CORE_DIR:-$ROOT_DIR/core}"
-export LAZYOS_DESKTOP_DIR="${LAZYOS_DESKTOP_DIR:-$ROOT_DIR/desktop}"
-export LAZYOS_DEVICES_DIR="${LAZYOS_DEVICES_DIR:-$ROOT_DIR/devices}"
+export HAYATO_ROOT_DIR="$ROOT_DIR"
+export HAYATO_CORE_DIR="${HAYATO_CORE_DIR:-$ROOT_DIR/core}"
+export HAYATO_DESKTOP_DIR="${HAYATO_DESKTOP_DIR:-$ROOT_DIR/desktop}"
+export HAYATO_DEVICES_DIR="${HAYATO_DEVICES_DIR:-$ROOT_DIR/devices}"
 
-for sub in "$LAZYOS_CORE_DIR/scripts" "$LAZYOS_DESKTOP_DIR/uis" "$LAZYOS_DEVICES_DIR/devices"; do
+for sub in "$HAYATO_CORE_DIR/scripts" "$HAYATO_DESKTOP_DIR/uis" "$HAYATO_DEVICES_DIR/devices"; do
 	if [ ! -d "$sub" ]; then
 		echo "error: submodule checkout incomplete (missing $sub). Run: git submodule update --init --recursive" >&2
 		exit 1
@@ -37,42 +37,57 @@ case "$cmd" in
 		exit 0
 		;;
 	all)
-		exec "$LAZYOS_CORE_DIR/scripts/build.sh" "$@"
+		exec "$HAYATO_CORE_DIR/scripts/build.sh" "$@"
 		;;
 	kernel)
-		exec "$LAZYOS_DEVICES_DIR/scripts/build-kernel.sh" "$@"
+		exec "$HAYATO_DEVICES_DIR/scripts/build-kernel.sh" "$@"
 		;;
 	desktop)
-		exec "$LAZYOS_DESKTOP_DIR/scripts/stage-desktop.sh" "$@"
+		exec "$HAYATO_DESKTOP_DIR/scripts/stage-desktop.sh" "$@"
 		;;
 	rootfs)
-		"$LAZYOS_CORE_DIR/scripts/build-rootfs.sh" "$@"
-		"$LAZYOS_CORE_DIR/scripts/install-kernel.sh"
-		exec "$LAZYOS_CORE_DIR/scripts/install-desktop.sh"
+		"$HAYATO_CORE_DIR/scripts/build-rootfs.sh" "$@"
+		"$HAYATO_CORE_DIR/scripts/install-kernel.sh"
+		exec "$HAYATO_CORE_DIR/scripts/install-desktop.sh"
 		;;
 	image)
-		exec "$LAZYOS_CORE_DIR/scripts/make-image.sh" "$@"
+		exec "$HAYATO_CORE_DIR/scripts/make-image.sh" "$@"
 		;;
 	release)
-		exec "$LAZYOS_CORE_DIR/scripts/make-release.sh" "$@"
+		exec "$HAYATO_CORE_DIR/scripts/make-release.sh" "$@"
 		;;
 	sd)
-		exec "$LAZYOS_CORE_DIR/scripts/write-sd.sh" "$@"
+		exec "$HAYATO_CORE_DIR/scripts/write-sd.sh" "$@"
 		;;
 	emmc)
-		exec "$LAZYOS_CORE_DIR/scripts/install-emmc.sh" "$@"
+		exec "$HAYATO_CORE_DIR/scripts/install-emmc.sh" "$@"
 		;;
 	check)
-		exec "$LAZYOS_CORE_DIR/scripts/check-system.sh" "$ROOT_DIR" "$@"
+		exec "$HAYATO_CORE_DIR/scripts/check-system.sh" "$ROOT_DIR" "$@"
 		;;
 	validate)
-		"$LAZYOS_DEVICES_DIR/scripts/validate-devices.sh"
-		bash "$LAZYOS_CORE_DIR/tests/run.sh"
-		bash "$LAZYOS_DEVICES_DIR/tests/run.sh"
-		for f in "$LAZYOS_CORE_DIR"/scripts/*.sh "$LAZYOS_CORE_DIR"/boot/*.sh "$LAZYOS_DESKTOP_DIR"/scripts/*.sh; do
+		"$HAYATO_DEVICES_DIR/scripts/validate-devices.sh"
+		bash "$HAYATO_CORE_DIR/tests/run.sh"
+		bash "$HAYATO_DEVICES_DIR/tests/run.sh"
+		for f in "$HAYATO_CORE_DIR"/scripts/*.sh "$HAYATO_CORE_DIR"/boot/*.sh "$HAYATO_DESKTOP_DIR"/scripts/*.sh; do
 			bash -n "$f"
 		done
-		"$LAZYOS_CORE_DIR/scripts/check-system.sh" --help >/dev/null
+		"$HAYATO_CORE_DIR/scripts/check-system.sh" --help >/dev/null
+		# The old brand name lives in history (reports/, docs/releases/, the
+		# old specs and design notes) and nowhere in the product. This is the
+		# guard for specs/026-hayato-rebrand.md: a stray identifier in the
+		# tree is a path that resolves to nothing on the device.
+		stale=$(grep -rIl --exclude-dir=.git --exclude-dir=target \
+			-e 'lazyos' -e 'LazyOS' -e 'LAZYOS' \
+			"$HAYATO_DESKTOP_DIR/uis" "$HAYATO_DESKTOP_DIR/rust" \
+			"$HAYATO_CORE_DIR/scripts" "$HAYATO_CORE_DIR/boot" \
+			"$HAYATO_DEVICES_DIR/devices" "$HAYATO_DEVICES_DIR/kernels" \
+			"$ROOT_DIR/site" "$ROOT_DIR/.github" 2>/dev/null || true)
+		if [ -n "$stale" ]; then
+			echo "error: the old brand name is still in the product tree:" >&2
+			echo "$stale" >&2
+			exit 1
+		fi
 		echo "Umbrella validation passed."
 		;;
 	*)

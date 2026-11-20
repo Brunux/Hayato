@@ -15,7 +15,7 @@ deserve a checked answer instead of a feeling.
   names (`hyprpicker`, `yaru-theme-icon`, `libqalculate23`) are standalone tools that are
   reclassified in the tables below.
 * **Features**: the inventory in [`plan-rofi.md`](plan-rofi.md) and the manual's own "not built yet"
-  list (`uis/sway/files/usr/share/doc/lazyos/03-shortcuts.md`).
+  list (`uis/sway/files/usr/share/doc/hayato/03-shortcuts.md`).
 * **Section 5 is not Omarchy parity**: it is what this port's own plans (`plan-rofi.md`'s batches B
   and C, its tablet section, `plan-agents.md`) already specify and has not been built. It is here so
   the two questions - "what does Omarchy have that we do not" and "what have we planned and not
@@ -62,7 +62,7 @@ Adopted since this list was written: `swappy` and `wf-recorder` (the capture men
 `fonts-noto-color-emoji` (the emoji picker's glyphs, `rofi-emoji`), `pcmanfm` + `gvfs` (the
 windowed file manager: `Alt+Ctrl+Shift+F`, the launcher's **Files (window)**; the decision is section
 1), and the five names the file story was waiting for: **`mpv` + `mpv-mpris`** (a video plays in a
-real player, and `playerctl`, `rofi-media` and the bar see it because `lazyos-view` passes
+real player, and `playerctl`, `rofi-media` and the bar see it because `hayato-view` passes
 `--script=/etc/mpv/scripts/mpris.so` - `--no-config` empties the directory the plugin installs
 into), **`imv`** (the picture viewer, with `chafa` kept as the fallback for a GPU without an EGL
 context), **`papers`** (PDF, DjVu and comics in a reader instead of a browser tab), **`udisks2`**
@@ -70,7 +70,7 @@ context), **`papers`** (PDF, DjVu and comics in a reader instead of a browser ta
 it is a resident tray daemon and this bar has no tray), and **`neovim` + `vim`** (so `EDITOR` and
 `VISUAL` name `nvim` instead of leaving `eff` on nano, and `vim` brings `/usr/bin/vi` with it).
 The colour picker needed no package at all: `slurp` + `grim` + `ffmpeg` already read a pixel - and
-neither did `ffmpegthumbnailer`: `lazyos-thumbnail` makes a video's thumbnail with the `ffmpeg` the
+neither did `ffmpegthumbnailer`: `hayato-thumbnail` makes a video's thumbnail with the `ffmpeg` the
 image already has.
 
 ## 2. Covered by something else
@@ -79,7 +79,7 @@ image already has.
 |---|---|
 | `chromium` (280 MB) | `firefox-esr` (in `uis/sway/packages.list`), the image's one browser: documents, pictures and video have viewers of their own now (`papers`, `imv`, `mpv`) |
 | `alacritty`, `kitty` | `foot` - half the memory of an alacritty window on a 4 GB machine |
-| `yaru-theme-icon` | the **LazyOS** icon theme, rendered by `scripts/make-icons.sh` from the Font Awesome codepoints used in the menus |
+| `yaru-theme-icon` | the **Hayato** icon theme, rendered by `scripts/make-icons.sh` from the Font Awesome codepoints used in the menus |
 | `libxkbcommon-tools` (`xkbcli list`) | `keyd` for the keymap and `swaymsg -t get_inputs` + `jq` for the layout indicator |
 | `libqalculate23` | `rofi-calc` (an `awk` expression, no library) |
 | `hyprsunset` | `wlsunset` + the night-light row in `rofi-quick` |
@@ -117,7 +117,7 @@ has that are still missing:
 | **Package search/install** | **done**: `rofi-pkg` searches with `apt-cache`, marks what is installed, installs with `apt-get -y` behind the busy card, and its last row runs `apt-get update` | — |
 | **DNS switcher** | **done**: `rofi-dns` sets `ipv4.dns`/`ipv4.ignore-auto-dns` on the connection that is up and brings it back, with common resolvers, typed servers or DHCP | — |
 | **Reminders** | **done**: `rofi-remind` starts transient `systemd-run --user` timers that fire `notify-send` once, listed back from systemd and cancelled by choosing one | — |
-| **Theme switcher, appearance, animations, monitor layout** | **done**: `lazyos-theme` (Alt+Shift+T / Alt+Shift+W) parses `theme.toml` with 8 built-ins (Solarized, Catppuccin, Tokyo Night, Rose Pine, Nord, Gruvbox, Everforest, Kanagawa), generates wallpapers and atomic templates across 11 surfaces | — |
+| **Theme switcher, appearance, animations, monitor layout** | **done**: `hayato-theme` (Alt+Shift+T / Alt+Shift+W) parses `theme.toml` with 8 built-ins (Solarized, Catppuccin, Tokyo Night, Rose Pine, Nord, Gruvbox, Everforest, Kanagawa), generates wallpapers and atomic templates across 11 surfaces | — |
 | **OSD (volume/brightness overlay)** | **done**: `~/.config/bin/osd` (Alt+volume/brightness) draws a mako card with the `value` hint as a progress bar and the matching Font Awesome icon; no process, no package. `swayosd` **is** packaged in forky (`0.3.0-4`, 7.7 MB), and the reason it is not used is the daemon: a resident GTK4 server for the same picture. | — |
 
 Not portable from Omarchy at all: its **Install/Remove trees** (pacman/AUR/mise for Arch packages -
@@ -180,7 +180,7 @@ different ones.
 | `Super+Shift+S` for a screenshot | `Alt+Shift+S` (area), `Alt+Shift+F` (full), both through `screenshot` + `grimshot -n`. |
 | A second close chord | `Alt+Q` is the only close, and it is the documented one: foot's `Ctrl+Shift+W` never reached the held About windows on this keyboard. |
 | Agent account selection applied to subprocesses | that is the design here: `CLAUDE_CONFIG_DIR` and `CODEX_HOME` are set per account (`rofi-agents`), so every process an agent starts inherits the choice. |
-| No-animations mode, on by default in VMs | `LAZYOS_REDUCED_MOTION=1` skips the framework's one 300 ms sweep (`app.rs`); there is no toggle in the session yet (7.2). |
+| No-animations mode, on by default in VMs | `HAYATO_REDUCED_MOTION=1` skips the framework's one 300 ms sweep (`app.rs`); there is no toggle in the session yet (7.2). |
 
 ### 7.2 Worth taking (and which spec would carry it)
 
@@ -193,15 +193,15 @@ project and "one more row in the network panel" is a commit.
 | **Actions, codes and links on the card** | mako 1.11 is installed and **supports it** (`actions=1`, `on-button-left`, `on-notify` in its own man page and binary); the config does not set it | `actions=1` in the mako template plus a `default` action on the call sites that have one ("open the folder", "show the log"). Belongs to spec 006, whose `Card` already carries an `action` field. |
 | **Snooze** | dismissing a card loses it (it stays in `makoctl`'s history, not on screen) | no mako option; the shape already exists in `rofi-remind` - `systemd-run --user --collect` a one-shot that re-sends the card. A row on the card's menu, not a daemon. Spec 006. |
 | **An Appearance menu** | theme (`Alt+Shift+T`), wallpaper (`Alt+Shift+W`), night light and the radio switches are four separate places; the root menu's *Settings* row says "Wi-Fi, Bluetooth, night light, tablet mode, rotation" | a group, not a daemon: theme, wallpaper, night light, reduced motion, bar position, and (once it exists) density. Spec 013 is where the theme engine's user-facing surface lands, so the grouping is its job. |
-| **A short intro when the theme loads** | `theme next` rewrites eleven files and prints a line | the framework's animation budget already allows **one** sweep of at most 300 ms, skipped by `LAZYOS_REDUCED_MOTION=1`; the surface that draws it is the framework window, so this is spec 013/014 work, not a `swaybg` trick. |
-| **Remembering the wallpaper per theme** | one wallpaper for the session; `theme next` keeps it | `wallpaper next` already chooses; the per-theme memory is one file under `~/.local/state/lazyos/theme/` keyed by theme name. Spec 013. |
+| **A short intro when the theme loads** | `theme next` rewrites eleven files and prints a line | the framework's animation budget already allows **one** sweep of at most 300 ms, skipped by `HAYATO_REDUCED_MOTION=1`; the surface that draws it is the framework window, so this is spec 013/014 work, not a `swaybg` trick. |
+| **Remembering the wallpaper per theme** | one wallpaper for the session; `theme next` keeps it | `wallpaper next` already chooses; the per-theme memory is one file under `~/.local/state/hayato/theme/` keyed by theme name. Spec 013. |
 | **Dimming installed software instead of hiding it** | `rofi-pkg` marks what is installed; `rofi-install` lists rows | one `ui_row` for the installed state with the dim colour, i.e. the shape `rofi-pkg` already uses. Spec 012 (the launcher/reference surfaces). |
 | **Scrolling through workspaces from the bar** | already on: waybar 0.15's `sway/workspaces` scrolls unless `disable-scroll: true`, which this config does not set (verified in `waybar-sway-workspaces(5)`), so the pills cycle on a scroll today. | nothing; noted so it is not "added" twice. |
 | **A clock with live seconds** | `sway/clock` with a one-minute interval | `interval: 1` costs a wakeup a second all day on a battery device: **opt-in**, and the honest default stays minutes. |
 | **`Shift+Caps Lock` as the compose key** | neither Compose nor a dead-key layer is set; accents come from `wvkbd`'s `Cmp` key on the touch keyboard | xkb's `compose:caps` option is available in this tree's `evdev` rules (verified); it is one line in the keyd/xkb setup and it returns Caps Lock to normal. Worth doing for typing on a physical keyboard, and it has to be checked against keyd's own layer. |
-| **Keeping an update safe from a logout mid-transaction** | `lazyos-install-run` and `sway-suspend` already use `systemd-inhibit`; `rofi-pkg` and the update row do not | the same `systemd-inhibit --what=shutdown:sleep` wrapper around the `apt-get` call, plus the busy card it already opens. |
+| **Keeping an update safe from a logout mid-transaction** | `hayato-install-run` and `sway-suspend` already use `systemd-inhibit`; `rofi-pkg` and the update row do not | the same `systemd-inhibit --what=shutdown:sleep` wrapper around the `apt-get` call, plus the busy card it already opens. |
 | **BBR and the kyber I/O scheduler** | `optimization.md` tunes sysctls; the scheduler is the kernel's default | both are measurable here (`sysctl net.ipv4.tcp_congestion_control=bbr`, `echo kyber > /sys/block/mmcblk0/queue/scheduler`), and both belong in `optimization.md` with numbers **before** they become a drop-in. |
-| **Hardware video decoding in mpv** | `lazyos-view` and `rofi-files` run `mpv --no-config` with **no `--hwdec`**, so playback is software everywhere today | the MT8192 has a stateless `mtk-vcodec` decoder; whether `--hwdec=v4l2request` opens a real node here has not been measured, and a codec that silently falls back is not a saving. One `mpv --hwdec=v4l2request --msg-level=vd=v` against a known file answers it, then `optimization.md`. A `fix:` commit only after the measurement. |
+| **Hardware video decoding in mpv** | `hayato-view` and `rofi-files` run `mpv --no-config` with **no `--hwdec`**, so playback is software everywhere today | the MT8192 has a stateless `mtk-vcodec` decoder; whether `--hwdec=v4l2request` opens a real node here has not been measured, and a codec that silently falls back is not a saving. One `mpv --hwdec=v4l2request --msg-level=vd=v` against a known file answers it, then `optimization.md`. A `fix:` commit only after the measurement. |
 
 ### 7.3 Deliberately not
 

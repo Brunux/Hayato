@@ -22,7 +22,7 @@ jobs:
             local dev="$1" want_src="$2" want_rel="$3" want_boot="$4" want_img="$5"
             (
               export BUILD_ROOT="$TMP/build"
-              export LAZYOS_ROOT_DIR="$PWD"
+              export HAYATO_ROOT_DIR="$PWD"
               export DEVICE="$dev"
               . ./core/scripts/lib.sh
               [ "$KERNEL_SOURCE_TYPE" = "$want_src" ]
@@ -44,6 +44,6 @@ jobs:
       - name: Verify Pages assembly paths
         run: |
           test -f site/index.html
-          test -f desktop/brand/lazyos.svg
+          test -f desktop/brand/hayato.svg
           test -f desktop/brand/social-preview.png
           test -f desktop/brand/apple-touch-icon.png
