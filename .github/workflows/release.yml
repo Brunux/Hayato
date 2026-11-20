@@ -82,15 +82,20 @@ jobs:
   build-desktop:
     needs: verify
     runs-on: ubuntu-24.04-arm
+    container:
+      image: debian:forky
     steps:
+      - name: Prepare the forky container
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git ca-certificates curl xz-utils zstd nodejs
       - uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install build dependencies
-        run: sudo ./core/scripts/00-deps.sh
+        run: ./core/scripts/00-deps.sh
       - name: Free space for shared desktop build
         run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
           df -h
       - name: Build shared desktop once (swayfx, workstyle, hayato)
         run: |
@@ -108,15 +113,20 @@ jobs:
     needs: verify
     if: needs.verify.outputs.need_mt81_kernel == 'true'
     runs-on: ubuntu-24.04-arm
+    container:
+      image: debian:forky
     steps:
+      - name: Prepare the forky container
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git ca-certificates curl xz-utils zstd nodejs
       - uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install build dependencies
-        run: sudo ./core/scripts/00-deps.sh
+        run: ./core/scripts/00-deps.sh
       - name: Free space for mediatek-mt81 kernel build
         run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
           df -h
       - name: Build mediatek-mt81 kernel once (google-asurada & google-kukui)
         run: |
@@ -134,19 +144,24 @@ jobs:
     needs: [verify, build-desktop, build-mt81-kernel]
     if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') }}
     runs-on: ubuntu-24.04-arm
+    container:
+      image: debian:forky
     strategy:
       fail-fast: false
       matrix:
         target: ${{ fromJson(needs.verify.outputs.targets) }}
     steps:
+      - name: Prepare the forky container
+        run: |
+          apt-get update -qq
+          apt-get install -y -qq --no-install-recommends git ca-certificates curl xz-utils zstd nodejs
       - uses: actions/checkout@v4
         with:
           submodules: true
       - name: Install build dependencies
-        run: sudo ./core/scripts/00-deps.sh
+        run: ./core/scripts/00-deps.sh
       - name: Free space for target assembly
         run: |
-          sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc
           df -h
       - uses: actions/download-artifact@v4
         with:
@@ -160,17 +175,16 @@ jobs:
       - name: Assemble rootfs, images, and release archive
         run: |
           export BUILD_ROOT=/var/tmp/hayato-build
-          sudo mkdir -p "$BUILD_ROOT/work"
-          sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/desktop-stages.tar.zst
+          mkdir -p "$BUILD_ROOT/work"
+          tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/desktop-stages.tar.zst
           if [ -f stages/mt81-kernel-stage.tar.zst ]; then
-            sudo tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/mt81-kernel-stage.tar.zst
+            tar -C "$BUILD_ROOT/work" --numeric-owner -I zstd -xf stages/mt81-kernel-stage.tar.zst
           fi
           export DEVICE="${{ matrix.target }}"
           export SKIP_DESKTOP_BUILD=yes
           export SKIP_KERNEL_BUILD=yes
-          sudo -E ./build.sh all
-          sudo -E ./build.sh release "$PWD/out-${{ matrix.target }}"
-          sudo chown -R "$USER:$USER" "$PWD/out-${{ matrix.target }}"
+          ./build.sh all
+          ./build.sh release "$PWD/out-${{ matrix.target }}"
       - uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.target }}
@@ -211,8 +225,14 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "$GITHUB_REF_NAME" \
-            release-files/* \
-            --title "$GITHUB_REF_NAME" \
-            --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
-            --verify-tag
+          # A release may already exist: the first target is often cut by hand
+          # before the tag, and the pipeline then adds the rest.
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" release-files/* --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              release-files/* \
+              --title "$GITHUB_REF_NAME" \
+              --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
+              --verify-tag
+          fi
