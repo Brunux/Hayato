@@ -17,13 +17,13 @@ Upgrade complex Hayato TUI apps from flat single-column lists and nested `Picker
 - [x] **6. Developer Workbench** (`system/dev.rs`): Left categorized tool rail + Right Workbench Inspector (command, highlights, paths & safety contract).
 
 ## Wave 2 — Productivity, Agents & Media Studios (7)
-- [ ] **7. AI Agents & Accounts Studio** (`system/agents.rs`)
-- [ ] **8. Unified Download Deck** (`system/download.rs`)
-- [ ] **9. Reminders & Timers Studio** (`system/remind.rs`)
-- [ ] **10. Places & Storage Hub** (`system/places.rs`)
-- [ ] **11. Now Playing Media Deck** (`system/media.rs`)
-- [ ] **12. Notification Center** (`system/notify.rs`)
-- [ ] **13. Interactive Translation Studio** (`system/translate.rs`)
+- [x] **7. AI Agents & Accounts Studio** (`system/agents.rs`): Left installed/available agent rail (`★ default`, active account) + Right Agent Deck (binary, npm package, account profiles, inline `Ctrl+D` default & `Ctrl+A` accounts).
+- [x] **8. Unified Download Deck** (`system/download.rs`): Single-screen URL input (auto-filled from clipboard), inline `Tab` Video / Audio (m4a) toggle, embedded `TaskView`, and Recent Downloads list on the right.
+- [x] **9. Reminders & Timers Studio** (`system/remind.rs`): Left active systemd user timers + Right Timer Details & Quick Presets deck.
+- [x] **10. Places & Storage Hub** (`system/places.rs`): Left folders/disks/mounts/tools + Right Storage Inspector with live `df` capacity gauge and `Ctrl+T` terminal-here shortcut.
+- [x] **11. Now Playing Media Deck** (`system/media.rs`): Left Now Playing hero & transport deck + Right Players & Controls list.
+- [x] **12. Notification Center** (`system/notify.rs`): Left history + DND/Restore/Dismiss action strip + Right full-body Message Inspector + guarded `ConfirmDismiss` on `Ctrl+X`.
+- [x] **13. Interactive Translation Studio** (`system/translate.rs`): Left 26-language target selector + Right Live Translator workbench (`Ctrl+T` translates clipboard live & copies).
 
 ## Wave 3 — System Config, Safety Wizards & Reference Studios (10)
 - [ ] **14. Safe Disk Formatter** (`system/format.rs`)
