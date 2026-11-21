@@ -15,7 +15,15 @@ on:
         type: boolean
         default: false
       reuse_run_id:
-        description: "Optional workflow run ID to reuse desktop-stages and mt81-kernel-stage artifacts from"
+        description: "Optional workflow run ID to reuse both desktop-stages and mt81-kernel-stage artifacts from"
+        required: false
+        default: ""
+      reuse_desktop_run_id:
+        description: "Optional workflow run ID to reuse desktop-stages artifact from"
+        required: false
+        default: ""
+      reuse_kernel_run_id:
+        description: "Optional workflow run ID to reuse mt81-kernel-stage artifact from"
         required: false
         default: ""
 
@@ -110,7 +118,7 @@ jobs:
 
   build-desktop:
     needs: verify
-    if: ${{ github.event.inputs.reuse_run_id == '' }}
+    if: ${{ github.event.inputs.reuse_run_id == '' && github.event.inputs.reuse_desktop_run_id == '' }}
     runs-on: ubuntu-24.04-arm
     container:
       image: debian:forky
@@ -170,7 +178,7 @@ jobs:
 
   build-mt81-kernel:
     needs: verify
-    if: ${{ needs.verify.outputs.need_mt81_kernel == 'true' && github.event.inputs.reuse_run_id == '' }}
+    if: ${{ needs.verify.outputs.need_mt81_kernel == 'true' && github.event.inputs.reuse_run_id == '' && github.event.inputs.reuse_kernel_run_id == '' }}
     runs-on: ubuntu-24.04-arm
     container:
       image: debian:forky
@@ -189,8 +197,10 @@ jobs:
           df -h
       - name: Build mediatek-mt81 kernel once (google-asurada & google-kukui)
         run: |
+          set -euo pipefail
           export BUILD_ROOT=/var/tmp/hayato-build
           DEVICE=google-asurada ./build.sh kernel
+          [ -d "$BUILD_ROOT/work/kernel-stage-mediatek-mt81/boot" ]
           if [ "${{ needs.verify.outputs.mode }}" = "images" ]; then
             mkdir -p stages
             tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - kernel-stage-mediatek-mt81 | zstd -T0 -6 -q -o stages/mt81-kernel-stage.tar.zst
@@ -240,14 +250,14 @@ jobs:
         with:
           name: desktop-stages
           path: stages
-          run-id: ${{ github.event.inputs.reuse_run_id || github.run_id }}
+          run-id: ${{ github.event.inputs.reuse_desktop_run_id || github.event.inputs.reuse_run_id || github.run_id }}
           github-token: ${{ github.token }}
       - uses: actions/download-artifact@v4
         if: matrix.target == 'google-asurada' || matrix.target == 'google-kukui'
         with:
           name: mt81-kernel-stage
           path: stages
-          run-id: ${{ github.event.inputs.reuse_run_id || github.run_id }}
+          run-id: ${{ github.event.inputs.reuse_kernel_run_id || github.event.inputs.reuse_run_id || github.run_id }}
           github-token: ${{ github.token }}
       - name: Assemble rootfs, images, and release archive
         run: |
