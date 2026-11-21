@@ -25,6 +25,7 @@ jobs:
       targets: ${{ steps.plan.outputs.targets }}
       need_mt81_kernel: ${{ steps.plan.outputs.need_mt81_kernel }}
       should_publish: ${{ steps.plan.outputs.should_publish }}
+      release_tag: ${{ steps.plan.outputs.release_tag }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,29 +33,14 @@ jobs:
       - name: Verify versions or umbrella validation
         id: plan
         run: |
+          ./build.sh validate
           if [ "${{ github.event_name }}" = "push" ]; then
             tag="${GITHUB_REF_NAME}"
-            expected="v$(tr -d '\n' < VERSION)"
-            if [ "$tag" != "$expected" ]; then
-              echo "tag $tag does not match VERSION ($expected)"
-              exit 1
-            fi
-            for vfile in core/VERSION desktop/VERSION; do
-              subver="v$(tr -d '\n' < "$vfile")"
-              if [ "$tag" != "$subver" ]; then
-                echo "tag $tag does not match $vfile ($subver)"
-                exit 1
-              fi
-            done
-            if [ ! -f "docs/releases/$tag.md" ]; then
-              echo "docs/releases/$tag.md is missing (it is the release body)"
-              exit 1
-            fi
             targets='["google-asurada","google-kukui","arm64-uefi","arm64-extlinux"]'
             need_mt81_kernel="true"
             should_publish="true"
           else
-            ./build.sh validate
+            tag="v$(tr -d ' \t\r\n' < VERSION)"
             case "${{ github.event.inputs.target }}" in
               all)
                 targets='["google-asurada","google-kukui","arm64-uefi","arm64-extlinux"]'
@@ -73,11 +59,34 @@ jobs:
                 exit 1
                 ;;
             esac
-            should_publish="false"
+            if [ "${{ github.event.inputs.publish }}" = "true" ]; then
+              should_publish="true"
+            else
+              should_publish="false"
+            fi
+          fi
+          if [ "$should_publish" = "true" ]; then
+            expected="v$(tr -d ' \t\r\n' < VERSION)"
+            if [ "$tag" != "$expected" ]; then
+              echo "tag $tag does not match VERSION ($expected)"
+              exit 1
+            fi
+            for vfile in core/VERSION desktop/VERSION; do
+              subver="v$(tr -d ' \t\r\n' < "$vfile")"
+              if [ "$tag" != "$subver" ]; then
+                echo "tag $tag does not match $vfile ($subver)"
+                exit 1
+              fi
+            done
+            if [ ! -f "docs/releases/$tag.md" ]; then
+              echo "docs/releases/$tag.md is missing (it is the release body)"
+              exit 1
+            fi
           fi
           echo "targets=$targets" >> "$GITHUB_OUTPUT"
           echo "need_mt81_kernel=$need_mt81_kernel" >> "$GITHUB_OUTPUT"
           echo "should_publish=$should_publish" >> "$GITHUB_OUTPUT"
+          echo "release_tag=$tag" >> "$GITHUB_OUTPUT"
 
   build-desktop:
     needs: verify
@@ -203,10 +212,21 @@ jobs:
           merge-multiple: true
       - name: Build APT repository metadata and unified SHA256SUMS
         env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.verify.outputs.release_tag }}
           HAYATO_APT_GPG_PRIVATE_KEY: ${{ secrets.HAYATO_APT_GPG_PRIVATE_KEY }}
         run: |
-          mkdir -p release-files
+          mkdir -p release-files prev-release
           find out-all -type f ! -name 'SHA256SUMS' ! -name 'MERGED_SUMS' -exec mv -f -t release-files {} +
+          if [ "${{ needs.verify.outputs.should_publish }}" = "true" ] && gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Merging existing .deb packages and image checksums from $RELEASE_TAG..."
+            gh release download "$RELEASE_TAG" --dir prev-release --pattern "*.deb" --pattern "SHA256SUMS" 2>/dev/null || true
+            for pdeb in prev-release/*.deb; do
+              [ -f "$pdeb" ] || continue
+              base="$(basename "$pdeb")"
+              [ -f "release-files/$base" ] || cp -a "$pdeb" "release-files/$base"
+            done
+          fi
           chmod +x ./core/scripts/hayato-apt.sh
           ./core/scripts/hayato-apt.sh build-repo release-files
           # Recompute clean combined SHA256SUMS across all shipped images, .debs, and APT metadata
@@ -214,7 +234,18 @@ jobs:
             cd release-files
             rm -f SHA256SUMS
             sha256sum * > SHA256SUMS
-            sha256sum -c SHA256SUMS
+            if [ -f ../prev-release/SHA256SUMS ]; then
+              while read -r sum fname; do
+                case "$fname" in
+                  *.img.xz)
+                    if [ ! -f "$fname" ]; then
+                      printf '%s  %s\n' "$sum" "$fname" >> SHA256SUMS
+                    fi
+                    ;;
+                esac
+              done < ../prev-release/SHA256SUMS
+            fi
+            sha256sum -c --ignore-missing SHA256SUMS
           )
           ls -lh release-files
       - uses: actions/upload-artifact@v4
@@ -227,17 +258,18 @@ jobs:
         if: needs.verify.outputs.should_publish == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.verify.outputs.release_tag }}
         run: |
-          # A release may already exist: the first target is often cut by hand
-          # before the tag, and the pipeline then adds the rest.
-          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" release-files/* --clobber
+          # A release may already exist when building one target at a time:
+          # the first target creates the tag/release and later targets upload into it.
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" release-files/* --clobber
           else
-            gh release create "$GITHUB_REF_NAME" \
+            gh release create "$RELEASE_TAG" \
               release-files/* \
-              --title "$GITHUB_REF_NAME" \
-              --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
-              --verify-tag
+              --target "$GITHUB_SHA" \
+              --title "$RELEASE_TAG" \
+              --notes-file "docs/releases/$RELEASE_TAG.md"
           fi
       - name: Push .deb packages to Cloudsmith APT repository
         if: needs.verify.outputs.should_publish == 'true'
