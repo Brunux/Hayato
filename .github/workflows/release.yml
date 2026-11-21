@@ -14,6 +14,10 @@ on:
         description: "Publish GitHub release if running on a v* tag"
         type: boolean
         default: false
+      reuse_run_id:
+        description: "Optional workflow run ID to reuse desktop-stages and mt81-kernel-stage artifacts from"
+        required: false
+        default: ""
 
 permissions:
   contents: write
@@ -106,6 +110,7 @@ jobs:
 
   build-desktop:
     needs: verify
+    if: ${{ github.event.inputs.reuse_run_id == '' }}
     runs-on: ubuntu-24.04-arm
     container:
       image: debian:forky
@@ -165,7 +170,7 @@ jobs:
 
   build-mt81-kernel:
     needs: verify
-    if: needs.verify.outputs.need_mt81_kernel == 'true'
+    if: ${{ needs.verify.outputs.need_mt81_kernel == 'true' && github.event.inputs.reuse_run_id == '' }}
     runs-on: ubuntu-24.04-arm
     container:
       image: debian:forky
@@ -209,10 +214,11 @@ jobs:
 
   build-target:
     needs: [verify, build-desktop, build-mt81-kernel]
-    if: ${{ !failure() && !cancelled() && needs.verify.outputs.mode == 'images' && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') }}
+    if: ${{ !failure() && !cancelled() && needs.verify.outputs.mode == 'images' && needs.verify.result == 'success' && (needs.build-desktop.result == 'success' || needs.build-desktop.result == 'skipped') && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') }}
     runs-on: ubuntu-24.04-arm
     container:
       image: debian:forky
+      options: --privileged -v /dev:/dev
     strategy:
       fail-fast: false
       matrix:
@@ -234,11 +240,15 @@ jobs:
         with:
           name: desktop-stages
           path: stages
+          run-id: ${{ github.event.inputs.reuse_run_id || github.run_id }}
+          github-token: ${{ github.token }}
       - uses: actions/download-artifact@v4
         if: matrix.target == 'google-asurada' || matrix.target == 'google-kukui'
         with:
           name: mt81-kernel-stage
           path: stages
+          run-id: ${{ github.event.inputs.reuse_run_id || github.run_id }}
+          github-token: ${{ github.token }}
       - name: Assemble rootfs, images, and release archive
         run: |
           export BUILD_ROOT=/var/tmp/hayato-build
@@ -260,7 +270,7 @@ jobs:
 
   publish:
     needs: [verify, build-desktop, build-mt81-kernel, build-target]
-    if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') && (needs.build-target.result == 'success' || needs.build-target.result == 'skipped') }}
+    if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && (needs.build-desktop.result == 'success' || needs.build-desktop.result == 'skipped') && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') && (needs.build-target.result == 'success' || needs.build-target.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
