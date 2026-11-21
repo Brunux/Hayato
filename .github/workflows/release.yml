@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       target:
-        description: "Release target (all, google-asurada, google-kukui, arm64-uefi, arm64-extlinux)"
+        description: "Release target (all, debs-fast, debs, google-asurada, google-kukui, arm64-uefi, arm64-extlinux)"
         required: true
         default: "all"
       publish:
@@ -22,6 +22,7 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     outputs:
+      mode: ${{ steps.plan.outputs.mode }}
       targets: ${{ steps.plan.outputs.targets }}
       need_mt81_kernel: ${{ steps.plan.outputs.need_mt81_kernel }}
       should_publish: ${{ steps.plan.outputs.should_publish }}
@@ -36,6 +37,7 @@ jobs:
           ./build.sh validate
           if [ "${{ github.event_name }}" = "push" ]; then
             tag="${GITHUB_REF_NAME}"
+            mode="images"
             targets='["google-asurada","google-kukui","arm64-uefi","arm64-extlinux"]'
             need_mt81_kernel="true"
             should_publish="true"
@@ -43,14 +45,27 @@ jobs:
             tag="v$(tr -d ' \t\r\n' < VERSION)"
             case "${{ github.event.inputs.target }}" in
               all)
+                mode="images"
                 targets='["google-asurada","google-kukui","arm64-uefi","arm64-extlinux"]'
                 need_mt81_kernel="true"
                 ;;
+              debs-fast)
+                mode="debs-fast"
+                targets='["none"]'
+                need_mt81_kernel="false"
+                ;;
+              debs)
+                mode="debs"
+                targets='["none"]'
+                need_mt81_kernel="true"
+                ;;
               google-asurada|google-kukui)
+                mode="images"
                 targets='["${{ github.event.inputs.target }}"]'
                 need_mt81_kernel="true"
                 ;;
               arm64-uefi|arm64-extlinux)
+                mode="images"
                 targets='["${{ github.event.inputs.target }}"]'
                 need_mt81_kernel="false"
                 ;;
@@ -83,6 +98,7 @@ jobs:
               exit 1
             fi
           fi
+          echo "mode=$mode" >> "$GITHUB_OUTPUT"
           echo "targets=$targets" >> "$GITHUB_OUTPUT"
           echo "need_mt81_kernel=$need_mt81_kernel" >> "$GITHUB_OUTPUT"
           echo "should_publish=$should_publish" >> "$GITHUB_OUTPUT"
@@ -106,17 +122,46 @@ jobs:
       - name: Free space for shared desktop build
         run: |
           df -h
-      - name: Build shared desktop once (swayfx, workstyle, hayato)
+      - name: Build desktop and core/device packages
         run: |
           export BUILD_ROOT=/var/tmp/hayato-build
-          ./build.sh desktop
-          mkdir -p stages
-          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - swayfx-stage workstyle-stage hayato-stage | zstd -T0 -6 -q -o stages/desktop-stages.tar.zst
+          if [ "${{ needs.verify.outputs.mode }}" = "debs-fast" ]; then
+            ./desktop/scripts/build-hayato.sh
+            ./core/scripts/build-core-deb.sh
+            for dev in google-asurada google-kukui arm64-uefi arm64-extlinux; do
+              DEVICE="$dev" ./devices/scripts/build-device-deb.sh "$BUILD_ROOT/work/hayato-stage"
+            done
+            mkdir -p out-debs
+            cp -f "$BUILD_ROOT/work/hayato-stage"/*.deb out-debs/
+            ls -lh out-debs
+          elif [ "${{ needs.verify.outputs.mode }}" = "debs" ]; then
+            ./build.sh desktop
+            ./core/scripts/build-core-deb.sh
+            for dev in google-asurada google-kukui arm64-uefi arm64-extlinux; do
+              DEVICE="$dev" ./devices/scripts/build-device-deb.sh "$BUILD_ROOT/work/hayato-stage"
+            done
+            mkdir -p out-debs
+            for deb in "$BUILD_ROOT/work/swayfx-stage"/*.deb "$BUILD_ROOT/work/workstyle-stage"/*.deb "$BUILD_ROOT/work/hayato-stage"/*.deb; do
+              [ -f "$deb" ] && cp -f "$deb" out-debs/
+            done
+            ls -lh out-debs
+          else
+            ./build.sh desktop
+            mkdir -p stages
+            tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - swayfx-stage workstyle-stage hayato-stage | zstd -T0 -6 -q -o stages/desktop-stages.tar.zst
+          fi
       - uses: actions/upload-artifact@v4
+        if: needs.verify.outputs.mode == 'images'
         with:
           name: desktop-stages
           path: stages/desktop-stages.tar.zst
           retention-days: 2
+      - uses: actions/upload-artifact@v4
+        if: needs.verify.outputs.mode != 'images'
+        with:
+          name: release-debs
+          path: out-debs/*.deb
+          retention-days: 7
 
   build-mt81-kernel:
     needs: verify
@@ -141,17 +186,30 @@ jobs:
         run: |
           export BUILD_ROOT=/var/tmp/hayato-build
           DEVICE=google-asurada ./build.sh kernel
-          mkdir -p stages
-          tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - kernel-stage-mediatek-mt81 | zstd -T0 -6 -q -o stages/mt81-kernel-stage.tar.zst
+          if [ "${{ needs.verify.outputs.mode }}" = "images" ]; then
+            mkdir -p stages
+            tar -C "$BUILD_ROOT/work" --numeric-owner -cpf - kernel-stage-mediatek-mt81 | zstd -T0 -6 -q -o stages/mt81-kernel-stage.tar.zst
+          else
+            mkdir -p out-kernel-debs
+            cp -f "$BUILD_ROOT/work/kernel-stage-mediatek-mt81"/*.deb out-kernel-debs/
+            ls -lh out-kernel-debs
+          fi
       - uses: actions/upload-artifact@v4
+        if: needs.verify.outputs.mode == 'images'
         with:
           name: mt81-kernel-stage
           path: stages/mt81-kernel-stage.tar.zst
           retention-days: 2
+      - uses: actions/upload-artifact@v4
+        if: needs.verify.outputs.mode != 'images'
+        with:
+          name: release-kernel-debs
+          path: out-kernel-debs/*.deb
+          retention-days: 7
 
   build-target:
     needs: [verify, build-desktop, build-mt81-kernel]
-    if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') }}
+    if: ${{ !failure() && !cancelled() && needs.verify.outputs.mode == 'images' && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') }}
     runs-on: ubuntu-24.04-arm
     container:
       image: debian:forky
@@ -201,7 +259,8 @@ jobs:
           retention-days: 7
 
   publish:
-    needs: [verify, build-target]
+    needs: [verify, build-desktop, build-mt81-kernel, build-target]
+    if: ${{ !failure() && !cancelled() && needs.verify.result == 'success' && needs.build-desktop.result == 'success' && (needs.build-mt81-kernel.result == 'success' || needs.build-mt81-kernel.result == 'skipped') && (needs.build-target.result == 'success' || needs.build-target.result == 'skipped') }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
