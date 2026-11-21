@@ -961,13 +961,13 @@ footer {
 █▄▄▄█  ▀▀▀▄ █   █  ▀▀▀▄ ▀▀█▀▀ ▄▀▀▀▄  
 █   █ ▄▀▀▀█ ▀▄▄▄█ ▄▀▀▀█   █   █   █  
 ▀   ▀  ▀▀▀▀  ▄▄▄▀  ▀▀▀▀    ▀▀  ▀▀▀  <span class="u blink">▀▀▀▀</span></pre>
-        <p class="hero-lede">Debian arm64 for Chromebooks &amp; Mainline ARM64.<br>Keyboard first. <em>Light. Fast. Fun.</em></p>
-        <p class="hero-sub">Real Debian <code>forky</code> above a tuned kernel — driven by one pure-Rust <code>hayato</code> binary (52+ TUI menus, minimalist <code>greetd</code> login, 16 synced themes, Golden Eagle screensavers, retro &amp; HTML games, MCP agent server, and a 6-step disk installer).</p>
+        <p class="hero-lede">Real Debian arm64 for Chromebooks &amp; ARM64 boards.<br>Keyboard first. <em>Light. Fast. Fun.</em></p>
+        <p class="hero-sub">Built to turn 4&nbsp;GB ARM Chromebooks, SBCs, and VMs into snappy daily drivers. Plain Debian <code>forky</code> underneath, a <code>swayfx</code> desktop on top, and one Rust binary (<code>hayato</code>) that handles the menus, login screen, 16 themes, Golden Eagle screensavers, games, AI tools, and disk installer.</p>
         <div class="cta-row">
-          <a class="btn btn-primary" href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">↓ Download v0.6.1</a>
-          <a class="btn" href="#demos">▸ Live Desktop Demos</a>
-          <a class="btn" href="#features">≡ All Features</a>
-          <a class="btn" href="https://github.com/Brunux/Hayato">&lt;/&gt; Source</a>
+          <a class="btn btn-primary" href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">↓ Grab v0.6.1</a>
+          <a class="btn" href="#demos">▸ See it live</a>
+          <a class="btn" href="#features">≡ Everything inside</a>
+          <a class="btn" href="https://github.com/Brunux/Hayato">&lt;/&gt; GitHub</a>
         </div>
         <div class="targets-strip">
           <span class="t-chip"><b>google-asurada</b> MT8192</span>
@@ -1002,9 +1002,9 @@ footer {
   <section class="alt" id="demos" aria-labelledby="demos-h">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">LIVE FROM GOOGLE HAYATO · REAL v0.6.1 CAPTURES</span>
-        <h2 id="demos-h">See Hayato in motion</h2>
-        <p>Every clip below was recorded live on a 4&nbsp;GB Google Hayato (MT8192) running <code>swayfx</code> + <code>hayato 0.6.1</code>. Zero mockups — real Wayland frames, real <code>tte</code> terminal effects, and real pure-Rust Ratatui panels.</p>
+        <span class="kicker">RECORDED LIVE ON A GOOGLE HAYATO · v0.6.1</span>
+        <h2 id="demos-h">See it running for real</h2>
+        <p>No mockups or renders here — every GIF below was recorded straight off my 4&nbsp;GB Google Hayato (MT8192) running <code>swayfx</code> and <code>hayato 0.6.1</code>. Click around to see the login screen, Golden Eagle screensavers, live theme picker, root menu, and games shelf.</p>
       </div>
 
       <div class="demo-tabs" role="tablist" aria-label="Live Hayato desktop demos">
@@ -1013,7 +1013,7 @@ footer {
           data-src="demos/greeter.gif"
           data-title="hayato-greeter · greetd IPC"
           data-cmd="F4 / ^T theme · ^Z sleep · ^R reboot · ^P power"
-          data-cap="<strong>Minimalist Pixel-Hacker Greeter:</strong> pre-formed half-block <code>Hayato_</code> hero with glitch pulse, user pills, blinking block cursor, live <code>F4</code> theme cycling across 16 palettes, icon-only power strip, and quiet bottom-right clock.">
+          data-cap="<strong>The login screen:</strong> a clean pixel <code>Hayato_</code> banner with a subtle glitch pulse, user pills, blinking block cursor, a quiet bottom-right clock, and live <code>F4</code> theme switching right before you even log in.">
           <span class="idx">01</span> Greeter <span class="cmd">greetd</span>
         </button>
         <button class="demo-tab" type="button" role="tab" aria-selected="false"
@@ -1021,7 +1021,7 @@ footer {
           data-src="demos/screensaver.gif"
           data-title="hayato-screensaver · Golden Eagle"
           data-cmd="tte wipe/decrypt/beams · gold → amber → cyan"
-          data-cap="<strong>Golden Eagle Screensavers:</strong> 3 ultra-minimal 2×2 quadrant-block Golden Eagles (Crest, Dive, Head) paired with <code>Hayato_</code>, cycling <code>tte</code> pixel-hacker effects at 30&nbsp;fps before <code>swaylock</code>.">
+          data-cap="<strong>Golden Eagle screensavers:</strong> three 2×2 pixel-block Golden Eagles (Crest, Dive, and Head) that animate with <code>tte</code> terminal effects in a gold-to-cyan gradient while the laptop is idle.">
           <span class="idx">02</span> Screensaver <span class="cmd">tte</span>
         </button>
         <button class="demo-tab" type="button" role="tab" aria-selected="false"
@@ -1029,7 +1029,7 @@ footer {
           data-src="demos/themes.gif"
           data-title="hayato menu theme · 16 palettes"
           data-cmd="Alt+Ctrl+T · 14 synced surfaces"
-          data-cap="<strong>16-Theme Engine:</strong> live Sixel wallpaper simulation, Waybar mockup, 16 ANSI swatches, semantic roles, and WCAG 2.1 contrast badges — compiling 14 desktop surfaces atomically from one <code>theme.toml</code>.">
+          data-cap="<strong>16 themes, one click:</strong> preview the wallpaper, Waybar, ANSI colors, and contrast scores live — hit Enter and Sway, Waybar, <code>foot</code>, notifications, lock screen, and greeter all switch together.">
           <span class="idx">03</span> 16 Themes <span class="cmd">Alt+Ctrl+T</span>
         </button>
         <button class="demo-tab" type="button" role="tab" aria-selected="false"
@@ -1037,7 +1037,7 @@ footer {
           data-src="demos/menu.gif"
           data-title="hayato menu · 52 commands"
           data-cmd="Alt+Space · 117 verified glyphs"
-          data-cap="<strong>Root Menu &amp; Fuzzy Launcher:</strong> instant pure-Rust Ratatui launcher floating over <code>swayfx</code> with 52 commands, 117 verified <code>forky</code> Nerd Font glyphs (zero tofu boxes), and sub-millisecond filtering.">
+          data-cap="<strong>The root menu:</strong> hit <code>Alt+Space</code> and start typing. 52 commands in one floating Rust TUI with 117 crisp Nerd Font icons (no broken tofu boxes anywhere).">
           <span class="idx">04</span> Root Menu <span class="cmd">Alt+Space</span>
         </button>
         <button class="demo-tab" type="button" role="tab" aria-selected="false"
@@ -1045,7 +1045,7 @@ footer {
           data-src="demos/games.gif"
           data-title="hayato menu games · Retro + HTML"
           data-cmd="RetroArch + WebKitGTK · gamepad ready"
-          data-cap="<strong>Retro &amp; Web Games Shelf:</strong> unified library for <code>~/Games</code> retro ROMs (FBNeo, Mupen64Plus-Next) and sandboxed WebKitGTK HTML games (Snake included), with generated pixel-block cartridge art and DualShock 3/4 navigation.">
+          data-cap="<strong>Games shelf:</strong> retro ROMs from <code>~/Games</code> (FBNeo &amp; N64) right next to local HTML games (Snake is already built in). Even without cover art it draws pixel cartridge art from the title, and works with a controller.">
           <span class="idx">05</span> Games <span class="cmd">hayato-games</span>
         </button>
       </div>
@@ -1059,7 +1059,7 @@ footer {
           <img id="demo-img" src="demos/greeter.gif" width="900" height="601" alt="Live recording of Hayato desktop">
         </div>
         <div class="demo-caption">
-          <span id="demo-cap"><strong>Minimalist Pixel-Hacker Greeter:</strong> pre-formed half-block <code>Hayato_</code> hero with glitch pulse, user pills, blinking block cursor, live <code>F4</code> theme cycling across 16 palettes, icon-only power strip, and quiet bottom-right clock.</span>
+          <span id="demo-cap"><strong>The login screen:</strong> a clean pixel <code>Hayato_</code> banner with a subtle glitch pulse, user pills, blinking block cursor, a quiet bottom-right clock, and live <code>F4</code> theme switching right before you even log in.</span>
         </div>
       </div>
 
@@ -1086,9 +1086,9 @@ footer {
   <section id="features" aria-labelledby="feat-h">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">EVERYTHING INCLUDED · COMPLETE INVENTORY</span>
-        <h2 id="feat-h">Every feature in Hayato v0.6.1</h2>
-        <p>From signed ChromeOS FIT kernels and custom pixel-hacker Plymouth boot splash to 52+ pure-Rust TUI tools, offline Whisper dictation, retro gaming, and capability-bounded AI MCP tooling. Filter by domain or search below.</p>
+        <span class="kicker">WHAT'S IN THE BOX · FULL LIST</span>
+        <h2 id="feat-h">Everything packed into Hayato v0.6.1</h2>
+        <p>It's impossible to show everything in a few GIFs, so here's the full rundown — from the Chromebook kernels and boot splash to the 52+ Rust TUI tools, offline voice dictation, retro games, and AI tooling. Hit <code>/</code> to search or filter by category.</p>
       </div>
 
       <div class="feat-toolbar">
@@ -1110,88 +1110,88 @@ footer {
       <div class="feat-groups" id="feat-groups">
         <!-- 1. Boot & Hardware -->
         <article class="feat-group" data-cat="boot">
-          <div class="fg-head"><h3>01 · Boot, Kernel &amp; ARM64 Hardware</h3><span class="fg-tag">devices/ · core/</span></div>
+          <div class="fg-head"><h3>01 · Boot, Kernel &amp; Hardware</h3><span class="fg-tag">devices/ · core/</span></div>
           <ul class="fg-list">
-            <li><strong>4 First-Class ARM64 Targets:</strong> <code>google-asurada</code> (Hayato MT8192), <code>google-kukui</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi</code> (UEFI laptops/servers, QEMU/UTM/Parallels VMs, RPi 4/5 EDK2), and <code>arm64-extlinux</code> (U-Boot SBCs).</li>
-            <li><strong>3 Pluggable Boot Backends:</strong> ChromeOS <code>depthcharge</code> (lz4 signed FIT + <code>cgpt</code>), standard <code>uefi</code> (<code>systemd-boot</code>), and U-Boot <code>extlinux</code> — unified under one <code>boot_*</code> interface.</li>
-            <li><strong>Tuned MT81 &amp; Mainline Kernels:</strong> custom <code>7.2.7-mt81</code> kernel for MediaTek Chromebooks plus Debian <code>linux-image-arm64</code> with multi-vendor firmware (<code>brcm80211</code>, <code>qcom-soc</code>, <code>atheros</code>, <code>iwlwifi</code>, <code>realtek</code>, <code>mediatek</code>).</li>
-            <li><strong>4&nbsp;GB RAM &amp; Flash Optimization:</strong> MGLRU page reclaim, <code>zram</code> (lz4) compressed swap, <code>kyber</code> I/O scheduler, MMC IRQ affinity balancing, and optional SD card auxiliary swap (<code>hayato menu swap</code>).</li>
-            <li><strong>Chromebook Hardware Polish:</strong> USB-C DisplayPort Alt-Mode mux, tablet-mode auto-rotation + <code>wvkbd</code> virtual keyboard, <code>keyd</code> Search-key &amp; top-row mapping, backlight/audio/webcam integration.</li>
-            <li><strong>Zero Firmware Flashing:</strong> stock bootloader and firmware are never modified or overwritten.</li>
+            <li><strong>4 ready-to-flash ARM64 targets:</strong> <code>google-asurada</code> (Hayato MT8192), <code>google-kukui</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi</code> (UEFI laptops, QEMU/UTM/Parallels VMs, RPi 4/5 with EDK2), and <code>arm64-extlinux</code> (U-Boot SBCs).</li>
+            <li><strong>3 bootloaders, one codebase:</strong> ChromeOS <code>depthcharge</code> (lz4 signed FIT), standard <code>uefi</code> (<code>systemd-boot</code>), and U-Boot <code>extlinux</code> — all handled cleanly through the same boot backend.</li>
+            <li><strong>Tuned kernels + broad firmware:</strong> custom <code>7.2.7-mt81</code> kernel for MediaTek Chromebooks, plus Debian <code>linux-image-arm64</code> with Wi-Fi/SoC firmware (<code>brcm80211</code>, <code>qcom-soc</code>, <code>atheros</code>, <code>iwlwifi</code>, <code>realtek</code>, <code>mediatek</code>) baked in.</li>
+            <li><strong>Tuned for 4&nbsp;GB RAM:</strong> MGLRU, <code>zram</code> (lz4) swap, <code>kyber</code> I/O scheduler, MMC IRQ balancing, and an easy tool to turn a spare SD card into extra swap (<code>hayato menu swap</code>).</li>
+            <li><strong>Chromebook stuff that just works:</strong> USB-C DisplayPort out, tablet-mode auto-rotation + <code>wvkbd</code> on-screen keyboard, <code>keyd</code> Search-key &amp; top-row mapping, backlight, audio, and webcam.</li>
+            <li><strong>Never touches stock firmware:</strong> your device's bootloader stays untouched, so you can always go back.</li>
           </ul>
         </article>
 
         <!-- 2. Boot Splash, Greeter & Idle -->
         <article class="feat-group" data-cat="desktop">
-          <div class="fg-head"><h3>02 · Boot Splash, Greeter &amp; Screensavers</h3><span class="fg-tag">plymouth · greetd · tte</span></div>
+          <div class="fg-head"><h3>02 · Boot Splash, Login &amp; Screensavers</h3><span class="fg-tag">plymouth · greetd · tte</span></div>
           <ul class="fg-list">
-            <li><strong>Pixel-Hacker Plymouth Boot Splash:</strong> custom 5×8 pixel <code>Hayato_</code> with cyan decode glyphs (<code>0 1 # / = +</code>), blinking orange underscore, and <code>plymouth.ignore-serial-consoles</code> for ARM64 UARTs.</li>
-            <li><strong>Minimalist <code>hayato-greeter</code> (greetd IPC):</strong> pure-Rust VT7 login with pre-formed half-block <code>Hayato_</code> hero, randomized glitch pulse, user pills, blinking cursor, icon-only <code>^T ^Z ^R ^P</code> strip, and optional bottom-right clock.</li>
-            <li><strong>Live Greeter Theme Cycling &amp; Settings:</strong> press <code>F4</code> / <code>^T</code> to cycle all 16 themes right on the login screen; configure defaults via <code>hayato menu greeter</code> (follow user theme, default theme, user pills, clock, action buttons).</li>
-            <li><strong>3 Golden Eagle Screensavers:</strong> ultra-minimal 2×2 quadrant-block Golden Eagles (<code>Crest</code>, <code>Dive</code>, <code>Head</code>) cycling <code>tte</code> effects (<code>decrypt</code>, <code>beams</code>, <code>binarypath</code>, <code>rain</code>, <code>sweep</code>, <code>wipe</code>) in a gold → amber → cyber-cyan gradient.</li>
-            <li><strong>Full Idle &amp; Lock Chain:</strong> <code>swayidle</code> → Golden Eagle screensaver (150s) → themed <code>swaylock</code> (300s) → DPMS off (360s) → suspend.</li>
+            <li><strong>Pixel-hacker Plymouth boot splash:</strong> custom 5×8 pixel <code>Hayato_</code> with cyan decode glyphs (<code>0 1 # / = +</code>), blinking orange underscore, and <code>plymouth.ignore-serial-consoles</code> so it actually shows up on ARM64 boards.</li>
+            <li><strong>Minimalist <code>hayato-greeter</code> (greetd):</strong> pure-Rust login screen with the half-block <code>Hayato_</code> hero, subtle glitch pulse, user pills, blinking cursor, clean icon-only <code>^T ^Z ^R ^P</code> buttons, and an optional bottom-right clock.</li>
+            <li><strong>Live login themes &amp; settings:</strong> tap <code>F4</code> / <code>^T</code> to flip through all 16 themes right on the login screen, or tweak defaults anytime in <code>hayato menu greeter</code>.</li>
+            <li><strong>3 Golden Eagle screensavers:</strong> three 2×2 pixel-block Golden Eagles (<code>Crest</code>, <code>Dive</code>, <code>Head</code>) cycling <code>tte</code> effects (<code>decrypt</code>, <code>beams</code>, <code>binarypath</code>, <code>rain</code>, <code>sweep</code>, <code>wipe</code>) in gold → amber → cyber-cyan.</li>
+            <li><strong>Clean idle chain:</strong> <code>swayidle</code> kicks in the Golden Eagle screensaver at 150s, locks with themed <code>swaylock</code> at 300s, turns off the display at 360s, then suspends.</li>
           </ul>
         </article>
 
         <!-- 3. Wayland SwayFX & 16-Theme Engine -->
         <article class="feat-group" data-cat="desktop">
-          <div class="fg-head"><h3>03 · SwayFX Desktop &amp; 16-Theme Engine</h3><span class="fg-tag">swayfx · waybar · hayato-theme</span></div>
+          <div class="fg-head"><h3>03 · SwayFX Desktop &amp; 16 Themes</h3><span class="fg-tag">swayfx · waybar · hayato-theme</span></div>
           <ul class="fg-list">
-            <li><strong>SwayFX Wayland Compositor:</strong> crisp tiling with rounded corners, subtle blur, shadows, scratchpad, and consistent <code>Alt</code> / <code>Alt+Ctrl</code> keyboard ergonomics.</li>
-            <li><strong>Floating Waybar Statusline:</strong> <code>H_</code> root launcher, dynamic <code>workstyle</code> workspace glyphs, live system telemetry, and clickable quick-controls.</li>
-            <li><strong>16 Curated Themes (Dark &amp; Light):</strong> Tokyo Night, Solarized Dark, Catppuccin Mocha, Rose Pine, Nord, Gruvbox Dark, Everforest Dark, Kanagawa, Dracula, One Dark, Hackerman, Lumon, Matte Black, Omacon, Catppuccin Latte, Flexoki Light.</li>
-            <li><strong>14 Atomically Compiled Surfaces:</strong> one <code>theme.toml</code> compiles Sway, Waybar, <code>foot</code>, Starship, <code>hayato-notify</code>, <code>hayato-greeter</code>, <code>swaylock</code>, GTK, <code>btop</code>, <code>bat</code>, and more — with 3 bundled wallpapers per theme, live Sixel preview, and WCAG 2.1 contrast checks.</li>
-            <li><strong>Native Wayland Notifications &amp; OSD:</strong> <code>hayato-notify</code> renders interactive layer-shell toast cards, notification history, Do-Not-Disturb, and volume/brightness OSD bars.</li>
-            <li><strong>117 Verified Glyphs:</strong> every TUI/Waybar icon is verified against Debian <code>forky</code>'s installed Nerd Font &amp; Font Awesome faces — zero tofu boxes.</li>
+            <li><strong>SwayFX Wayland session:</strong> lightweight tiling with rounded corners, subtle blur, shadows, scratchpad, and consistent <code>Alt</code> / <code>Alt+Ctrl</code> shortcuts.</li>
+            <li><strong>Floating Waybar:</strong> <code>H_</code> menu button, automatic workspace icons via <code>workstyle</code>, battery/Wi-Fi/audio status, and clickable quick toggles.</li>
+            <li><strong>16 built-in themes (dark &amp; light):</strong> Tokyo Night, Solarized Dark, Catppuccin Mocha, Rose Pine, Nord, Gruvbox Dark, Everforest Dark, Kanagawa, Dracula, One Dark, Hackerman, Lumon, Matte Black, Omacon, Catppuccin Latte, and Flexoki Light.</li>
+            <li><strong>14 surfaces stay in sync:</strong> every theme compiles from one <code>theme.toml</code> into Sway, Waybar, <code>foot</code>, Starship, <code>hayato-notify</code>, greeter, <code>swaylock</code>, GTK, <code>btop</code>, <code>bat</code>, and more — with 3 wallpapers per theme, live Sixel preview, and contrast checks.</li>
+            <li><strong>Native notifications &amp; OSD:</strong> <code>hayato-notify</code> draws Wayland toast cards, keeps notification history, handles Do-Not-Disturb, and shows volume/brightness bars.</li>
+            <li><strong>117 checked icons:</strong> every icon in the UI is tested against Debian <code>forky</code>'s fonts so you never see missing-glyph boxes.</li>
           </ul>
         </article>
 
         <!-- 4. Pure-Rust TUI & CLI Suite -->
         <article class="feat-group" data-cat="tui">
-          <div class="fg-head"><h3>04 · Pure-Rust <code>hayato</code> TUI Suite (52+ Commands)</h3><span class="fg-tag">hayato-cli · ratatui</span></div>
+          <div class="fg-head"><h3>04 · One Rust Binary, 52+ TUI Tools</h3><span class="fg-tag">hayato-cli · ratatui</span></div>
           <ul class="fg-list">
-            <li><strong>Launchers &amp; Navigation:</strong> <code>menu</code> (root launcher), <code>menu palette</code> (ranked command palette), <code>menu apps</code> (frecency <code>.desktop</code> launcher), <code>menu window</code> (Sway IPC switcher), <code>menu run</code> (PATH runner).</li>
-            <li><strong>Files &amp; Search:</strong> <code>menu files</code> (live Sixel/<code>bat</code> preview), <code>menu find</code>, <code>menu grep</code> (ripgrep), <code>menu places</code> (disks &amp; bookmarks), <code>menu file-actions</code> (du/compress/extract/convert), plus <code>favnyr</code> GUI file manager &amp; smart <code>hayato open</code>.</li>
-            <li><strong>Capture, Clipboard &amp; Utilities:</strong> <code>menu capture</code> (screenshot, <code>swappy</code> annotate, <code>wf-recorder</code> video, offline OCR, QR scan), <code>menu clip</code> (<code>cliphist</code> text &amp; image history), <code>menu qr</code>, <code>menu emoji</code>, <code>menu calc</code>, <code>menu colour</code>, <code>menu translate</code>, <code>menu remind</code>, <code>menu download</code> (<code>yt-dlp</code>).</li>
-            <li><strong>System &amp; Connectivity Panels:</strong> <code>menu net</code> (Wi-Fi scan, signal gauge, captive portal, QR share), <code>menu bluetooth</code>, <code>menu audio</code>, <code>menu media</code>, <code>menu display</code> (multi-monitor layout/scale), <code>menu layout</code>, <code>menu tz</code>, <code>menu dns</code>, <code>menu ssh</code>, <code>menu vnc</code> (loopback-only over SSH), <code>menu settings</code>, <code>menu pkg</code> (APT), <code>menu clean</code>, <code>menu kill</code>, <code>menu format</code>, <code>menu power</code>, <code>menu about</code>.</li>
-            <li><strong>Self-Documenting UX:</strong> <code>menu keys</code> parses every live keybinding directly from Sway configs; <code>menu learn</code> renders the full 8-chapter Hayato manual inside the terminal.</li>
+            <li><strong>Fast launchers:</strong> <code>menu</code> (root menu), <code>menu palette</code> (ranked command palette), <code>menu apps</code> (app launcher), <code>menu window</code> (window switcher), and <code>menu run</code> (run anything in PATH).</li>
+            <li><strong>Files &amp; search:</strong> <code>menu files</code> (terminal browser with Sixel/<code>bat</code> preview), <code>menu find</code>, <code>menu grep</code> (ripgrep), <code>menu places</code>, <code>menu file-actions</code> (zip/extract/convert/du), plus <code>favnyr</code> GUI file manager and smart <code>hayato open</code>.</li>
+            <li><strong>Screenshots, clipboard &amp; handy tools:</strong> <code>menu capture</code> (screenshots, <code>swappy</code> markup, <code>wf-recorder</code> video, offline OCR, QR scan), <code>menu clip</code> (text + image history), <code>menu qr</code>, <code>menu emoji</code>, <code>menu calc</code>, <code>menu colour</code>, <code>menu translate</code>, <code>menu remind</code>, and <code>menu download</code> (<code>yt-dlp</code>).</li>
+            <li><strong>System controls without leaving the keyboard:</strong> <code>menu net</code> (Wi-Fi + captive portal + QR share), <code>menu bluetooth</code>, <code>menu audio</code>, <code>menu media</code>, <code>menu display</code> (external monitors), <code>menu layout</code>, <code>menu tz</code>, <code>menu dns</code>, <code>menu ssh</code>, <code>menu vnc</code> (SSH loopback only), <code>menu settings</code>, <code>menu pkg</code>, <code>menu clean</code>, <code>menu kill</code>, <code>menu format</code>, <code>menu power</code>, and <code>menu about</code>.</li>
+            <li><strong>Built-in docs:</strong> <code>menu keys</code> reads your actual Sway config to list every live shortcut, and <code>menu learn</code> lets you read the whole 8-chapter manual right in the terminal.</li>
           </ul>
         </article>
 
         <!-- 5. Games, Media & Notes -->
         <article class="feat-group" data-cat="games">
-          <div class="fg-head"><h3>05 · Retro &amp; HTML Games, Notes &amp; Media</h3><span class="fg-tag">hayato-games · editxr · xournalpp</span></div>
+          <div class="fg-head"><h3>05 · Retro &amp; Web Games, Notes &amp; Media</h3><span class="fg-tag">hayato-games · editxr · xournalpp</span></div>
           <ul class="fg-list">
-            <li><strong>Unified Games Shelf (<code>menu games</code>):</strong> browse retro ROMs in <code>~/Games</code> and Hayato HTML games side by side, with platform tabs, favourites, recents, options overlay, and in-window manual.</li>
-            <li><strong>Procedural Cartridge Art:</strong> generates crisp pixel-block monograms and themed hero cards straight from each game's title — zero missing cover art, instant theme sync.</li>
-            <li><strong>Slim RetroArch + Cores:</strong> ships lean <code>RetroArch</code> with <code>FBNeo</code> (arcade) and <code>Mupen64Plus-Next</code> (N64) libretro cores pre-configured for ARM64.</li>
-            <li><strong>Sandboxed WebKitGTK HTML Host:</strong> <code>hayato-games</code> runs local HTML/CSS/JS games over a custom sandboxed <code>hayato-game://</code> scheme with gamepad &amp; persistent high-score support (includes playable <strong>Snake</strong>).</li>
-            <li><strong>Full Gamepad Navigation:</strong> <code>hayato gamepad</code> evdev daemon translates DualShock 3/4 and standard controllers into arrows/Enter/Escape across every Hayato menu (<code>menu controller</code> pairing guide).</li>
-            <li><strong>Notes, Ink &amp; Readers:</strong> <code>menu notes</code> for instant markdown notes (<code>editxr</code>), stylus ink notes &amp; PDF signing (<code>xournalpp</code>), plus <code>imv</code>, <code>mpv</code>, <code>papers</code>, and <code>foliate</code>.</li>
+            <li><strong>Games shelf (<code>menu games</code>):</strong> puts your retro ROMs in <code>~/Games</code> right next to local HTML games, with platform tabs, favorites, recents, and an in-window manual.</li>
+            <li><strong>Auto-generated cartridge art:</strong> draws pixel-block cover monograms from each game's title so your shelf still looks great even with zero downloaded art.</li>
+            <li><strong>Lean RetroArch setup:</strong> comes with <code>FBNeo</code> (arcade) and <code>Mupen64Plus-Next</code> (N64) cores trimmed and ready for ARM64.</li>
+            <li><strong>Local HTML games host:</strong> <code>hayato-games</code> runs HTML/CSS/JS games in a sandboxed WebKitGTK window with controller support and saved high scores (playable <strong>Snake</strong> included).</li>
+            <li><strong>Controller-friendly menus:</strong> <code>hayato gamepad</code> maps DualShock 3/4 and standard pads to arrows/Enter/Esc across every menu, with a pairing guide in <code>menu controller</code>.</li>
+            <li><strong>Notes &amp; viewers:</strong> <code>menu notes</code> for quick markdown notes (<code>editxr</code>), stylus notes &amp; PDF signing (<code>xournalpp</code>), plus <code>imv</code>, <code>mpv</code>, <code>papers</code>, and <code>foliate</code>.</li>
           </ul>
         </article>
 
         <!-- 6. AI, MCP & Developer Workflow -->
         <article class="feat-group" data-cat="ai">
-          <div class="fg-head"><h3>06 · AI Agents, MCP Server &amp; Dev Tooling</h3><span class="fg-tag">hayato-mcp · whisper · apt</span></div>
+          <div class="fg-head"><h3>06 · AI Agents, MCP &amp; Dev Tools</h3><span class="fg-tag">hayato-mcp · whisper · apt</span></div>
           <ul class="fg-list">
-            <li><strong>Capability-Bounded <code>hayato mcp</code>:</strong> 18 stdio MCP tools split across <code>read</code> (status, screenshot, windows, theme, packages, health report, clipboard, tasks), <code>act</code> (open menu/view, set theme, notify), and <code>propose</code> (install, format, swap, power — opens human-confirmed UI only, never executes destructively).</li>
-            <li><strong>AI Agents Hub &amp; Multi-Account Profiles:</strong> <code>menu agents</code> (<code>Alt+Ctrl+Shift+A</code>) installs, launches, and isolates Claude Code, Codex, OpenCode (pre-wired to <code>hayato-mcp</code>), Gemini CLI, and GitHub Copilot.</li>
-            <li><strong>Drop-Down Quake Console &amp; Ask:</strong> <code>hayato quake</code> (<code>Alt+`</code>) toggles a full-width 60% scratchpad agent terminal; <code>hayato ask</code> runs one-shot questions in-window.</li>
-            <li><strong>Offline Voice Dictation (<code>Alt+Ctrl+X</code>):</strong> <code>parecord</code> → pinned <code>whisper-cli</code> → <code>wtype</code> — push-to-talk or hands-free dictation directly into the focused window with zero cloud dependency.</li>
-            <li><strong>Encrypted Developer Profile (<code>menu dev</code>):</strong> <code>hayato-profile</code> exports and restores dotfiles, SSH/agent configs, and state inside GPG AES-256 encrypted archives with tar link/setuid validation.</li>
-            <li><strong>Signed Cloudsmith APT Repository:</strong> <code>hayato-apt enable</code> configures the signed <code>debian/forky</code> repo so <code>apt upgrade</code> keeps <code>hayato</code>, <code>hayato-core</code>, and board packages up to date.</li>
+            <li><strong>Safe desktop MCP server (<code>hayato mcp</code>):</strong> 18 stdio tools split into <code>read</code> (status, screenshot, windows, theme, packages, clipboard), <code>act</code> (open menus, switch themes, notify), and <code>propose</code> (install, format, swap, power — only opens a confirmation screen for you, never runs destructive stuff on its own).</li>
+            <li><strong>AI agents launcher:</strong> <code>menu agents</code> (<code>Alt+Ctrl+Shift+A</code>) manages Claude Code, Codex, OpenCode (already wired to <code>hayato-mcp</code>), Gemini CLI, and GitHub Copilot with isolated accounts.</li>
+            <li><strong>Drop-down Quake console &amp; Ask:</strong> hit <code>Alt+`</code> to slide down a 60% scratchpad terminal anytime, or run <code>hayato ask</code> for a quick answer in-window.</li>
+            <li><strong>Offline voice dictation (<code>Alt+Ctrl+X</code>):</strong> <code>parecord</code> → <code>whisper-cli</code> → <code>wtype</code>. Hold for push-to-talk or tap for hands-free — types straight into whatever window you're in, 100% offline.</li>
+            <li><strong>Encrypted dev profile backup (<code>menu dev</code>):</strong> pack up your dotfiles, SSH/agent configs, and state into a GPG AES-256 archive and restore it on another machine in seconds.</li>
+            <li><strong>Cloudsmith APT repo:</strong> run <code>hayato-apt enable</code> once and normal <code>apt upgrade</code> keeps <code>hayato</code>, <code>hayato-core</code>, and board packages current.</li>
           </ul>
         </article>
 
         <!-- 7. Installer & Security Hardening -->
         <article class="feat-group" data-cat="security">
-          <div class="fg-head"><h3>07 · Pure-Rust Installer, Backups &amp; Security</h3><span class="fg-tag">installer · audited v0.6.1</span></div>
+          <div class="fg-head"><h3>07 · Disk Installer, Backups &amp; Security</h3><span class="fg-tag">installer · audited v0.6.1</span></div>
           <ul class="fg-list">
-            <li><strong>6-Step Guided Disk Installer:</strong> <code>hayato installer</code> (and headless <code>--clone</code>) verifies SoC, AC power, GPT/vboot tools, and target disk before cloning the live OS to internal eMMC/NVMe/SATA — Cancel-first double confirmation, boot drive locked out.</li>
-            <li><strong>System Backup &amp; Restore:</strong> <code>backup-system.sh</code> and <code>restore-system.sh</code> create and restore full system snapshots.</li>
-            <li><strong>Three-Tier Live Health Witnesses:</strong> <code>check-core.sh</code>, <code>check-device.sh</code>, <code>check-desktop.sh</code>, and <code>check-system.sh</code> verify 535+ runtime invariants across kernel, hardware, fonts, and configs.</li>
-            <li><strong>Security-Hardened Defaults (Audited in v0.6.1):</strong> <code>ssh.service</code> disabled by default, <code>0700</code> home directory permissions, loopback-only VNC, SHA256-pinned third-party binaries, <code>plugdev</code>-gated automount, bounded <code>hayato-notify</code> socket reads, and zero <code>sh -c</code> shell-injection surfaces across the Rust suite.</li>
+            <li><strong>6-step Rust disk installer:</strong> <code>hayato installer</code> (or headless <code>--clone</code>) checks your hardware, power, and disks before cloning the live OS onto internal storage — defaults to Cancel, double-confirms, and blocks you from wiping the drive you booted from.</li>
+            <li><strong>Full system snapshots:</strong> <code>backup-system.sh</code> and <code>restore-system.sh</code> let you back up and restore a whole install without guesswork.</li>
+            <li><strong>535+ live health checks:</strong> <code>check-core.sh</code>, <code>check-device.sh</code>, <code>check-desktop.sh</code>, and <code>check-system.sh</code> sanity-check the kernel, hardware, fonts, and desktop config.</li>
+            <li><strong>Locked-down defaults (audited in v0.6.1):</strong> SSH off by default on fresh images, <code>0700</code> home directories, loopback-only VNC, SHA256-pinned binaries, <code>plugdev</code>-only automount, bounded notify sockets, and no raw <code>sh -c</code> shell injection paths in the Rust suite.</li>
           </ul>
         </article>
       </div>
@@ -1202,9 +1202,9 @@ footer {
   <section class="alt" id="keys" aria-labelledby="keys-h">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">KEYBOARD FIRST · ZERO MOUSE REQUIRED</span>
-        <h2 id="keys-h">Day-one chords</h2>
-        <p>Window management lives on <kbd>Alt</kbd>, system tools on <kbd>Alt</kbd>+<kbd>Ctrl</kbd>, and <kbd>Search</kbd> stays dedicated to launching. Press <kbd class="hot">Alt</kbd>+<kbd class="hot">Ctrl</kbd>+<kbd class="hot">K</kbd> anytime to search every live binding parsed directly from Sway.</p>
+        <span class="kicker">KEYBOARD FIRST · NO MOUSE NEEDED</span>
+        <h2 id="keys-h">The shortcuts you'll actually use on day one</h2>
+        <p>Window stuff lives on <kbd>Alt</kbd>, tools live on <kbd>Alt</kbd>+<kbd>Ctrl</kbd>, and <kbd>Search</kbd> is just your app launcher. Forget a shortcut? Hit <kbd class="hot">Alt</kbd>+<kbd class="hot">Ctrl</kbd>+<kbd class="hot">K</kbd> and search all of them live.</p>
       </div>
       <div class="keys-grid">
         <div class="key-row"><span class="combo"><kbd class="hot">Search</kbd></span><span>App launcher (<code>hayato menu apps</code>)</span></div>
@@ -1227,9 +1227,9 @@ footer {
   <section id="install" aria-labelledby="inst-h">
     <div class="wrap">
       <div class="sec-head">
-        <span class="kicker">RELEASE v0.6.1 · READY-TO-FLASH IMAGES + APT</span>
-        <h2 id="inst-h">Flash, boot, install to internal storage</h2>
-        <p>Pick the image matching your ARM64 target from <a href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">GitHub Releases v0.6.1</a>, verify against <code>SHA256SUMS</code>, write to USB/microSD, and optionally clone onto internal storage with <code>hayato installer</code>.</p>
+        <span class="kicker">RELEASE v0.6.1 · FLASH &amp; GO</span>
+        <h2 id="inst-h">Try it on USB/SD, then install to disk</h2>
+        <p>Grab the image for your board from <a href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">v0.6.1 Releases</a>, verify it with <code>SHA256SUMS</code>, flash it to a card or USB stick, and boot. When you're ready to keep it, <code>hayato installer</code> clones the running system straight onto internal storage.</p>
       </div>
 
       <div class="install-grid">
@@ -1297,12 +1297,12 @@ footer {
   <section class="alt" id="hood" aria-labelledby="hood-h">
     <div class="wrap hood-grid">
       <div class="prose">
-        <span class="kicker">MODULAR ARCHITECTURE</span>
-        <h2 id="hood-h" style="margin-bottom: 16px">Three focused submodules. One umbrella.</h2>
-        <p>Hayato splits cleanly into three Git submodules so hardware quirks never leak into the desktop and bootloaders never couple to the UI:</p>
-        <p><a href="https://github.com/Brunux/hayato-core"><code>core/</code></a> owns Debian <code>forky</code> rootfs assembly, pluggable <code>boot_*</code> backends (<code>depthcharge</code>, <code>uefi</code>, <code>extlinux</code>), backup/restore, and release sanitization.</p>
-        <p><a href="https://github.com/Brunux/hayato-desktop"><code>desktop/</code></a> owns the <code>swayfx</code> session, 16-theme compiler, Plymouth splash, Golden Eagle screensavers, 8-chapter manual, and the pure-Rust <code>hayato</code> workspace.</p>
-        <p><a href="https://github.com/Brunux/hayato-devices"><code>devices/</code></a> isolates kernel recipes (<code>7.2.7-mt81</code> &amp; mainline fragments), udev/keyd/IRQ rules, and per-board overlays.</p>
+        <span class="kicker">HOW IT'S BUILT</span>
+        <h2 id="hood-h" style="margin-bottom: 16px">Three small repos, one clean umbrella.</h2>
+        <p>Instead of one giant messy repo, Hayato is split into three focused submodules so board quirks never leak into the desktop and bootloaders stay separate from the UI:</p>
+        <p><a href="https://github.com/Brunux/hayato-core"><code>core/</code></a> builds the Debian <code>forky</code> rootfs, handles the three boot backends (<code>depthcharge</code>, <code>uefi</code>, <code>extlinux</code>), backup/restore, and release imaging.</p>
+        <p><a href="https://github.com/Brunux/hayato-desktop"><code>desktop/</code></a> holds the <code>swayfx</code> config, 16-theme engine, Plymouth splash, Golden Eagle screensavers, manual, and the Rust <code>hayato</code> codebase.</p>
+        <p><a href="https://github.com/Brunux/hayato-devices"><code>devices/</code></a> keeps kernels (<code>7.2.7-mt81</code> and mainline fragments), udev/keyd/IRQ tweaks, and per-board overlays neatly isolated.</p>
       </div>
       <dl class="facts">
         <div><dt>Version</dt><dd><code>v0.6.1</code> · Debian <code>forky</code> (<code>arm64</code>)</dd></div>
