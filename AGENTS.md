@@ -35,6 +35,8 @@ old monorepo context) before updating submodule pins here.
 - Release CI uses a 3-stage Hybrid Matrix (`.github/workflows/release.yml`): shared `desktop` and
   `mediatek-mt81` kernel (`google-asurada`, `google-kukui`) build once, then `google-asurada`,
   `google-kukui`, `arm64-uefi`, and `arm64-extlinux` (`debian-arm64`) assemble in parallel before
-  merging unified `SHA256SUMS`.
+  merging unified `SHA256SUMS`, generating signed APT metadata (`hayato-apt build-repo`), archiving
+  all `<target>.img.xz` and `*.deb` packages on GitHub Releases, and pushing `*.deb` packages to
+  the Cloudsmith APT repository (`debian/forky`) when `CLOUDSMITH_API_KEY` is configured.
 - Use HTTPS URLs in `.gitmodules` for unauthenticated `git clone --recursive` and CI checkouts.
 - Never force-push `main`, and never commit host build state (`REVISION`, `*.img*`, `*.nmconnection`).

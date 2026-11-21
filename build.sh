@@ -7,6 +7,7 @@
 #   ./build.sh kernel          build device kernel stage only
 #   ./build.sh desktop         build swayfx, workstyle, and hayato binaries
 #   ./build.sh rootfs          build and populate rootfs
+#   ./build.sh debs [OUTDIR]   build hayato, core, and device .deb packages
 #   ./build.sh image [IMG]     build sanitized disk image
 #   ./build.sh release [DIR]   build release artifacts + SHA256SUMS
 #   ./build.sh sd [DEV]        write image onto removable SD/USB (default /dev/mmcblk1)
@@ -46,9 +47,15 @@ case "$cmd" in
 		exec "$HAYATO_DESKTOP_DIR/scripts/stage-desktop.sh" "$@"
 		;;
 	rootfs)
+		"$HAYATO_CORE_DIR/scripts/build-core-deb.sh"
 		"$HAYATO_CORE_DIR/scripts/build-rootfs.sh" "$@"
+		"$HAYATO_CORE_DIR/scripts/install-core.sh"
 		"$HAYATO_CORE_DIR/scripts/install-kernel.sh"
 		exec "$HAYATO_CORE_DIR/scripts/install-desktop.sh"
+		;;
+	debs)
+		"$HAYATO_DESKTOP_DIR/scripts/build-hayato.sh"
+		exec "$HAYATO_CORE_DIR/scripts/build-core-deb.sh" "$@"
 		;;
 	image)
 		exec "$HAYATO_CORE_DIR/scripts/make-image.sh" "$@"
