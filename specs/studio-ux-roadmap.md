@@ -9,12 +9,12 @@ Upgrade complex Hayato TUI apps from flat single-column lists and nested `Picker
 - Strict `desktop/AGENTS.md` compliance: single `Mode`/`Phase` enum, `ColorRole` only, zero per-frame allocations, zero resident daemons, full mouse + keyboard + gamepad ergonomics, and dual-grid (`80×24` & `152×45`) golden snapshot tests.
 
 ## Wave 1 — Core Daily & High-Visibility Studios (6)
-- [ ] **1. Capture & Recording Studio** (`system/capture.rs`): Left grouped actions (`Snapshot`, `Record`, `Extract & Share`) + Right **Studio Deck** (live `● READY` / `● REC` timer & file-size hero, inline `^A` Audio `Off/Mic/System` & `^W` Webcam PiP pills, Recent Captures list).
-- [ ] **2. Spatial Display Studio** (`system/display.rs` + `workspaces.rs`): Left live **ASCII Monitor Topology Canvas** (`eDP-1` + `DP-*` scaled boxes with coordinates) + Right inline `←`/`→` controls (Position, Mode/Hz, Scale, Workspaces, `● UNSAVED`, Apply & Save).
-- [ ] **3. Master-Detail Settings Control Center** (`system/settings.rs`): Left persistent 7-section rail with live badges + Right inline settings pane.
-- [ ] **4. Clipboard Inspector** (`system/clip.rs`): Left kind-filtered history list (`All | Text | Link | Image`) + Right cached full-text/code/URL/image-metadata preview + body-replacing `ConfirmWipe`.
-- [ ] **5. Package Manager Studio** (`system/pkg.rs`): Unified search bar + Left results list + Right `apt-cache show` inspector expanding inline into `TaskView`.
-- [ ] **6. Developer Workbench** (`system/dev.rs`): Left categorized tool rail + Right async Live Context Inspector (Cloudsmith APT, SSH/Git, MCP, boot errors, profile archives).
+- [x] **1. Capture & Recording Studio** (`system/capture.rs`): Left grouped actions (`Snapshot`, `Record`, `Extract & Share`) + Right **Studio Deck** (live `● READY` / `● REC` timer & file-size hero, inline `^A` Audio `Off/Mic/System` & `^W` Webcam PiP pills, Recent Captures list).
+- [x] **2. Spatial Display Studio** (`system/display.rs`): Left live **ASCII Monitor Topology Canvas** (`eDP-1` + `DP-*` scaled boxes with live arrangement & `● LIVE`/`● UNSAVED` pill) + Right inline `←`/`→` controls (Position, Mode/Hz, Scale, Power toggles, Apply & Save).
+- [x] **3. Master-Detail Settings Control Center** (`system/settings.rs`): Left persistent 7-section rail (compact horizontal tab bar on `< 100` cols) + Right live settings pane with instant switching.
+- [x] **4. Clipboard Inspector** (`system/clip.rs`): Left kind-filtered history list (`All | Text | Links | Images`) + Right cached full-text/URL/image-metadata preview + body-replacing `ConfirmWipe`.
+- [x] **5. Package Manager Studio** (`system/pkg.rs`): Unified search bar + Left results list + Right cached `apt-cache show` inspector expanding full-width into `TaskView`.
+- [x] **6. Developer Workbench** (`system/dev.rs`): Left categorized tool rail + Right Workbench Inspector (command, highlights, paths & safety contract).
 
 ## Wave 2 — Productivity, Agents & Media Studios (7)
 - [ ] **7. AI Agents & Accounts Studio** (`system/agents.rs`)
