@@ -26,13 +26,13 @@ Upgrade complex Hayato TUI apps from flat single-column lists and nested `Picker
 - [x] **13. Interactive Translation Studio** (`system/translate.rs`): Left 26-language target selector + Right Live Translator workbench (`Ctrl+T` translates clipboard live & copies).
 
 ## Wave 3 — System Config, Safety Wizards & Reference Studios (10)
-- [ ] **14. Safe Disk Formatter** (`system/format.rs`)
-- [ ] **15. Memory & Auxiliary Swap Studio** (`system/swap.rs`)
-- [ ] **16. Screen Share (VNC) Control Panel** (`system/vnc.rs`)
-- [ ] **17. Remote Login (SSH) Panel** (`system/ssh.rs`)
-- [ ] **18. DNS Resolver Studio** (`system/dns.rs`)
-- [ ] **19. Date, Time & Timezone Studio** (`system/tz.rs`)
-- [ ] **20. Keybindings Reference Studio** (`system/keys.rs`)
-- [ ] **21. Process Monitor & Killer** (`system/kill.rs`)
-- [ ] **22. Gamepad Studio** (`system/pad.rs`)
-- [ ] **23. Live QR Studio** (`system/qr.rs`)
+- [x] **14. Safe Disk Formatter** (`system/format.rs`): Left removable disk list + inline `Tab` exFAT/ext4 toggle (`Ctrl+R` rescan) + Right Safety & Execution Plan inspector + body-replacing `Confirm` modal.
+- [x] **15. Memory & Auxiliary Swap Studio** (`system/swap.rs`): Left swap status & turn-off controls + Right live RAM gauge & swap priority stack (`zram` pri 100 -> `hayato_swap` pri 10) + guarded `ConfirmOff`.
+- [x] **16. Screen Share (VNC) Control Panel** (`system/vnc.rs`): Left read-only / remote-control / stop / tunnel controls + Right Security & Tunnel Deck (`127.0.0.1:5900` loopback-only + SSH tunnel command).
+- [x] **17. Remote Login (SSH) Panel** (`system/ssh.rs`): Left enable/disable/copy controls + Right SSH Telemetry Deck (unit boot state, daemon status, port 22, `authorized_keys` count, connect command).
+- [x] **18. DNS Resolver Studio** (`system/dns.rs`): Left preset & custom IPv4 resolvers + Right Active Connection & Resolver Inspector (interface, live DNS, DHCP/static mode, privacy/feature notes).
+- [x] **19. Date, Time & Timezone Studio** (`system/tz.rs`): Left filterable 400+ tzdata zones + inline `Ctrl+N` NTP toggle + Right Clock & NTP Deck (live local/UTC clocks, sync status, highlighted zone).
+- [x] **20. Keybindings Reference Studio** (`system/keys.rs`): Left filterable Sway bindings + Right Shortcut Inspector (keycaps, mode, description, full Sway command, Enter copies).
+- [x] **21. Process Monitor & Killer** (`system/kill.rs`): Left memory-sorted process table + Right System RAM gauge & Selected Process Inspector (PID, RSS, %CPU, SIGTERM -> SIGKILL flow).
+- [x] **22. Gamepad Studio** (`system/pad.rs`): Left button remap table + Right ASCII Gamepad Deck (console layout diagram, selected button binding, DS4/DS3 pairing guide).
+- [x] **23. Live QR Studio** (`system/qr.rs`): Left source selector (`Wi-Fi`, `Clipboard`, `Any text`) + Right QR Studio Deck (Wi-Fi status, half-block render & PNG export shortcuts).
