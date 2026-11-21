@@ -201,12 +201,15 @@ jobs:
           pattern: release-*
           path: out-all
           merge-multiple: true
-      - name: Merge and verify SHA256SUMS
+      - name: Build APT repository metadata and unified SHA256SUMS
+        env:
+          HAYATO_APT_GPG_PRIVATE_KEY: ${{ secrets.HAYATO_APT_GPG_PRIVATE_KEY }}
         run: |
           mkdir -p release-files
-          cat out-all/* > out-all/MERGED_SUMS || true
-          find out-all -type f ! -name 'SHA256SUMS' ! -name 'MERGED_SUMS' -exec mv -t release-files {} +
-          # Recompute clean combined SHA256SUMS across all shipped assets
+          find out-all -type f ! -name 'SHA256SUMS' ! -name 'MERGED_SUMS' -exec mv -f -t release-files {} +
+          chmod +x ./core/scripts/hayato-apt.sh
+          ./core/scripts/hayato-apt.sh build-repo release-files
+          # Recompute clean combined SHA256SUMS across all shipped images, .debs, and APT metadata
           (
             cd release-files
             rm -f SHA256SUMS
@@ -236,3 +239,19 @@ jobs:
               --notes-file "docs/releases/$GITHUB_REF_NAME.md" \
               --verify-tag
           fi
+      - name: Push .deb packages to Cloudsmith APT repository
+        if: needs.verify.outputs.should_publish == 'true'
+        env:
+          CLOUDSMITH_API_KEY: ${{ secrets.CLOUDSMITH_API_KEY }}
+          CLOUDSMITH_REPO: ${{ vars.CLOUDSMITH_REPO || 'brunux/hayato' }}
+        run: |
+          if [ -z "${CLOUDSMITH_API_KEY:-}" ]; then
+            echo "CLOUDSMITH_API_KEY secret is not set; skipping Cloudsmith push (packages are archived on GitHub Release)."
+            exit 0
+          fi
+          pipx install cloudsmith-cli || pip install --user cloudsmith-cli
+          export PATH="$HOME/.local/bin:$PATH"
+          for deb in release-files/*.deb; do
+            [ -f "$deb" ] || continue
+            cloudsmith push deb "${CLOUDSMITH_REPO}/debian/forky" "$deb" --republish --no-wait-for-sync
+          done
