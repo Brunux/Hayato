@@ -1,15 +1,15 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="tokyo-night">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Hayato: Debian Linux for ARM64 &amp; ARM Chromebooks · light. fast. fun.</title>
-<meta name="description" content="Hayato is Debian (forky, arm64) for Google Hayato (MT8192) &amp; Kukui/Duet (MT8183) Chromebooks plus generic ARM64 UEFI systems, VMs (QEMU/UTM/Parallels), EDK2-UEFI boards like Raspberry Pi 4/5, and U-Boot SBCs: a keyboard-first swayfx desktop with pure-Rust hayato TUI/greeter/installer tools and ready-to-flash images.">
+<title>Hayato_ — Debian ARM64 for Chromebooks &amp; Mainline ARM64 · light. fast. fun.</title>
+<meta name="description" content="Hayato v0.6.1 is Debian (forky, arm64) for Google Hayato (MT8192) &amp; Kukui/Duet (MT8183) Chromebooks, ARM64 UEFI systems/VMs, Raspberry Pi 4/5, and U-Boot SBCs: a keyboard-first swayfx desktop with a pure-Rust hayato TUI suite, minimalist pixel-hacker greeter, Golden Eagle screensavers, 16 synced themes, and ready-to-flash images.">
 <link rel="canonical" href="https://brunux.github.io/Hayato/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="author" content="Brunux">
 <meta name="theme-color" content="#1a1b26">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="dark light">
 <link rel="icon" href="brand/hayato.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="manifest" href="site.webmanifest">
@@ -17,18 +17,17 @@
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Hayato">
 <meta property="og:locale" content="en_US">
-<meta property="og:title" content="Hayato: Debian Linux for ARM64 &amp; ARM Chromebooks">
+<meta property="og:title" content="Hayato_ — Debian Linux for ARM64 &amp; ARM Chromebooks">
 <meta property="og:description" content="Debian arm64 for Chromebooks and Mainline ARM64. Keyboard first. Light. Fast. Fun.">
 <meta property="og:url" content="https://brunux.github.io/Hayato/">
 <meta property="og:image" content="https://brunux.github.io/Hayato/brand/social-preview.png">
 <meta property="og:image:width" content="1280">
 <meta property="og:image:height" content="640">
-<meta property="og:image:alt" content="Hayato_ - Debian for ARM Chromebooks and Mainline ARM64. Keyboard first. Light. Fast. Fun.">
+<meta property="og:image:alt" content="Hayato_ — Debian for ARM Chromebooks and Mainline ARM64. Keyboard first. Light. Fast. Fun.">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Hayato: Debian Linux for ARM64 &amp; ARM Chromebooks">
+<meta name="twitter:title" content="Hayato_ — Debian Linux for ARM64 &amp; ARM Chromebooks">
 <meta name="twitter:description" content="Debian arm64 for Chromebooks and Mainline ARM64. Keyboard first. Light. Fast. Fun.">
 <meta name="twitter:image" content="https://brunux.github.io/Hayato/brand/social-preview.png">
-<meta name="twitter:image:alt" content="Hayato_ - Debian for ARM Chromebooks and Mainline ARM64. Keyboard first. Light. Fast. Fun.">
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -51,8 +50,8 @@
       "image": "https://brunux.github.io/Hayato/brand/social-preview.png",
       "applicationCategory": "Operating system",
       "operatingSystem": "Linux (Debian forky, arm64)",
-      "softwareVersion": "0.5.1",
-      "downloadUrl": "https://github.com/Brunux/Hayato/releases",
+      "softwareVersion": "0.6.1",
+      "downloadUrl": "https://github.com/Brunux/Hayato/releases/tag/v0.6.1",
       "isAccessibleForFree": true,
       "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
       "author": { "@type": "Person", "name": "Brunux", "url": "https://github.com/Brunux" },
@@ -65,513 +64,1519 @@
 @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono-Regular.woff2") format("woff2"); font-weight: 400; font-display: swap; }
 @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
 @font-face { font-family: "JetBrains Mono"; src: url("fonts/JetBrainsMono-ExtraBold.woff2") format("woff2"); font-weight: 800; font-display: swap; }
-/* Silkscreen is the arcade word's alone: "play" in "press any key to play". */
 @font-face { font-family: "Silkscreen"; src: url("fonts/Silkscreen-Bold.woff2") format("woff2"); font-weight: 700; font-display: swap; }
 
-/* The brand palette: brand/README.md */
-:root {
-  --base03: #1a1b26;
-  --base02: #24283b;
-  --key: #1f2335;
-  --key-edge: #292e42;
-  --key-shadow: #13141c;
-  --line: #3b4261;
-  --cyan: #7dcfff;
-  --cyan-hi: #a4daff;
-  --cursor: #ff9e64;
+/* ── Hayato Theme Tokens (live-switchable via ^T) ── */
+:root,
+[data-theme="tokyo-night"] {
+  --bg: #1a1b26;
+  --bg-deep: #16161e;
+  --surface: #24283b;
+  --surface-hi: #292e42;
+  --border: #3b4261;
+  --border-dim: #292e42;
   --text: #c0caf5;
   --body: #a9b1d6;
   --muted: #565f89;
+  --accent: #7dcfff;
+  --accent-hi: #a4daff;
+  --cursor: #ff9e64;
+  --gold: #e0af68;
+  --ok: #9ece6a;
+  --danger: #f7768e;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --nav-bg: rgba(22, 22, 30, 0.88);
   --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --wrap: 1180px;
+}
+
+[data-theme="hackerman"] {
+  --bg: #0b0f10;
+  --bg-deep: #070a0b;
+  --surface: #12191c;
+  --surface-hi: #182328;
+  --border: #22443a;
+  --border-dim: #162a24;
+  --text: #d4f5e9;
+  --body: #9ad8c1;
+  --muted: #4c7a6b;
+  --accent: #00ff9c;
+  --accent-hi: #66ffc2;
+  --cursor: #00d4ff;
+  --gold: #a6ff00;
+  --ok: #00ff9c;
+  --danger: #ff4d6d;
+  --shadow: rgba(0, 0, 0, 0.65);
+  --nav-bg: rgba(7, 10, 11, 0.90);
+}
+
+[data-theme="solarized"] {
+  --bg: #002b36;
+  --bg-deep: #001f27;
+  --surface: #073642;
+  --surface-hi: #0d4554;
+  --border: #1e4a55;
+  --border-dim: #0d3a46;
+  --text: #eee8d5;
+  --body: #93a1a1;
+  --muted: #657b83;
+  --accent: #2aa198;
+  --accent-hi: #48c9bf;
+  --cursor: #e8743b;
+  --gold: #b58900;
+  --ok: #859900;
+  --danger: #dc322f;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --nav-bg: rgba(0, 31, 39, 0.90);
+}
+
+[data-theme="gruvbox"] {
+  --bg: #282828;
+  --bg-deep: #1d2021;
+  --surface: #32302f;
+  --surface-hi: #3c3836;
+  --border: #504945;
+  --border-dim: #3c3836;
+  --text: #ebdbb2;
+  --body: #d5c4a1;
+  --muted: #928374;
+  --accent: #83a598;
+  --accent-hi: #a3c4b7;
+  --cursor: #fe8019;
+  --gold: #fabd2f;
+  --ok: #b8bb26;
+  --danger: #fb4934;
+  --shadow: rgba(0, 0, 0, 0.5);
+  --nav-bg: rgba(29, 32, 33, 0.90);
+}
+
+[data-theme="nord"] {
+  --bg: #2e3440;
+  --bg-deep: #242933;
+  --surface: #3b4252;
+  --surface-hi: #434c5e;
+  --border: #4c566a;
+  --border-dim: #3b4252;
+  --text: #eceff4;
+  --body: #d8dee9;
+  --muted: #7b88a1;
+  --accent: #88c0d0;
+  --accent-hi: #8fbcbb;
+  --cursor: #d08770;
+  --gold: #ebcb8b;
+  --ok: #a3be8c;
+  --danger: #bf616a;
+  --shadow: rgba(0, 0, 0, 0.45);
+  --nav-bg: rgba(36, 41, 51, 0.90);
+}
+
+[data-theme="catppuccin-latte"] {
+  --bg: #eff1f5;
+  --bg-deep: #e6e9ef;
+  --surface: #ffffff;
+  --surface-hi: #dce0e8;
+  --border: #bcc0cc;
+  --border-dim: #ccd0da;
+  --text: #4c4f69;
+  --body: #5c5f77;
+  --muted: #7c7f93;
+  --accent: #1e66f5;
+  --accent-hi: #04a5e5;
+  --cursor: #fe640b;
+  --gold: #df8e1d;
+  --ok: #40a02b;
+  --danger: #d20f39;
+  --shadow: rgba(76, 79, 105, 0.14);
+  --nav-bg: rgba(230, 233, 239, 0.90);
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+
 body {
   margin: 0;
-  background: var(--base03);
+  background: var(--bg);
   color: var(--body);
   font-family: var(--mono);
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.65;
   -webkit-font-smoothing: antialiased;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
-a { color: var(--cyan); text-decoration-thickness: 1px; text-underline-offset: 3px; }
-a:hover { color: var(--cyan-hi); }
-:focus-visible { outline: 2px solid var(--cursor); outline-offset: 3px; border-radius: 4px; }
+
+a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted transparent; transition: color 0.15s ease, border-color 0.15s ease; }
+a:hover { color: var(--accent-hi); border-bottom-color: var(--accent-hi); }
+:focus-visible { outline: 2px solid var(--cursor); outline-offset: 2px; border-radius: 3px; }
 img { max-width: 100%; height: auto; display: block; }
-h1, h2, h3 { color: var(--text); line-height: 1.15; margin: 0; }
-h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 800; letter-spacing: -0.04em; }
-h3 { font-size: 17px; font-weight: 700; }
+h1, h2, h3 { color: var(--text); margin: 0; line-height: 1.2; }
+h2 { font-size: clamp(22px, 3vw, 30px); font-weight: 800; letter-spacing: -0.03em; }
+h3 { font-size: 15px; font-weight: 700; }
 p { margin: 0; }
 code, kbd, pre { font-family: var(--mono); }
-.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+code { color: var(--accent); font-size: 0.92em; }
+
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 22px; }
 .cur { color: var(--cursor); }
-.blink { animation: blink 1.1s steps(1) infinite; }
+.gold { color: var(--gold); }
+.ok { color: var(--ok); }
+.muted { color: var(--muted); }
+.blink { animation: blink 1.05s steps(1) infinite; }
 @keyframes blink { 50% { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .blink { animation: none; } }
-.skip { position: absolute; left: -999px; top: 8px; background: var(--cursor); color: var(--base03); padding: 8px 12px; border-radius: 6px; z-index: 10; }
+
+.skip { position: absolute; left: -999px; top: 8px; background: var(--cursor); color: var(--bg-deep); padding: 6px 12px; font-weight: 700; z-index: 50; }
 .skip:focus { left: 8px; }
 
-/* Nav */
-.nav { position: sticky; top: 0; z-index: 5; background: rgba(0, 43, 54, 0.88); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(30, 74, 85, 0.6); }
-.nav .wrap { display: flex; align-items: center; gap: 24px; min-height: 64px; flex-wrap: wrap; }
-.brand { display: flex; align-items: center; gap: 10px; color: var(--text); text-decoration: none; font-weight: 800; font-size: 20px; letter-spacing: -0.05em; }
-.brand img { width: 30px; height: 30px; }
-.nav nav { margin-left: auto; }
-.nav ul { display: flex; gap: 22px; list-style: none; margin: 0; padding: 0; flex-wrap: wrap; }
-.nav ul a { color: var(--muted); text-decoration: none; font-size: 14px; }
-.nav ul a:hover { color: var(--text); }
-
-/* Hero */
-.hero { position: relative; overflow: hidden; padding: 96px 0 104px; }
-.board { position: absolute; top: 56px; left: 46%; display: flex; flex-direction: column; gap: 14px; pointer-events: none; }
-.board .row { display: flex; gap: 14px; }
-.board .k { width: 76px; height: 76px; flex: none; border-radius: 15px; background: var(--key); border: 1px solid var(--key-edge); box-shadow: 0 7px 0 var(--key-shadow); }
-.board .k.lit { background: var(--base02); border: 2px solid var(--cyan); box-shadow: 0 7px 0 var(--key-shadow), 0 0 80px rgba(42, 161, 152, 0.45); display: grid; place-items: center; }
-.board .k.lit img { width: 50px; height: 50px; }
-.hero::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, var(--base03) 0%, rgba(0, 43, 54, 0.94) 42%, rgba(0, 43, 54, 0.15) 75%, rgba(0, 43, 54, 0.4) 100%); pointer-events: none; }
-.hero .wrap { position: relative; z-index: 1; }
-.eyebrow { display: inline-flex; gap: 10px; align-items: center; font-size: 13px; color: var(--cyan); background: var(--base02); border: 1px solid var(--line); padding: 6px 12px; border-radius: 999px; }
-.eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cursor); }
-.hero h1 { margin-top: 28px; font-size: clamp(64px, 12vw, 132px); font-weight: 800; letter-spacing: -0.06em; line-height: 0.95; }
-.lede { margin-top: 26px; font-size: clamp(19px, 2.4vw, 25px); line-height: 1.45; color: var(--text); max-width: 34ch; }
-.lede em { font-style: normal; color: var(--cyan); }
-.sub { margin-top: 18px; max-width: 56ch; color: var(--muted); }
-.ctas { margin-top: 36px; display: flex; gap: 14px; flex-wrap: wrap; }
-.btn { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 22px; border-radius: 12px; font-weight: 700; font-size: 15px; text-decoration: none; transition: transform 0.12s ease, box-shadow 0.12s ease; }
-.btn-primary { background: var(--cyan); color: var(--base03); box-shadow: 0 5px 0 #1b6e68; }
-.btn-primary:hover { color: var(--base03); transform: translateY(2px); box-shadow: 0 3px 0 #1b6e68; }
-.btn-ghost { background: var(--base02); color: var(--text); border: 1px solid var(--line); box-shadow: 0 5px 0 var(--key-shadow); }
-.btn-ghost:hover { color: var(--text); transform: translateY(2px); box-shadow: 0 3px 0 var(--key-shadow); }
-.btn svg { width: 18px; height: 18px; }
-.meta { margin-top: 22px; font-size: 13px; color: var(--muted); }
-
-/* Sections */
-section { padding: 88px 0; }
-.sec-head { display: flex; flex-direction: column; gap: 14px; max-width: 62ch; margin-bottom: 44px; }
-.kicker { font-size: 13px; color: var(--cursor); letter-spacing: 0.08em; }
-.sec-head p { color: var(--muted); }
-.alt { background: #01303b; border-top: 1px solid rgba(30, 74, 85, 0.5); border-bottom: 1px solid rgba(30, 74, 85, 0.5); }
-
-/* Screenshot frame & spotlight tabs */
-.tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 18px; }
-.tab { display: inline-flex; align-items: center; gap: 8px; padding: 9px 15px; border-radius: 10px; border: 1px solid var(--line); background: var(--base02); color: var(--muted); font-family: var(--mono); font-size: 13.5px; font-weight: 700; cursor: pointer; box-shadow: 0 3px 0 var(--key-shadow); transition: transform 0.1s ease, border-color 0.15s ease, color 0.15s ease; }
-.tab:hover { color: var(--text); border-color: var(--cyan); }
-.tab[aria-selected="true"] { background: rgba(42, 161, 152, 0.14); border-color: var(--cyan); color: var(--text); box-shadow: 0 3px 0 #1b6e68; }
-.tab code { font-size: 12px; color: var(--cyan); font-weight: 400; }
-.spot-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-.spot-hint { font-size: 13px; color: var(--cyan); }
-.shot { border-radius: 14px; overflow: hidden; border: 1px solid var(--line); background: var(--base02); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45); }
-.shot .bar { display: flex; gap: 7px; padding: 12px 14px; border-bottom: 1px solid var(--line); }
-.shot .bar span { width: 11px; height: 11px; border-radius: 50%; background: var(--line); }
-figure { margin: 0; }
-figcaption { margin-top: 14px; font-size: 14px; color: var(--muted); }
-
-/* Keys */
-.keys { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px 40px; }
-.keyrow { display: flex; align-items: center; gap: 18px; padding: 14px 0; border-bottom: 1px solid rgba(30, 74, 85, 0.6); }
-.combo { display: flex; gap: 6px; flex: none; min-width: 210px; flex-wrap: wrap; }
-kbd { display: inline-flex; align-items: center; justify-content: center; min-width: 34px; height: 34px; padding: 0 10px; border-radius: 8px; background: var(--base02); border: 1px solid var(--key-edge); box-shadow: 0 3px 0 var(--key-shadow); color: var(--text); font-size: 13px; font-weight: 700; }
-kbd.hot { border-color: var(--cyan); color: var(--cyan); }
-.keyrow span.what { color: var(--body); font-size: 15px; }
-
-/* Features */
-.grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; }
-.card { background: var(--base02); border: 1px solid var(--line); border-radius: 14px; padding: 26px; display: flex; flex-direction: column; gap: 12px; }
-.card .ico { width: 40px; height: 40px; border-radius: 10px; background: var(--base03); border: 1px solid var(--line); display: grid; place-items: center; color: var(--cyan); }
-.card .ico svg { width: 20px; height: 20px; }
-.card p { color: var(--muted); font-size: 14.5px; }
-.card code { color: var(--body); font-size: 13.5px; }
-
-/* Gallery */
-.gallery { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
-
-/* Install */
-.steps { display: grid; gap: 22px; counter-reset: step; }
-.step { display: grid; grid-template-columns: 56px minmax(0, 1fr); gap: 18px; align-items: start; }
-.step::before { counter-increment: step; content: counter(step); width: 44px; height: 44px; border-radius: 10px; background: var(--base02); border: 1px solid var(--cyan); color: var(--cyan); font-weight: 800; display: grid; place-items: center; box-shadow: 0 4px 0 var(--key-shadow); }
-.step h3 { margin-top: 8px; }
-.step p { margin-top: 8px; color: var(--muted); }
-.code { position: relative; margin-top: 14px; background: #001f27; border: 1px solid var(--line); border-radius: 12px; }
-.code pre { margin: 0; padding: 18px 20px; overflow-x: auto; font-size: 14px; line-height: 1.6; color: var(--text); }
-.code pre .c { color: var(--muted); }
-.code pre .p { color: var(--cyan); user-select: none; }
-.copy { position: absolute; top: 8px; right: 8px; min-height: 32px; padding: 0 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--base02); color: var(--muted); font-family: var(--mono); font-size: 12px; cursor: pointer; }
-.copy:hover { color: var(--text); }
-.note { margin-top: 30px; padding: 18px 20px; border-radius: 12px; border: 1px solid rgba(232, 116, 59, 0.45); background: rgba(232, 116, 59, 0.07); color: var(--body); font-size: 14.5px; }
-.note strong { color: var(--cursor); }
-
-/* Under the hood */
-.split { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 48px; align-items: start; }
-.facts { display: grid; gap: 0; border-top: 1px solid var(--line); }
-.facts div { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: 14.5px; }
-.facts dt, .facts .k2 { color: var(--cyan); }
-.prose p + p { margin-top: 16px; }
-.prose p { color: var(--muted); }
-.prose strong { color: var(--text); font-weight: 700; }
-
-/* Footer */
-footer { padding: 72px 0 56px; border-top: 1px solid var(--line); }
-footer .wrap { display: flex; flex-wrap: wrap; gap: 32px; justify-content: space-between; align-items: flex-start; }
-footer .big { font-size: 34px; font-weight: 800; letter-spacing: -0.05em; color: var(--text); }
-footer p { color: var(--muted); font-size: 14px; margin-top: 8px; }
-footer .name { max-width: 34ch; color: var(--body); }
-footer ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 14px; }
-.arcade { margin-top: 18px; color: var(--muted); font-size: 14px; }
-.play { font-family: "Silkscreen", var(--mono); font-weight: 700; font-size: 1.3em; line-height: 1; color: var(--cursor); letter-spacing: 0.02em; margin: 0 0.1em; }
-
-@media (max-width: 900px) {
-  .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .keys, .gallery, .split { grid-template-columns: minmax(0, 1fr); }
-  .board { left: 30%; opacity: 0.55; }
+/* ── Top Waybar-style Sticky Bar ── */
+.bar-nav {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--nav-bg);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--border-dim);
 }
-@media (max-width: 600px) {
-  .nav ul { display: none; }
-  .hero { padding: 64px 0 72px; }
-  .board { left: 8%; top: 300px; opacity: 0.35; }
-  .grid { grid-template-columns: minmax(0, 1fr); }
+.bar-nav .wrap {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 52px;
+  flex-wrap: wrap;
+}
+.brand-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-weight: 800;
+  font-size: 16px;
+  letter-spacing: -0.03em;
+  border: none;
+}
+.brand-pill:hover { color: var(--text); border: none; }
+.brand-pill .mark {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  border-radius: 4px;
+  font-size: 14px;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.nav-links a {
+  display: inline-block;
+  padding: 4px 9px;
+  font-size: 13px;
+  color: var(--muted);
+  border-radius: 4px;
+  border: 1px solid transparent;
+}
+.nav-links a:hover {
+  color: var(--text);
+  background: var(--surface);
+  border-color: var(--border-dim);
+}
+.bar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.theme-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 5px 10px;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.theme-btn:hover { border-color: var(--accent); }
+.theme-btn .k { color: var(--cursor); font-weight: 700; }
+.theme-btn .sw { width: 9px; height: 9px; border-radius: 2px; background: linear-gradient(135deg, var(--gold), var(--accent)); }
+.ver-pill {
+  font-size: 12px;
+  color: var(--ok);
+  padding: 4px 8px;
+  border: 1px solid var(--border-dim);
+  background: var(--bg-deep);
+  border-radius: 4px;
+}
+.ver-pill:hover { border-color: var(--ok); color: var(--ok); }
+
+/* ── Terminal Window Frame (ASCII Box Aesthetic) ── */
+.term {
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 20px 50px var(--shadow);
+}
+.term-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 9px 14px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border-dim);
+  font-size: 12.5px;
+  color: var(--muted);
+  flex-wrap: wrap;
+}
+.term-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+  font-weight: 700;
+}
+.term-title .dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--cursor);
+  display: inline-block;
+}
+.term-meta { font-size: 12px; color: var(--muted); }
+
+/* ── Hero ── */
+.hero {
+  padding: 56px 0 68px;
+  border-bottom: 1px solid var(--border-dim);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.95fr);
+  gap: 36px;
+  align-items: center;
+}
+.status-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--accent);
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  padding: 4px 11px;
+  border-radius: 4px;
+}
+.status-line .pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--ok);
+}
+.pixel-logo {
+  margin: 22px 0 0;
+  font-size: clamp(10px, 1.7vw, 17px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  color: var(--text);
+  user-select: none;
+  white-space: pre;
+  overflow-x: auto;
+}
+.pixel-logo .u { color: var(--cursor); }
+.pixel-logo .g { color: var(--accent); }
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0;
+}
+.hero-lede {
+  margin-top: 22px;
+  font-size: clamp(17px, 2.1vw, 22px);
+  color: var(--text);
+  font-weight: 700;
+  line-height: 1.4;
+}
+.hero-lede em { font-style: normal; color: var(--gold); }
+.hero-sub {
+  margin-top: 14px;
+  color: var(--body);
+  font-size: 14.5px;
+  max-width: 58ch;
+}
+.cta-row {
+  margin-top: 26px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.15s ease, background-color 0.15s ease;
+}
+.btn:hover { transform: translateY(-1px); border-color: var(--accent); color: var(--text); }
+.btn-primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--bg-deep);
+}
+.btn-primary:hover {
+  background: var(--accent-hi);
+  border-color: var(--accent-hi);
+  color: var(--bg-deep);
+}
+.targets-strip {
+  margin-top: 22px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 12px;
+}
+.t-chip {
+  padding: 3px 8px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  color: var(--muted);
+}
+.t-chip b { color: var(--text); font-weight: 700; }
+
+/* Interactive Golden Eagle ASCII Stage */
+.eagle-stage {
+  display: flex;
+  flex-direction: column;
+}
+.eagle-controls {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.eagle-btn {
+  padding: 2px 8px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  background: var(--bg-deep);
+  color: var(--muted);
+  border: 1px solid var(--border-dim);
+  border-radius: 3px;
+  cursor: pointer;
+}
+.eagle-btn:hover { color: var(--text); border-color: var(--accent); }
+.eagle-btn[aria-pressed="true"] {
+  color: var(--bg-deep);
+  background: var(--gold);
+  border-color: var(--gold);
+  font-weight: 700;
+}
+.eagle-body {
+  padding: 18px 14px 16px;
+  display: grid;
+  place-items: center;
+  min-height: 330px;
+  background: radial-gradient(circle at 50% 42%, rgba(224, 175, 104, 0.07), transparent 68%), var(--bg-deep);
+}
+.eagle-art {
+  margin: 0;
+  font-size: clamp(7.2px, 1.02vw, 10.6px);
+  line-height: 1.05;
+  white-space: pre;
+  user-select: none;
+  background: linear-gradient(180deg, var(--accent) 0%, var(--cursor) 52%, var(--gold) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.eagle-foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 14px;
+  border-top: 1px solid var(--border-dim);
+  background: var(--surface);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+/* ── Section Layout ── */
+section { padding: 72px 0; }
+.alt { background: var(--bg-deep); border-top: 1px solid var(--border-dim); border-bottom: 1px solid var(--border-dim); }
+.sec-head { margin-bottom: 32px; max-width: 72ch; }
+.kicker {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--cursor);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.sec-head p { margin-top: 10px; color: var(--body); font-size: 14.5px; }
+
+/* ── Live Showcase GIFs ── */
+.demo-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.demo-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 13px;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border-dim);
+  border-radius: 5px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+}
+.demo-tab:hover { color: var(--text); border-color: var(--accent); }
+.demo-tab[aria-selected="true"] {
+  color: var(--text);
+  border-color: var(--accent);
+  background: var(--surface-hi);
+}
+.demo-tab .idx { color: var(--cursor); font-size: 11.5px; }
+.demo-tab .cmd { color: var(--muted); font-weight: 400; font-size: 12px; }
+.demo-tab[aria-selected="true"] .cmd { color: var(--accent); }
+
+.demo-viewport {
+  position: relative;
+  background: #101118;
+  aspect-ratio: 1366 / 912;
+  overflow: hidden;
+}
+.demo-viewport img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.demo-caption {
+  padding: 13px 16px;
+  border-top: 1px solid var(--border-dim);
+  background: var(--surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 13.5px;
+  color: var(--body);
+}
+.demo-caption strong { color: var(--text); }
+.demo-strip {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 12px;
+}
+.thumb-card {
+  padding: 0;
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  font-family: var(--mono);
+  transition: border-color 0.15s ease, transform 0.12s ease;
+}
+.thumb-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+.thumb-card.active { border-color: var(--cursor); }
+.thumb-card img { width: 100%; aspect-ratio: 1366 / 912; object-fit: cover; }
+.thumb-card .lbl {
+  display: block;
+  padding: 6px 8px;
+  font-size: 11.5px;
+  color: var(--text);
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Metrics Strip ── */
+.stats-grid {
+  margin-top: 32px;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+.stat-box {
+  padding: 14px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-radius: 6px;
+  text-align: center;
+}
+.stat-box .num {
+  display: block;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  line-height: 1.1;
+}
+.stat-box .lab {
+  display: block;
+  margin-top: 5px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+/* ── Comprehensive Feature Matrix ── */
+.feat-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+.filter-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.f-pill {
+  padding: 5px 11px;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border-dim);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  cursor: pointer;
+}
+.f-pill:hover { color: var(--text); border-color: var(--accent); }
+.f-pill[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--bg-deep);
+  border-color: var(--accent);
+  font-weight: 700;
+}
+.feat-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 10px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  min-width: 240px;
+}
+.feat-search span { color: var(--cursor); font-weight: 700; }
+.feat-search input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 13px;
+  width: 100%;
+  outline: none;
+}
+.feat-search input::placeholder { color: var(--muted); }
+
+.feat-groups {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+.feat-group {
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-radius: 7px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.feat-group.hidden { display: none; }
+.fg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 11px 16px;
+  background: var(--bg-deep);
+  border-bottom: 1px solid var(--border-dim);
+}
+.fg-head h3 { font-size: 14px; color: var(--text); }
+.fg-tag { font-size: 11.5px; color: var(--gold); }
+.fg-list {
+  list-style: none;
+  margin: 0;
+  padding: 12px 16px 14px;
+  display: grid;
+  gap: 10px;
+}
+.fg-list li {
+  display: grid;
+  grid-template-columns: 14px minmax(0, 1fr);
+  gap: 8px;
+  font-size: 13.5px;
+  color: var(--body);
+  line-height: 1.5;
+}
+.fg-list li.hidden { display: none; }
+.fg-list li::before {
+  content: "›";
+  color: var(--cursor);
+  font-weight: 800;
+}
+.fg-list strong { color: var(--text); }
+
+/* ── Keybindings ── */
+.keys-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px 32px;
+}
+.key-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px dashed var(--border-dim);
+  font-size: 13.5px;
+}
+.combo { display: flex; gap: 5px; min-width: 195px; flex-wrap: wrap; flex: none; }
+kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 8px;
+  min-width: 28px;
+  height: 26px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-bottom-width: 2px;
+  border-radius: 4px;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+}
+kbd.hot { border-color: var(--accent); color: var(--accent); }
+
+/* ── Install & APT ── */
+.install-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+  margin-bottom: 24px;
+}
+.dl-card {
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-radius: 7px;
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.dl-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+.dl-top code { font-weight: 700; font-size: 14px; color: var(--gold); }
+.dl-boot { font-size: 11.5px; color: var(--accent); padding: 2px 7px; border: 1px solid var(--border); border-radius: 3px; background: var(--bg-deep); }
+.dl-card p { font-size: 13px; color: var(--body); }
+
+.steps { display: grid; gap: 16px; }
+.step-box {
+  background: var(--surface);
+  border: 1px solid var(--border-dim);
+  border-radius: 7px;
+  padding: 16px 18px;
+}
+.step-box h3 { color: var(--text); font-size: 14.5px; margin-bottom: 8px; }
+.step-box h3 span { color: var(--cursor); margin-right: 6px; }
+.step-box p { font-size: 13.5px; color: var(--body); }
+.code-blk {
+  position: relative;
+  margin-top: 10px;
+  background: var(--bg-deep);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+}
+.code-blk pre {
+  margin: 0;
+  padding: 12px 74px 12px 14px;
+  overflow-x: auto;
+  font-size: 13px;
+  color: var(--text);
+  line-height: 1.55;
+}
+.code-blk .p { color: var(--cursor); user-select: none; }
+.code-blk .c { color: var(--muted); }
+.copy-btn {
+  position: absolute;
+  top: 7px;
+  right: 7px;
+  padding: 3px 9px;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  cursor: pointer;
+}
+.copy-btn:hover { color: var(--text); border-color: var(--accent); }
+
+.warn-box {
+  margin-top: 20px;
+  padding: 14px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--cursor);
+  background: rgba(255, 158, 100, 0.08);
+  font-size: 13.5px;
+  color: var(--body);
+}
+.warn-box strong { color: var(--cursor); }
+
+/* ── Under the hood ── */
+.hood-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 36px;
+  align-items: start;
+}
+.prose p + p { margin-top: 14px; }
+.prose p { font-size: 14px; color: var(--body); }
+.prose strong { color: var(--text); }
+.facts {
+  margin: 0;
+  border-top: 1px solid var(--border-dim);
+}
+.facts div {
+  display: grid;
+  grid-template-columns: 135px minmax(0, 1fr);
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-dim);
+  font-size: 13.5px;
+}
+.facts dt { color: var(--gold); font-weight: 700; }
+.facts dd { margin: 0; color: var(--body); }
+
+/* ── Footer ── */
+footer {
+  padding: 52px 0 44px;
+  border-top: 1px solid var(--border-dim);
+  background: var(--bg-deep);
+}
+.foot-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 28px;
+  align-items: flex-start;
+}
+.foot-brand { font-size: 26px; font-weight: 800; color: var(--text); letter-spacing: -0.04em; }
+.arcade { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+.play { font-family: "Silkscreen", var(--mono); color: var(--cursor); font-size: 1.25em; margin: 0 3px; }
+.etym { margin-top: 10px; max-width: 44ch; font-size: 13px; color: var(--muted); }
+.foot-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 7px; font-size: 13.5px; }
+
+/* ── Responsive ── */
+@media (max-width: 960px) {
+  .hero-grid, .feat-groups, .keys-grid, .install-grid, .hood-grid { grid-template-columns: minmax(0, 1fr); }
+  .stats-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .demo-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .nav-links { display: none; }
+  .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .demo-strip { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .combo { min-width: 0; }
-  .keyrow { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .key-row { flex-direction: column; align-items: flex-start; gap: 6px; }
   .facts div { grid-template-columns: minmax(0, 1fr); gap: 4px; }
-  section { padding: 64px 0; }
+  section { padding: 52px 0; }
 }
 </style>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="nav">
+<header class="bar-nav">
   <div class="wrap">
-    <a class="brand" href="#top" aria-label="Hayato home">
-      <img src="brand/hayato.svg" alt="" width="30" height="30">
-      <span>Hayato<span class="cur">_</span></span>
+    <a class="brand-pill" href="#top" aria-label="Hayato home">
+      <span class="mark">H<span class="cur">_</span></span>
+      <span>Hayato</span>
     </a>
     <nav aria-label="Primary">
-      <ul>
-        <li><a href="#keys">Keys</a></li>
-        <li><a href="#features">Features</a></li>
-        <li><a href="#install">Install</a></li>
-        <li><a href="#hood">Under the hood</a></li>
-        <li><a href="https://github.com/Brunux/Hayato">GitHub</a></li>
+      <ul class="nav-links">
+        <li><a href="#demos">[demos]</a></li>
+        <li><a href="#features">[features]</a></li>
+        <li><a href="#keys">[keys]</a></li>
+        <li><a href="#install">[install]</a></li>
+        <li><a href="#hood">[architecture]</a></li>
+        <li><a href="https://github.com/Brunux/Hayato">[github]</a></li>
       </ul>
     </nav>
+    <div class="bar-right">
+      <button class="theme-btn" id="theme-cycle" type="button" title="Cycle theme (press t)">
+        <span class="k">^T</span>
+        <span class="sw" aria-hidden="true"></span>
+        <span id="theme-name">tokyo-night</span>
+      </button>
+      <a class="ver-pill" href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">v0.6.1</a>
+    </div>
   </div>
 </header>
 
 <main id="main">
-  <div class="hero" id="top">
-    <div class="board" aria-hidden="true">
-      <div class="row"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
-      <div class="row" style="padding-left: 46px"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
-      <div class="row" style="padding-left: 68px"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
-      <div class="row" style="padding-left: 100px"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k lit"><img src="brand/hayato.svg" alt=""></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
-      <div class="row"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
-      <div class="row" style="padding-left: 36px"><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div><div class="k"></div></div>
-    </div>
-    <div class="wrap">
-      <span class="eyebrow"><span class="dot" aria-hidden="true"></span>v0.5.1 · Debian forky · arm64</span>
-      <h1>Hayato<span class="cur blink">_</span></h1>
-      <p class="lede">Debian arm64 for Chromebooks &amp; Mainline ARM64. Keyboard first. <em>Light. Fast. Fun.</em></p>
-      <p class="sub">Real Debian above the kernel: tuned <code>7.2.7-mt81</code> images for Google Hayato (MT8192) &amp; Google Kukui / Lenovo IdeaPad Duet (MT8183) Chromebooks, plus generic Debian <code>linux-image-arm64</code> + multi-vendor firmware images reaching ARM64 UEFI laptops/VMs (QEMU/UTM/Parallels), Raspberry Pi 4/5 (via EDK2 UEFI or U-Boot), and U-Boot SBCs—driven by our pure-Rust <code>hayato</code> TUI, greeter, and installer.</p>
-      <div class="ctas">
-        <a class="btn btn-primary" href="https://github.com/Brunux/Hayato/releases">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v12"/><path d="m6 11 6 6 6-6"/><path d="M5 20h14"/></svg>
-          Download
-        </a>
-        <a class="btn btn-ghost" href="#features">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
-          Noticeable features
-        </a>
-        <a class="btn btn-ghost" href="https://github.com/Brunux/Hayato">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m8 7-5 5 5 5"/><path d="m16 7 5 5-5 5"/></svg>
-          Source
-        </a>
-      </div>
-      <p class="meta">Targets: <code>google-asurada</code> (Hayato MT8192) · <code>google-kukui</code> (Kukui/Duet MT8183) · <code>arm64-uefi</code> (UEFI/VMs/RPi EDK2) · <code>arm64-extlinux</code> (U-Boot SBCs)</p>
-    </div>
-  </div>
-
-  <section class="alt" aria-labelledby="look">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="kicker">THE SESSION · 0.5.1 SCREENSHOTS</span>
-        <h2 id="look">Everything is one keystroke away</h2>
-        <p><code>swayfx</code> with blur and rounded corners, <code>waybar</code> on top, and one pure-Rust Ratatui suite (<code>hayato</code>) driving the session menu, <code>hayato-greeter</code> at boot, 16 synced themes, <code>hayato-notify</code> cards, and the 6-step disk installer.</p>
-        <p class="note">These captures are from 0.5.1 and still show the old Solarized session. 0.6.0 ships the golden-eagle mark and Tokyo Night by default; new captures follow the image.</p>
-      </div>
-      <div class="spot-head">
-        <div class="tabs" role="tablist" aria-label="Hayato v0.5.1 interactive surfaces">
-          <button class="tab" type="button" role="tab" aria-selected="true" data-src="screenshots/v051-menu.png" data-alt="Hayato v0.5.1 root menu centered over the Solarized keyboard wallpaper showing Terminal, Files, Search inside files, Places, Camera, Download, Settings, Learn, Keybindings, Applications, Window switcher, Calculator, Emoji, Clipboard, Password, SSH, Agent session and Ask" data-cap="Root Menu (Alt+Space): instant fuzzy launcher, files, tools, and AI agents using 101 verified fork-ready Nerd Font &amp; Font Awesome glyphs (zero tofu boxes)." data-cmd="Alt+Space · hayato menu">Root Menu <code>Alt+Space</code></button>
-          <button class="tab" type="button" role="tab" aria-selected="false" data-src="screenshots/v051-greeter.png" data-alt="Hayato native hayato-greeter login screen showing brunux user pill, + Other button, blinking focus cursor on password field, Sway session selector, Solarized Dark theme pill, and Sleep/Reboot/Shut down/Settings actions" data-cap="Native hayato-greeter (greetd IPC): user pills, blinking accent cursors, F4 16-theme switcher, F2 session picker, polkit-backed power buttons, and ^G defaults editor." data-cmd="VT7 · hayato-greeter">Native Greeter <code>greetd</code></button>
-          <button class="tab" type="button" role="tab" aria-selected="false" data-src="screenshots/v051-theme.png" data-alt="Hayato 16-theme appearance picker with live Sixel wallpaper simulation, Waybar preview, 16 ANSI color swatches, semantic role hex codes, WCAG 2.1 contrast check, and notification preview" data-cap="16-Theme Engine (Alt+Ctrl+T): live Sixel wallpaper, bar, ANSI palette, and WCAG contrast preview updating 13 config files atomically across the whole session." data-cmd="Alt+Ctrl+T · hayato menu theme">16 Themes <code>Alt+Ctrl+T</code></button>
-          <button class="tab" type="button" role="tab" aria-selected="false" data-src="screenshots/v051-installer.png" data-alt="Hayato v0.5.1 pure-Rust 6-step system installer pre-flight screen showing Google Hayato rev1 hardware, ChromeOS Depthcharge boot backend, target disk, and verified GPT/vboot utilities" data-cap="Pure-Rust System Installer (hayato installer): 6-step guided wizard with hardware/power pre-flight, Depthcharge/UEFI/Extlinux support, and Cancel-first double confirmations." data-cmd="hayato installer">Disk Installer <code>tui / --clone</code></button>
+  <!-- ════════ HERO ════════ -->
+  <section class="hero" id="top">
+    <div class="wrap hero-grid">
+      <div>
+        <span class="status-line"><span class="pulse" aria-hidden="true"></span>v0.6.1 · debian forky · arm64 · 4 targets</span>
+        <h1 class="sr-only">Hayato — Debian ARM64 for Chromebooks and Mainline ARM64</h1>
+        <pre class="pixel-logo" id="pixel-logo" aria-hidden="true">█   █                     ▄          
+█▄▄▄█  ▀▀▀▄ █   █  ▀▀▀▄ ▀▀█▀▀ ▄▀▀▀▄  
+█   █ ▄▀▀▀█ ▀▄▄▄█ ▄▀▀▀█   █   █   █  
+▀   ▀  ▀▀▀▀  ▄▄▄▀  ▀▀▀▀    ▀▀  ▀▀▀  <span class="u blink">▀▀▀▀</span></pre>
+        <p class="hero-lede">Debian arm64 for Chromebooks &amp; Mainline ARM64.<br>Keyboard first. <em>Light. Fast. Fun.</em></p>
+        <p class="hero-sub">Real Debian <code>forky</code> above a tuned kernel — driven by one pure-Rust <code>hayato</code> binary (52+ TUI menus, minimalist <code>greetd</code> login, 16 synced themes, Golden Eagle screensavers, retro &amp; HTML games, MCP agent server, and a 6-step disk installer).</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">↓ Download v0.6.1</a>
+          <a class="btn" href="#demos">▸ Live Desktop Demos</a>
+          <a class="btn" href="#features">≡ All Features</a>
+          <a class="btn" href="https://github.com/Brunux/Hayato">&lt;/&gt; Source</a>
         </div>
-        <span class="spot-hint"><code id="spot-cmd">Alt+Space · hayato menu</code></span>
-      </div>
-      <figure>
-        <div class="shot">
-          <div class="bar" aria-hidden="true"><span></span><span></span><span></span></div>
-          <img id="spot-img" src="screenshots/v051-menu.png" width="1920" height="1200" alt="Hayato v0.5.1 root menu centered over the Solarized keyboard wallpaper showing Terminal, Files, Search inside files, Places, Camera, Download, Settings, Learn, Keybindings, Applications, Window switcher, Calculator, Emoji, Clipboard, Password, SSH, Agent session and Ask">
+        <div class="targets-strip">
+          <span class="t-chip"><b>google-asurada</b> MT8192</span>
+          <span class="t-chip"><b>google-kukui</b> MT8183</span>
+          <span class="t-chip"><b>arm64-uefi</b> VMs / RPi / Laptops</span>
+          <span class="t-chip"><b>arm64-extlinux</b> U-Boot SBCs</span>
         </div>
-        <figcaption id="spot-cap">Root Menu (<code>Alt+Space</code>): instant fuzzy launcher, files, tools, and AI agents using 101 verified <code>forky</code> Nerd Font &amp; Font Awesome glyphs (zero tofu boxes).</figcaption>
-      </figure>
-    </div>
-  </section>
+      </div>
 
-  <section id="keys" aria-labelledby="keys-h">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="kicker">PRESS ANY KEY TO <span class="play">PLAY</span></span>
-        <h2 id="keys-h">The keys worth knowing on day one</h2>
-        <p>Consistent <kbd>Alt</kbd> window chords and <kbd>Alt</kbd> <kbd>Ctrl</kbd> tool bindings keep the <kbd>Search</kbd> key dedicated to launching. Forget one? <kbd class="hot">Alt</kbd> <kbd class="hot">Ctrl</kbd> <kbd class="hot">K</kbd> lists every binding, generated from the configuration itself.</p>
-      </div>
-      <div class="keys">
-        <div class="keyrow"><span class="combo"><kbd class="hot">Search</kbd></span><span class="what">Launcher (or Alt+D)</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Space</kbd></span><span class="what">Root menu</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Tab</kbd></span><span class="what">Window switcher</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Return</kbd></span><span class="what">Terminal</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>K</kbd></span><span class="what">Every key binding, searchable</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>F</kbd></span><span class="what">Files</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>A</kbd>/<kbd>B</kbd>/<kbd>W</kbd>/<kbd>P</kbd></span><span class="what">Audio, Bluetooth, network, power</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>T</kbd></span><span class="what">16 themes, wallpapers &amp; live preview</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>X</kbd></span><span class="what">Offline dictation (hold or tap)</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>A</kbd></span><span class="what">AI agents &amp; account profiles</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Escape</kbd></span><span class="what">Lock, suspend, log out, reboot, power off</span></div>
-        <div class="keyrow"><span class="combo"><kbd>Alt</kbd><kbd>Space</kbd> <span style="color:var(--muted)">›</span> <kbd>Install</kbd></span><span class="what">Clone live OS onto internal disk</span></div>
-      </div>
-    </div>
-  </section>
-
-  <section id="features" class="alt" aria-labelledby="feat-h">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="kicker">LAZY, ON PURPOSE</span>
-        <h2 id="feat-h">Most noticeable features in v0.5.1</h2>
-        <p>Zero background polling daemons. One multi-call <code>hayato</code> binary drives the login greeter, 16-theme engine, in-window TUI tools, offline AI/dictation workflows, and disk installer.</p>
-      </div>
-      <div class="grid">
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="12" cy="10" r="2.5"/><path d="M8 17c1.2-2 6.8-2 8 0"/></svg></div>
-          <h3>Native <code>hayato-greeter</code> &amp; Settings</h3>
-          <p>Pure-Rust <code>greetd</code> IPC login on VT7 with clickable user pills, blinking cursors, live <code>F4</code> 16-theme cycling, <code>^G</code> settings, polkit power actions, and raw TTY fallback.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 3a9 9 0 0 0 0 18c1.7 0 2-1.2 1.2-2.2-.8-1-1-1.8.3-1.8h2a3.5 3.5 0 0 0 3.5-3.5"/></svg></div>
-          <h3>16 themes, 13 synced surfaces</h3>
-          <p><kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>T</kbd> previews wallpaper thumbnails, ANSI swatches, and WCAG contrast live—rewriting Sway, Waybar, <code>foot</code>, Starship, <code>hayato-notify</code>, and the greeter together.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4z"/><path d="M8 18v-4h8v4"/><path d="M9 6v3h4V6"/></svg></div>
-          <h3>Pure-Rust multi-target installer</h3>
-          <p>6-step guided wizard (<code>hayato installer</code>) &amp; headless <code>--clone</code> mode with pre-flight safety checks for ChromeOS <code>depthcharge</code> (Hayato &amp; Kukui), ARM64 <code>uefi</code>, and U-Boot <code>extlinux</code>.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="m7 9 3 3-3 3"/><path d="M13 15h4"/></svg></div>
-          <h3>AI agents &amp; MCP server</h3>
-          <p>Launch Claude Code, Codex, OpenCode, Gemini CLI, or Copilot from one menu, manage separate accounts, or expose session context via <code>hayato mcp</code>.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0"/><path d="M12 18v3"/></svg></div>
-          <h3>Offline dictation, zero focus loss</h3>
-          <p><code>parecord</code> → pinned <code>whisper-cli</code> → <code>wtype</code>. Hold <kbd>Alt</kbd>+<kbd>Ctrl</kbd>+<kbd>X</kbd> for push-to-talk or tap for hands-free voice entry with Waybar &amp; toast stop controls.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v3"/><path d="M12 18v3"/><path d="m5.6 5.6 2.1 2.1"/><path d="m16.3 16.3 2.1 2.1"/><path d="M3 12h3"/><path d="M18 12h3"/></svg></div>
-          <h3>Frictionless in-window UX</h3>
-          <p>Menus open immediately on cached state (Wi-Fi with QR sharing, BT, audio, live <code>calc</code>, file previews) with dedicated <code>ActionStrip</code> buttons and <code>TaskView</code> progress.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></div>
-          <h3>Layer-shell notifications &amp; OSD</h3>
-          <p><code>hayato-notify</code> renders interactive Wayland cards and volume/brightness OSD bars using both <code>Symbols Nerd Font Mono</code> and <code>Font Awesome 6</code> icons.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5a2 2 0 0 1 2-2h12v18H6a2 2 0 0 1-2-2z"/><path d="M8 7h6"/><path d="M8 11h6"/></svg></div>
-          <h3>101-glyph alphabet &amp; 7-page manual</h3>
-          <p>Every UI glyph is verified against Debian <code>forky</code>'s fonts (0 tofu boxes), and the built-in <strong>Learn</strong> viewer renders the full manual right inside <code>foot</code>.</p>
-        </article>
-        <article class="card">
-          <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 4 6v6c0 4.5 3.4 8 8 9 4.6-1 8-4.5 8-9V6z"/><path d="m9 12 2 2 4-4"/></svg></div>
-          <h3>Three-tier health witnesses</h3>
-          <p><code>./build.sh check</code> runs modular core, board hardware, and desktop checks reading <code>/etc/hayato/</code> metadata plus font and layout invariants.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <section aria-labelledby="gal-h">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="kicker">ACROSS THE WORKFLOW</span>
-        <h2 id="gal-h">v0.5.1 highlights &amp; live captures</h2>
-        <p>Every panel shares one design language, keyboard grammar, and verified icon table.</p>
-      </div>
-      <div class="gallery">
-        <figure>
-          <div class="shot"><img src="screenshots/v051-greeter.png" width="1920" height="1200" loading="lazy" alt="Native hayato-greeter login canvas with user pills, blinking password cursor, session and theme pills, and power strip"></div>
-          <figcaption><strong>Native Greeter (v0.5.1):</strong> <code>hayato-greeter</code> over <code>greetd</code> IPC with blinking focus cursors, <code>F4</code> theme switcher, and polkit power controls.</figcaption>
-        </figure>
-        <figure>
-          <div class="shot"><img src="screenshots/v051-theme.png" width="1920" height="1200" loading="lazy" alt="Theme picker showing 16 palettes, live Sixel wallpaper simulation, Waybar preview, ANSI swatches, and WCAG contrast checks"></div>
-          <figcaption><strong>16-Theme Engine:</strong> live wallpaper, bar, ANSI palette, and accessibility preview across 13 synced surfaces.</figcaption>
-        </figure>
-        <figure>
-          <div class="shot"><img src="screenshots/v051-installer.png" width="1920" height="1200" loading="lazy" alt="Pure-Rust 6-step system installer verifying platform SoC, Depthcharge boot backend, target disk, and utilities"></div>
-          <figcaption><strong>Guided Disk Installer:</strong> pre-flight SoC, power, and partition-tool verification before writing internal storage.</figcaption>
-        </figure>
-        <figure>
-          <div class="shot"><img src="screenshots/v051-agents.png" width="1920" height="1200" loading="lazy" alt="AI Agents menu listing Claude Code, Codex, OpenCode, Gemini CLI, GitHub Copilot, default agent selector, and terminal workspace"></div>
-          <figcaption><strong>AI Agents Menu (Alt+Ctrl+Shift+A):</strong> install, pick, and isolate multi-account profiles in <code>~/Work</code>.</figcaption>
-        </figure>
-        <figure>
-          <div class="shot"><img src="screenshots/v051-keys.png" width="1920" height="1200" loading="lazy" alt="Searchable keybindings viewer parsed directly from active Sway configuration files"></div>
-          <figcaption><strong>Live Keybindings (Alt+Ctrl+K):</strong> parsed directly from Sway configs—type to filter, Enter copies the command.</figcaption>
-        </figure>
-        <figure>
-          <div class="shot"><img src="screenshots/hayato-r1-sway.png" width="1920" height="1200" loading="lazy" alt="Full Wayland session on Google Hayato Chromebook with Waybar system telemetry, terminal prompt, and desktop notes"></div>
-          <figcaption><strong>On Google Hayato (MT8192):</strong> Waybar system telemetry, tiling terminal, Starship prompt, and TUI notes on Chromebook hardware.</figcaption>
-        </figure>
-      </div>
-    </div>
-  </section>
-
-  <section id="install" class="alt" aria-labelledby="inst-h">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="kicker">FROM EXTERNAL MEDIA TO DISK</span>
-        <h2 id="inst-h">Flash an image, install to internal storage</h2>
-        <p>Boot the live image from microSD or USB, then clone the running system onto internal storage with our pure-Rust installer.</p>
-      </div>
-      <div class="steps">
-        <div class="step">
-          <div>
-            <h3>Download a release image</h3>
-            <p>Get <code>google-asurada.img.xz</code> (Hayato MT8192), <code>google-kukui.img.xz</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi.img.xz</code> (ARM64 UEFI laptops/servers, QEMU/UTM/Parallels VMs, and Raspberry Pi 4/5 with EDK2 UEFI), or <code>arm64-extlinux.img.xz</code> (U-Boot SBCs such as Rockchip/Allwinner/Amlogic/Pi U-Boot with SPI or SPL boot) plus <code>SHA256SUMS</code> from <a href="https://github.com/Brunux/Hayato/releases">v0.5.1 Releases</a>.</p>
+      <!-- Interactive Golden Eagle ASCII Mascot Frame -->
+      <div class="term eagle-stage">
+        <div class="term-head">
+          <span class="term-title"><span class="dot" aria-hidden="true"></span>hayato-screensaver</span>
+          <div class="eagle-controls" role="group" aria-label="Switch Golden Eagle ASCII pose">
+            <button class="eagle-btn" type="button" data-eagle="crest" aria-pressed="true">[1] crest</button>
+            <button class="eagle-btn" type="button" data-eagle="dive" aria-pressed="false">[2] dive</button>
+            <button class="eagle-btn" type="button" data-eagle="head" aria-pressed="false">[3] head</button>
           </div>
         </div>
-        <div class="step">
-          <div>
-            <h3>Verify and write the drive</h3>
-            <div class="code">
-              <button class="copy" type="button" data-copy="sha256sum -c --ignore-missing SHA256SUMS&#10;xz -dc &lt;target&gt;.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync">Copy</button>
+        <div class="eagle-body">
+          <pre class="eagle-art" id="eagle-art" aria-label="Golden Eagle 2x2 quadrant-block ASCII mascot"></pre>
+        </div>
+        <div class="eagle-foot">
+          <span>2×2 quadrant-block · <code>tte</code> gold→cyan</span>
+          <span>press <code>1</code> <code>2</code> <code>3</code> or <code>t</code> for theme</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ LIVE SHOWCASE GIFS ════════ -->
+  <section class="alt" id="demos" aria-labelledby="demos-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">LIVE FROM GOOGLE HAYATO · REAL v0.6.1 CAPTURES</span>
+        <h2 id="demos-h">See Hayato in motion</h2>
+        <p>Every clip below was recorded live on a 4&nbsp;GB Google Hayato (MT8192) running <code>swayfx</code> + <code>hayato 0.6.1</code>. Zero mockups — real Wayland frames, real <code>tte</code> terminal effects, and real pure-Rust Ratatui panels.</p>
+      </div>
+
+      <div class="demo-tabs" role="tablist" aria-label="Live Hayato desktop demos">
+        <button class="demo-tab" type="button" role="tab" aria-selected="true"
+          data-idx="0"
+          data-src="demos/greeter.gif"
+          data-title="hayato-greeter · greetd IPC"
+          data-cmd="F4 / ^T theme · ^Z sleep · ^R reboot · ^P power"
+          data-cap="<strong>Minimalist Pixel-Hacker Greeter:</strong> pre-formed half-block <code>Hayato_</code> hero with glitch pulse, user pills, blinking block cursor, live <code>F4</code> theme cycling across 16 palettes, icon-only power strip, and quiet bottom-right clock.">
+          <span class="idx">01</span> Greeter <span class="cmd">greetd</span>
+        </button>
+        <button class="demo-tab" type="button" role="tab" aria-selected="false"
+          data-idx="1"
+          data-src="demos/screensaver.gif"
+          data-title="hayato-screensaver · Golden Eagle"
+          data-cmd="tte wipe/decrypt/beams · gold → amber → cyan"
+          data-cap="<strong>Golden Eagle Screensavers:</strong> 3 ultra-minimal 2×2 quadrant-block Golden Eagles (Crest, Dive, Head) paired with <code>Hayato_</code>, cycling <code>tte</code> pixel-hacker effects at 30&nbsp;fps before <code>swaylock</code>.">
+          <span class="idx">02</span> Screensaver <span class="cmd">tte</span>
+        </button>
+        <button class="demo-tab" type="button" role="tab" aria-selected="false"
+          data-idx="2"
+          data-src="demos/themes.gif"
+          data-title="hayato menu theme · 16 palettes"
+          data-cmd="Alt+Ctrl+T · 14 synced surfaces"
+          data-cap="<strong>16-Theme Engine:</strong> live Sixel wallpaper simulation, Waybar mockup, 16 ANSI swatches, semantic roles, and WCAG 2.1 contrast badges — compiling 14 desktop surfaces atomically from one <code>theme.toml</code>.">
+          <span class="idx">03</span> 16 Themes <span class="cmd">Alt+Ctrl+T</span>
+        </button>
+        <button class="demo-tab" type="button" role="tab" aria-selected="false"
+          data-idx="3"
+          data-src="demos/menu.gif"
+          data-title="hayato menu · 52 commands"
+          data-cmd="Alt+Space · 117 verified glyphs"
+          data-cap="<strong>Root Menu &amp; Fuzzy Launcher:</strong> instant pure-Rust Ratatui launcher floating over <code>swayfx</code> with 52 commands, 117 verified <code>forky</code> Nerd Font glyphs (zero tofu boxes), and sub-millisecond filtering.">
+          <span class="idx">04</span> Root Menu <span class="cmd">Alt+Space</span>
+        </button>
+        <button class="demo-tab" type="button" role="tab" aria-selected="false"
+          data-idx="4"
+          data-src="demos/games.gif"
+          data-title="hayato menu games · Retro + HTML"
+          data-cmd="RetroArch + WebKitGTK · gamepad ready"
+          data-cap="<strong>Retro &amp; Web Games Shelf:</strong> unified library for <code>~/Games</code> retro ROMs (FBNeo, Mupen64Plus-Next) and sandboxed WebKitGTK HTML games (Snake included), with generated pixel-block cartridge art and DualShock 3/4 navigation.">
+          <span class="idx">05</span> Games <span class="cmd">hayato-games</span>
+        </button>
+      </div>
+
+      <div class="term">
+        <div class="term-head">
+          <span class="term-title"><span class="dot" aria-hidden="true"></span><span id="demo-title">hayato-greeter · greetd IPC</span></span>
+          <span class="term-meta" id="demo-cmd">F4 / ^T theme · ^Z sleep · ^R reboot · ^P power</span>
+        </div>
+        <div class="demo-viewport">
+          <img id="demo-img" src="demos/greeter.gif" width="900" height="601" alt="Live recording of Hayato desktop">
+        </div>
+        <div class="demo-caption">
+          <span id="demo-cap"><strong>Minimalist Pixel-Hacker Greeter:</strong> pre-formed half-block <code>Hayato_</code> hero with glitch pulse, user pills, blinking block cursor, live <code>F4</code> theme cycling across 16 palettes, icon-only power strip, and quiet bottom-right clock.</span>
+        </div>
+      </div>
+
+      <div class="demo-strip" aria-label="Quick preview thumbnails">
+        <button class="thumb-card active" type="button" data-idx="0"><img src="demos/greeter.gif" loading="lazy" alt="Greeter preview"><span class="lbl">01 · greeter</span></button>
+        <button class="thumb-card" type="button" data-idx="1"><img src="demos/screensaver.gif" loading="lazy" alt="Golden Eagle screensaver preview"><span class="lbl">02 · screensaver</span></button>
+        <button class="thumb-card" type="button" data-idx="2"><img src="demos/themes.gif" loading="lazy" alt="16-Theme Engine preview"><span class="lbl">03 · 16 themes</span></button>
+        <button class="thumb-card" type="button" data-idx="3"><img src="demos/menu.gif" loading="lazy" alt="Root menu preview"><span class="lbl">04 · root menu</span></button>
+        <button class="thumb-card" type="button" data-idx="4"><img src="demos/games.gif" loading="lazy" alt="Games shelf preview"><span class="lbl">05 · games shelf</span></button>
+      </div>
+
+      <div class="stats-grid" aria-label="Hayato key numbers">
+        <div class="stat-box"><span class="num">52+</span><span class="lab">Rust TUI commands</span></div>
+        <div class="stat-box"><span class="num">16</span><span class="lab">synced themes</span></div>
+        <div class="stat-box"><span class="num">14</span><span class="lab">compiled surfaces</span></div>
+        <div class="stat-box"><span class="num">117</span><span class="lab">verified glyphs</span></div>
+        <div class="stat-box"><span class="num">18</span><span class="lab">MCP agent tools</span></div>
+        <div class="stat-box"><span class="num">4</span><span class="lab">ARM64 image targets</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ COMPREHENSIVE FEATURE MATRIX ════════ -->
+  <section id="features" aria-labelledby="feat-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">EVERYTHING INCLUDED · COMPLETE INVENTORY</span>
+        <h2 id="feat-h">Every feature in Hayato v0.6.1</h2>
+        <p>From signed ChromeOS FIT kernels and custom pixel-hacker Plymouth boot splash to 52+ pure-Rust TUI tools, offline Whisper dictation, retro gaming, and capability-bounded AI MCP tooling. Filter by domain or search below.</p>
+      </div>
+
+      <div class="feat-toolbar">
+        <div class="filter-pills" role="group" aria-label="Filter features by category">
+          <button class="f-pill" type="button" data-cat="all" aria-pressed="true">all (7)</button>
+          <button class="f-pill" type="button" data-cat="boot" aria-pressed="false">boot &amp; hardware</button>
+          <button class="f-pill" type="button" data-cat="desktop" aria-pressed="false">desktop &amp; themes</button>
+          <button class="f-pill" type="button" data-cat="tui" aria-pressed="false">rust tui &amp; cli</button>
+          <button class="f-pill" type="button" data-cat="games" aria-pressed="false">games &amp; notes</button>
+          <button class="f-pill" type="button" data-cat="ai" aria-pressed="false">ai, mcp &amp; dev</button>
+          <button class="f-pill" type="button" data-cat="security" aria-pressed="false">installer &amp; security</button>
+        </div>
+        <label class="feat-search">
+          <span>/</span>
+          <input id="feat-q" type="search" placeholder="filter features (e.g. zram, mcp, qr, retro)..." aria-label="Filter Hayato features">
+        </label>
+      </div>
+
+      <div class="feat-groups" id="feat-groups">
+        <!-- 1. Boot & Hardware -->
+        <article class="feat-group" data-cat="boot">
+          <div class="fg-head"><h3>01 · Boot, Kernel &amp; ARM64 Hardware</h3><span class="fg-tag">devices/ · core/</span></div>
+          <ul class="fg-list">
+            <li><strong>4 First-Class ARM64 Targets:</strong> <code>google-asurada</code> (Hayato MT8192), <code>google-kukui</code> (Kukui / Lenovo Duet MT8183), <code>arm64-uefi</code> (UEFI laptops/servers, QEMU/UTM/Parallels VMs, RPi 4/5 EDK2), and <code>arm64-extlinux</code> (U-Boot SBCs).</li>
+            <li><strong>3 Pluggable Boot Backends:</strong> ChromeOS <code>depthcharge</code> (lz4 signed FIT + <code>cgpt</code>), standard <code>uefi</code> (<code>systemd-boot</code>), and U-Boot <code>extlinux</code> — unified under one <code>boot_*</code> interface.</li>
+            <li><strong>Tuned MT81 &amp; Mainline Kernels:</strong> custom <code>7.2.7-mt81</code> kernel for MediaTek Chromebooks plus Debian <code>linux-image-arm64</code> with multi-vendor firmware (<code>brcm80211</code>, <code>qcom-soc</code>, <code>atheros</code>, <code>iwlwifi</code>, <code>realtek</code>, <code>mediatek</code>).</li>
+            <li><strong>4&nbsp;GB RAM &amp; Flash Optimization:</strong> MGLRU page reclaim, <code>zram</code> (lz4) compressed swap, <code>kyber</code> I/O scheduler, MMC IRQ affinity balancing, and optional SD card auxiliary swap (<code>hayato menu swap</code>).</li>
+            <li><strong>Chromebook Hardware Polish:</strong> USB-C DisplayPort Alt-Mode mux, tablet-mode auto-rotation + <code>wvkbd</code> virtual keyboard, <code>keyd</code> Search-key &amp; top-row mapping, backlight/audio/webcam integration.</li>
+            <li><strong>Zero Firmware Flashing:</strong> stock bootloader and firmware are never modified or overwritten.</li>
+          </ul>
+        </article>
+
+        <!-- 2. Boot Splash, Greeter & Idle -->
+        <article class="feat-group" data-cat="desktop">
+          <div class="fg-head"><h3>02 · Boot Splash, Greeter &amp; Screensavers</h3><span class="fg-tag">plymouth · greetd · tte</span></div>
+          <ul class="fg-list">
+            <li><strong>Pixel-Hacker Plymouth Boot Splash:</strong> custom 5×8 pixel <code>Hayato_</code> with cyan decode glyphs (<code>0 1 # / = +</code>), blinking orange underscore, and <code>plymouth.ignore-serial-consoles</code> for ARM64 UARTs.</li>
+            <li><strong>Minimalist <code>hayato-greeter</code> (greetd IPC):</strong> pure-Rust VT7 login with pre-formed half-block <code>Hayato_</code> hero, randomized glitch pulse, user pills, blinking cursor, icon-only <code>^T ^Z ^R ^P</code> strip, and optional bottom-right clock.</li>
+            <li><strong>Live Greeter Theme Cycling &amp; Settings:</strong> press <code>F4</code> / <code>^T</code> to cycle all 16 themes right on the login screen; configure defaults via <code>hayato menu greeter</code> (follow user theme, default theme, user pills, clock, action buttons).</li>
+            <li><strong>3 Golden Eagle Screensavers:</strong> ultra-minimal 2×2 quadrant-block Golden Eagles (<code>Crest</code>, <code>Dive</code>, <code>Head</code>) cycling <code>tte</code> effects (<code>decrypt</code>, <code>beams</code>, <code>binarypath</code>, <code>rain</code>, <code>sweep</code>, <code>wipe</code>) in a gold → amber → cyber-cyan gradient.</li>
+            <li><strong>Full Idle &amp; Lock Chain:</strong> <code>swayidle</code> → Golden Eagle screensaver (150s) → themed <code>swaylock</code> (300s) → DPMS off (360s) → suspend.</li>
+          </ul>
+        </article>
+
+        <!-- 3. Wayland SwayFX & 16-Theme Engine -->
+        <article class="feat-group" data-cat="desktop">
+          <div class="fg-head"><h3>03 · SwayFX Desktop &amp; 16-Theme Engine</h3><span class="fg-tag">swayfx · waybar · hayato-theme</span></div>
+          <ul class="fg-list">
+            <li><strong>SwayFX Wayland Compositor:</strong> crisp tiling with rounded corners, subtle blur, shadows, scratchpad, and consistent <code>Alt</code> / <code>Alt+Ctrl</code> keyboard ergonomics.</li>
+            <li><strong>Floating Waybar Statusline:</strong> <code>H_</code> root launcher, dynamic <code>workstyle</code> workspace glyphs, live system telemetry, and clickable quick-controls.</li>
+            <li><strong>16 Curated Themes (Dark &amp; Light):</strong> Tokyo Night, Solarized Dark, Catppuccin Mocha, Rose Pine, Nord, Gruvbox Dark, Everforest Dark, Kanagawa, Dracula, One Dark, Hackerman, Lumon, Matte Black, Omacon, Catppuccin Latte, Flexoki Light.</li>
+            <li><strong>14 Atomically Compiled Surfaces:</strong> one <code>theme.toml</code> compiles Sway, Waybar, <code>foot</code>, Starship, <code>hayato-notify</code>, <code>hayato-greeter</code>, <code>swaylock</code>, GTK, <code>btop</code>, <code>bat</code>, and more — with 3 bundled wallpapers per theme, live Sixel preview, and WCAG 2.1 contrast checks.</li>
+            <li><strong>Native Wayland Notifications &amp; OSD:</strong> <code>hayato-notify</code> renders interactive layer-shell toast cards, notification history, Do-Not-Disturb, and volume/brightness OSD bars.</li>
+            <li><strong>117 Verified Glyphs:</strong> every TUI/Waybar icon is verified against Debian <code>forky</code>'s installed Nerd Font &amp; Font Awesome faces — zero tofu boxes.</li>
+          </ul>
+        </article>
+
+        <!-- 4. Pure-Rust TUI & CLI Suite -->
+        <article class="feat-group" data-cat="tui">
+          <div class="fg-head"><h3>04 · Pure-Rust <code>hayato</code> TUI Suite (52+ Commands)</h3><span class="fg-tag">hayato-cli · ratatui</span></div>
+          <ul class="fg-list">
+            <li><strong>Launchers &amp; Navigation:</strong> <code>menu</code> (root launcher), <code>menu palette</code> (ranked command palette), <code>menu apps</code> (frecency <code>.desktop</code> launcher), <code>menu window</code> (Sway IPC switcher), <code>menu run</code> (PATH runner).</li>
+            <li><strong>Files &amp; Search:</strong> <code>menu files</code> (live Sixel/<code>bat</code> preview), <code>menu find</code>, <code>menu grep</code> (ripgrep), <code>menu places</code> (disks &amp; bookmarks), <code>menu file-actions</code> (du/compress/extract/convert), plus <code>favnyr</code> GUI file manager &amp; smart <code>hayato open</code>.</li>
+            <li><strong>Capture, Clipboard &amp; Utilities:</strong> <code>menu capture</code> (screenshot, <code>swappy</code> annotate, <code>wf-recorder</code> video, offline OCR, QR scan), <code>menu clip</code> (<code>cliphist</code> text &amp; image history), <code>menu qr</code>, <code>menu emoji</code>, <code>menu calc</code>, <code>menu colour</code>, <code>menu translate</code>, <code>menu remind</code>, <code>menu download</code> (<code>yt-dlp</code>).</li>
+            <li><strong>System &amp; Connectivity Panels:</strong> <code>menu net</code> (Wi-Fi scan, signal gauge, captive portal, QR share), <code>menu bluetooth</code>, <code>menu audio</code>, <code>menu media</code>, <code>menu display</code> (multi-monitor layout/scale), <code>menu layout</code>, <code>menu tz</code>, <code>menu dns</code>, <code>menu ssh</code>, <code>menu vnc</code> (loopback-only over SSH), <code>menu settings</code>, <code>menu pkg</code> (APT), <code>menu clean</code>, <code>menu kill</code>, <code>menu format</code>, <code>menu power</code>, <code>menu about</code>.</li>
+            <li><strong>Self-Documenting UX:</strong> <code>menu keys</code> parses every live keybinding directly from Sway configs; <code>menu learn</code> renders the full 8-chapter Hayato manual inside the terminal.</li>
+          </ul>
+        </article>
+
+        <!-- 5. Games, Media & Notes -->
+        <article class="feat-group" data-cat="games">
+          <div class="fg-head"><h3>05 · Retro &amp; HTML Games, Notes &amp; Media</h3><span class="fg-tag">hayato-games · editxr · xournalpp</span></div>
+          <ul class="fg-list">
+            <li><strong>Unified Games Shelf (<code>menu games</code>):</strong> browse retro ROMs in <code>~/Games</code> and Hayato HTML games side by side, with platform tabs, favourites, recents, options overlay, and in-window manual.</li>
+            <li><strong>Procedural Cartridge Art:</strong> generates crisp pixel-block monograms and themed hero cards straight from each game's title — zero missing cover art, instant theme sync.</li>
+            <li><strong>Slim RetroArch + Cores:</strong> ships lean <code>RetroArch</code> with <code>FBNeo</code> (arcade) and <code>Mupen64Plus-Next</code> (N64) libretro cores pre-configured for ARM64.</li>
+            <li><strong>Sandboxed WebKitGTK HTML Host:</strong> <code>hayato-games</code> runs local HTML/CSS/JS games over a custom sandboxed <code>hayato-game://</code> scheme with gamepad &amp; persistent high-score support (includes playable <strong>Snake</strong>).</li>
+            <li><strong>Full Gamepad Navigation:</strong> <code>hayato gamepad</code> evdev daemon translates DualShock 3/4 and standard controllers into arrows/Enter/Escape across every Hayato menu (<code>menu controller</code> pairing guide).</li>
+            <li><strong>Notes, Ink &amp; Readers:</strong> <code>menu notes</code> for instant markdown notes (<code>editxr</code>), stylus ink notes &amp; PDF signing (<code>xournalpp</code>), plus <code>imv</code>, <code>mpv</code>, <code>papers</code>, and <code>foliate</code>.</li>
+          </ul>
+        </article>
+
+        <!-- 6. AI, MCP & Developer Workflow -->
+        <article class="feat-group" data-cat="ai">
+          <div class="fg-head"><h3>06 · AI Agents, MCP Server &amp; Dev Tooling</h3><span class="fg-tag">hayato-mcp · whisper · apt</span></div>
+          <ul class="fg-list">
+            <li><strong>Capability-Bounded <code>hayato mcp</code>:</strong> 18 stdio MCP tools split across <code>read</code> (status, screenshot, windows, theme, packages, health report, clipboard, tasks), <code>act</code> (open menu/view, set theme, notify), and <code>propose</code> (install, format, swap, power — opens human-confirmed UI only, never executes destructively).</li>
+            <li><strong>AI Agents Hub &amp; Multi-Account Profiles:</strong> <code>menu agents</code> (<code>Alt+Ctrl+Shift+A</code>) installs, launches, and isolates Claude Code, Codex, OpenCode (pre-wired to <code>hayato-mcp</code>), Gemini CLI, and GitHub Copilot.</li>
+            <li><strong>Drop-Down Quake Console &amp; Ask:</strong> <code>hayato quake</code> (<code>Alt+`</code>) toggles a full-width 60% scratchpad agent terminal; <code>hayato ask</code> runs one-shot questions in-window.</li>
+            <li><strong>Offline Voice Dictation (<code>Alt+Ctrl+X</code>):</strong> <code>parecord</code> → pinned <code>whisper-cli</code> → <code>wtype</code> — push-to-talk or hands-free dictation directly into the focused window with zero cloud dependency.</li>
+            <li><strong>Encrypted Developer Profile (<code>menu dev</code>):</strong> <code>hayato-profile</code> exports and restores dotfiles, SSH/agent configs, and state inside GPG AES-256 encrypted archives with tar link/setuid validation.</li>
+            <li><strong>Signed Cloudsmith APT Repository:</strong> <code>hayato-apt enable</code> configures the signed <code>debian/forky</code> repo so <code>apt upgrade</code> keeps <code>hayato</code>, <code>hayato-core</code>, and board packages up to date.</li>
+          </ul>
+        </article>
+
+        <!-- 7. Installer & Security Hardening -->
+        <article class="feat-group" data-cat="security">
+          <div class="fg-head"><h3>07 · Pure-Rust Installer, Backups &amp; Security</h3><span class="fg-tag">installer · audited v0.6.1</span></div>
+          <ul class="fg-list">
+            <li><strong>6-Step Guided Disk Installer:</strong> <code>hayato installer</code> (and headless <code>--clone</code>) verifies SoC, AC power, GPT/vboot tools, and target disk before cloning the live OS to internal eMMC/NVMe/SATA — Cancel-first double confirmation, boot drive locked out.</li>
+            <li><strong>System Backup &amp; Restore:</strong> <code>backup-system.sh</code> and <code>restore-system.sh</code> create and restore full system snapshots.</li>
+            <li><strong>Three-Tier Live Health Witnesses:</strong> <code>check-core.sh</code>, <code>check-device.sh</code>, <code>check-desktop.sh</code>, and <code>check-system.sh</code> verify 535+ runtime invariants across kernel, hardware, fonts, and configs.</li>
+            <li><strong>Security-Hardened Defaults (Audited in v0.6.1):</strong> <code>ssh.service</code> disabled by default, <code>0700</code> home directory permissions, loopback-only VNC, SHA256-pinned third-party binaries, <code>plugdev</code>-gated automount, bounded <code>hayato-notify</code> socket reads, and zero <code>sh -c</code> shell-injection surfaces across the Rust suite.</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ KEYBINDINGS ════════ -->
+  <section class="alt" id="keys" aria-labelledby="keys-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">KEYBOARD FIRST · ZERO MOUSE REQUIRED</span>
+        <h2 id="keys-h">Day-one chords</h2>
+        <p>Window management lives on <kbd>Alt</kbd>, system tools on <kbd>Alt</kbd>+<kbd>Ctrl</kbd>, and <kbd>Search</kbd> stays dedicated to launching. Press <kbd class="hot">Alt</kbd>+<kbd class="hot">Ctrl</kbd>+<kbd class="hot">K</kbd> anytime to search every live binding parsed directly from Sway.</p>
+      </div>
+      <div class="keys-grid">
+        <div class="key-row"><span class="combo"><kbd class="hot">Search</kbd></span><span>App launcher (<code>hayato menu apps</code>)</span></div>
+        <div class="key-row"><span class="combo"><kbd class="hot">Alt</kbd><kbd class="hot">Space</kbd></span><span>Root menu — all 52 commands</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Tab</kbd></span><span>Window switcher (Sway IPC)</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Return</kbd></span><span>Terminal (<code>foot</code>)</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>`</kbd></span><span>Drop-down Quake agent console</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>T</kbd></span><span>16-theme picker &amp; wallpapers</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>F</kbd></span><span>File browser with Sixel preview</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>K</kbd></span><span>Searchable live keybindings</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>A</kbd>/<kbd>B</kbd>/<kbd>W</kbd>/<kbd>P</kbd></span><span>Audio, Bluetooth, Wi-Fi, Power</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>X</kbd></span><span>Offline Whisper dictation</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Ctrl</kbd><kbd>Shift</kbd><kbd>A</kbd></span><span>AI agents &amp; isolated profiles</span></div>
+        <div class="key-row"><span class="combo"><kbd>Alt</kbd><kbd>Escape</kbd></span><span>Lock, sleep, logout, reboot, shutdown</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ════════ INSTALL & APT ════════ -->
+  <section id="install" aria-labelledby="inst-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="kicker">RELEASE v0.6.1 · READY-TO-FLASH IMAGES + APT</span>
+        <h2 id="inst-h">Flash, boot, install to internal storage</h2>
+        <p>Pick the image matching your ARM64 target from <a href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">GitHub Releases v0.6.1</a>, verify against <code>SHA256SUMS</code>, write to USB/microSD, and optionally clone onto internal storage with <code>hayato installer</code>.</p>
+      </div>
+
+      <div class="install-grid">
+        <div class="dl-card">
+          <div class="dl-top"><code>google-asurada.img.xz</code><span class="dl-boot">depthcharge</span></div>
+          <p>Google Hayato / Asurada (MediaTek MT8192) Chromebooks with tuned <code>7.2.7-mt81</code> kernel.</p>
+          <a href="https://github.com/Brunux/Hayato/releases/download/v0.6.1/google-asurada.img.xz">↓ Download image</a>
+        </div>
+        <div class="dl-card">
+          <div class="dl-top"><code>google-kukui.img.xz</code><span class="dl-boot">depthcharge</span></div>
+          <p>Google Kukui / Lenovo IdeaPad Duet (MediaTek MT8183) Chromebooks with <code>7.2.7-mt81</code> kernel.</p>
+          <a href="https://github.com/Brunux/Hayato/releases/download/v0.6.1/google-kukui.img.xz">↓ Download image</a>
+        </div>
+        <div class="dl-card">
+          <div class="dl-top"><code>arm64-uefi.img.xz</code><span class="dl-boot">uefi · systemd-boot</span></div>
+          <p>Generic ARM64 UEFI laptops/servers, QEMU/UTM/Parallels VMs, and Raspberry Pi 4/5 with EDK2 UEFI.</p>
+          <a href="https://github.com/Brunux/Hayato/releases/download/v0.6.1/arm64-uefi.img.xz">↓ Download image</a>
+        </div>
+        <div class="dl-card">
+          <div class="dl-top"><code>arm64-extlinux.img.xz</code><span class="dl-boot">extlinux · U-Boot</span></div>
+          <p>U-Boot ARM64 SBCs (Rockchip, Allwinner, Amlogic, Pi U-Boot) with 1–16&nbsp;MiB reserved SPL gap.</p>
+          <a href="https://github.com/Brunux/Hayato/releases/download/v0.6.1/arm64-extlinux.img.xz">↓ Download image</a>
+        </div>
+      </div>
+
+      <div class="steps">
+        <div class="step-box">
+          <h3><span>01.</span>Verify &amp; flash external media</h3>
+          <p>Download <code>SHA256SUMS</code> alongside your image and write it to microSD or USB (replace <code>&lt;target&gt;</code> and <code>/dev/sdX</code>):</p>
+          <div class="code-blk">
+            <button class="copy-btn" type="button" data-copy="sha256sum -c --ignore-missing SHA256SUMS&#10;xz -dc &lt;target&gt;.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync">copy</button>
 <pre><span class="p">$ </span>sha256sum -c --ignore-missing SHA256SUMS
 <span class="p">$ </span>xz -dc &lt;target&gt;.img.xz | sudo dd of=/dev/sdX bs=4M status=progress conv=fsync</pre>
-            </div>
-            <p>Replace <code>&lt;target&gt;.img.xz</code> and <code>/dev/sdX</code> (or <code>/dev/mmcblk1</code>) with your image and card/USB device. <code>dd</code> overwrites the entire drive. On <code>arm64-extlinux</code> SBCs without SPI/eMMC U-Boot, flash your board's U-Boot SPL into the reserved <code>1–16 MiB</code> pre-partition gap after <code>dd</code>.</p>
           </div>
         </div>
-        <div class="step">
-          <div>
-            <h3>Boot the external drive</h3>
-            <p>On UEFI laptops/VMs (QEMU/UTM/Parallels) or SBCs with U-Boot in SPI/eMMC, choose the flashed drive in your firmware boot menu (for Raspberry Pi 4/5 on <code>arm64-uefi</code>, use RPi4/RPi5 EDK2 UEFI firmware on SPI/SD ESP; on <code>arm64-extlinux</code> boards without SPI U-Boot, write your board's U-Boot SPL into the <code>1–16 MiB</code> gap). On Chromebooks (<code>google-asurada</code> or <code>google-kukui</code>), enter developer mode and allow external boot:</p>
-            <div class="code">
-              <button class="copy" type="button" data-copy="crossystem dev_boot_usb=1 dev_boot_signed_only=0">Copy</button>
+
+        <div class="step-box">
+          <h3><span>02.</span>Boot &amp; log in</h3>
+          <p>On UEFI/VMs/U-Boot boards, pick the flashed drive in your boot menu. On Chromebooks (<code>google-asurada</code> / <code>google-kukui</code>), enable external boot in Developer Mode and press <kbd>Ctrl</kbd>+<kbd>U</kbd>:</p>
+          <div class="code-blk">
+            <button class="copy-btn" type="button" data-copy="crossystem dev_boot_usb=1 dev_boot_signed_only=0">copy</button>
 <pre><span class="p">$ </span>crossystem dev_boot_usb=1 dev_boot_signed_only=0</pre>
-            </div>
-            <p>Insert the card and press <kbd>Ctrl</kbd>+<kbd>U</kbd> / pick <strong>external disk</strong> in the firmware menu.</p>
           </div>
+          <p style="margin-top:10px"><code>hayato-greeter</code> starts automatically. Live user: <code>brunux</code> · password: <code>debian</code>. Run <code>passwd</code> before daily use.</p>
         </div>
-        <div class="step">
-          <div>
-            <h3>Log in, then change the password</h3>
-            <p><code>hayato-greeter</code> starts automatically: live user <code>brunux</code>, password <code>debian</code>, passwordless sudo. Run <code>passwd</code> before using it daily.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div>
-            <h3>Install to the internal disk</h3>
-            <p><kbd>Alt</kbd> <kbd>Space</kbd> opens the root menu: pick <strong>Install Hayato</strong> (or run <code>hayato installer</code> in a terminal; headless: <code>sudo hayato installer apply --clone --confirm</code>). It checks power and free disks, writes the target's boot layout (<code>depthcharge</code>, <code>uefi</code>, or <code>extlinux</code>), and defaults safely to Cancel until confirmed.</p>
-            <p>On Depthcharge Chromebooks (<code>google-asurada</code> &amp; <code>google-kukui</code>), <code>CONFIRM=yes sudo /usr/libexec/hayato/install-emmc.sh</code> remains available as a manual/debug fallback.</p>
-          </div>
-        </div>
-        <div class="step">
-          <div>
-            <h3>Let it finish, then reboot</h3>
-            <p>The live clone copies the running system, updates boot metadata, and writes <code>/etc/hayato/installation</code> last. Remove the external drive and reboot to the internal disk.</p>
+
+        <div class="step-box">
+          <h3><span>03.</span>Install to internal disk &amp; enable APT upgrades</h3>
+          <p>Press <kbd>Alt</kbd>+<kbd>Space</kbd> → <strong>Install Hayato</strong> (or run <code>hayato installer</code>) to clone onto internal storage, and enable the signed Cloudsmith APT repo for rolling <code>hayato</code> updates:</p>
+          <div class="code-blk">
+            <button class="copy-btn" type="button" data-copy="hayato installer&#10;sudo hayato-apt enable &amp;&amp; sudo apt update &amp;&amp; sudo apt upgrade">copy</button>
+<pre><span class="p">$ </span>hayato installer          <span class="c"># 6-step guided TUI (or: sudo hayato installer apply --clone --confirm)</span>
+<span class="p">$ </span>sudo hayato-apt enable &amp;&amp; sudo apt update &amp;&amp; sudo apt upgrade</pre>
           </div>
         </div>
       </div>
-      <p class="note"><strong>Read before you flash.</strong> Stock system firmware is never overwritten. Developer mode wipes ChromeOS on Chromebooks, and the installer erases the selected internal disk. Keep a second computer and recovery media at hand; the running boot drive cannot be picked as the target.</p>
+
+      <div class="warn-box">
+        <strong>Read before flashing:</strong> Stock firmware is never touched. Enabling ChromeOS Developer Mode wipes ChromeOS, and <code>hayato installer</code> erases the chosen internal disk (the running boot media is locked out). Keep recovery media handy.
+      </div>
     </div>
   </section>
 
-  <section id="hood" aria-labelledby="hood-h">
-    <div class="wrap split">
+  <!-- ════════ UNDER THE HOOD ════════ -->
+  <section class="alt" id="hood" aria-labelledby="hood-h">
+    <div class="wrap hood-grid">
       <div class="prose">
-        <span class="kicker">UNDER THE HOOD</span>
-        <h2 id="hood-h" style="margin: 14px 0 22px">Modular by design.</h2>
-        <p>Hayato pairs Debian <code>forky</code> userland with a clean three-submodule architecture: <a href="https://github.com/Brunux/hayato-core"><code>hayato-core</code></a> handles Debian assembly and pluggable boot backends, <a href="https://github.com/Brunux/hayato-desktop"><code>hayato-desktop</code></a> owns the <code>swayfx</code> session and Rust <code>hayato</code> workspace, and <a href="https://github.com/Brunux/hayato-devices"><code>hayato-devices</code></a> isolates kernel recipes and board quirks.</p>
-        <p><code>google-asurada</code> and <code>google-kukui</code> share our tuned <code>7.2.7-mt81</code> kernel (started from postmarketOS/Nura), while <code>arm64-uefi</code> and <code>arm64-extlinux</code> pair Debian's mainline <code>linux-image-arm64</code> and Devicetree bundle with broad multi-vendor firmware (<code>brcm80211</code>, <code>qcom-soc</code>, <code>atheros</code>, <code>iwlwifi</code>, <code>realtek</code>, <code>mediatek</code>) to give Raspberry Pi 4/5 (via EDK2 UEFI or U-Boot), Rockchip/SBCs, ARM64 UEFI laptops, and QEMU/UTM VMs a ready-to-boot Debian arm64 image with automatic <code>apt upgrade</code> kernel sync.</p>
-        <p><a href="https://github.com/Brunux/Hayato#clone--build">Read the architecture</a></p>
+        <span class="kicker">MODULAR ARCHITECTURE</span>
+        <h2 id="hood-h" style="margin-bottom: 16px">Three focused submodules. One umbrella.</h2>
+        <p>Hayato splits cleanly into three Git submodules so hardware quirks never leak into the desktop and bootloaders never couple to the UI:</p>
+        <p><a href="https://github.com/Brunux/hayato-core"><code>core/</code></a> owns Debian <code>forky</code> rootfs assembly, pluggable <code>boot_*</code> backends (<code>depthcharge</code>, <code>uefi</code>, <code>extlinux</code>), backup/restore, and release sanitization.</p>
+        <p><a href="https://github.com/Brunux/hayato-desktop"><code>desktop/</code></a> owns the <code>swayfx</code> session, 16-theme compiler, Plymouth splash, Golden Eagle screensavers, 8-chapter manual, and the pure-Rust <code>hayato</code> workspace.</p>
+        <p><a href="https://github.com/Brunux/hayato-devices"><code>devices/</code></a> isolates kernel recipes (<code>7.2.7-mt81</code> &amp; mainline fragments), udev/keyd/IRQ rules, and per-board overlays.</p>
       </div>
       <dl class="facts">
-        <div><dt>Base</dt><dd style="margin:0">Debian <code>forky</code>, <code>arm64</code></dd></div>
-        <div><dt>Targets</dt><dd style="margin:0"><code>google-asurada</code> · <code>google-kukui</code> · <code>arm64-uefi</code> · <code>arm64-extlinux</code></dd></div>
-        <div><dt>Kernels</dt><dd style="margin:0"><code>7.2.7-mt81</code> (Hayato / Kukui) · Debian <code>linux-image-arm64</code> (UEFI / SBC)</dd></div>
-        <div><dt>Session</dt><dd style="margin:0"><code>swayfx</code> · <code>waybar</code> · <code>hayato</code> TUI/greeter/notify · <code>foot</code></dd></div>
-        <div><dt>Repos</dt><dd style="margin:0"><code>Hayato</code> umbrella · <code>core/</code> · <code>desktop/</code> · <code>devices/</code></dd></div>
-        <div><dt>Firmware</dt><dd style="margin:0">never flashed</dd></div>
+        <div><dt>Version</dt><dd><code>v0.6.1</code> · Debian <code>forky</code> (<code>arm64</code>)</dd></div>
+        <div><dt>Targets</dt><dd><code>google-asurada</code> · <code>google-kukui</code> · <code>arm64-uefi</code> · <code>arm64-extlinux</code></dd></div>
+        <div><dt>Kernels</dt><dd><code>7.2.7-mt81</code> (Chromebooks) · Debian <code>linux-image-arm64</code> (UEFI/SBC)</dd></div>
+        <div><dt>Desktop</dt><dd><code>swayfx</code> · <code>waybar</code> · <code>foot</code> · <code>hayato</code> (Rust/Ratatui)</dd></div>
+        <div><dt>APT Repo</dt><dd>Signed Cloudsmith <code>debian/forky</code> + GitHub Releases</dd></div>
+        <div><dt>Witnesses</dt><dd>535+ live system health checks (<code>check-system.sh</code>)</dd></div>
+        <div><dt>Firmware</dt><dd>Stock firmware never flashed</dd></div>
       </dl>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="wrap">
+  <div class="wrap foot-grid">
     <div>
-      <div class="big">Hayato<span class="cur">_</span></div>
-      <p>light. fast. fun.</p>
-      <p class="arcade">» press any key to <span class="play">play</span> «</p>
-      <p class="name">Hayato is an old word for a falconer - the person whose bird comes back to the
-      hand. The eagle is the mascot; the name is the idea: light, fast, fun.</p>
+      <div class="foot-brand">Hayato<span class="cur">_</span></div>
+      <p class="arcade">» press any key to <span class="play">PLAY</span> «</p>
+      <p class="etym"><em>Hayato</em> is an old word for a falconer — the person whose bird comes back to the hand. The Golden Eagle is the mascot; the name is the idea: light, fast, fun.</p>
     </div>
-    <ul>
-      <li><a href="https://github.com/Brunux/Hayato">Source on GitHub</a></li>
-      <li><a href="https://github.com/Brunux/Hayato/releases">Releases</a></li>
-      <li><a href="https://github.com/Brunux/hayato-desktop/tree/main/uis/sway/files/usr/share/doc/hayato">The manual</a></li>
-      <li><a href="https://github.com/Brunux/hayato-desktop/tree/main/brand">Brand</a></li>
+    <ul class="foot-links">
+      <li><a href="https://github.com/Brunux/Hayato">GitHub Umbrella Repo</a></li>
+      <li><a href="https://github.com/Brunux/Hayato/releases/tag/v0.6.1">Release v0.6.1 Images &amp; DEBs</a></li>
+      <li><a href="https://github.com/Brunux/hayato-desktop/tree/main/uis/sway/files/usr/share/doc/hayato">User Manual (Chapters 01–08)</a></li>
+      <li><a href="https://github.com/Brunux/hayato-core">hayato-core</a> · <a href="https://github.com/Brunux/hayato-desktop">hayato-desktop</a> · <a href="https://github.com/Brunux/hayato-devices">hayato-devices</a></li>
     </ul>
-    <p style="flex-basis: 100%; font-size: 13px">Developed by its maintainer together with an AI agent running on <a href="https://opencode.ai">OpenCode</a>. Set in <a href="fonts/OFL-JetBrainsMono.txt">JetBrains Mono</a> and <a href="fonts/OFL-Silkscreen.txt">Silkscreen</a>.</p>
   </div>
 </footer>
 
 <script>
-document.querySelectorAll('.copy').forEach(function (b) {
-  b.addEventListener('click', function () {
-    var t = b.getAttribute('data-copy');
-    var done = function () { b.textContent = 'Copied'; setTimeout(function () { b.textContent = 'Copy'; }, 1500); };
-    if (navigator.clipboard) { navigator.clipboard.writeText(t).then(done, function () {}); }
-  });
-});
+(() => {
+  const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-(function () {
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.tab[role="tab"]'));
-  var img = document.getElementById('spot-img');
-  var cap = document.getElementById('spot-cap');
-  var cmd = document.getElementById('spot-cmd');
-  if (!tabs.length || !img || !cap || !cmd) return;
+  /* ── 1. Live Theme Switcher (^T or press 't') ── */
+  const themes = ["tokyo-night", "hackerman", "solarized", "gruvbox", "nord", "catppuccin-latte"];
+  const themeBtn = document.getElementById("theme-cycle");
+  const themeName = document.getElementById("theme-name");
+  let themeIdx = 0;
 
-  function activate(tab) {
-    tabs.forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
-    img.src = tab.getAttribute('data-src');
-    img.alt = tab.getAttribute('data-alt');
-    cap.textContent = tab.getAttribute('data-cap');
-    cmd.textContent = tab.getAttribute('data-cmd');
+  function applyTheme(slug) {
+    const idx = themes.indexOf(slug);
+    themeIdx = idx >= 0 ? idx : 0;
+    const active = themes[themeIdx];
+    document.documentElement.setAttribute("data-theme", active);
+    themeName.textContent = active;
+    try { localStorage.setItem("hayato-site-theme", active); } catch (_) {}
   }
 
-  tabs.forEach(function (tab, i) {
-    tab.addEventListener('click', function () { activate(tab); });
-    tab.addEventListener('keydown', function (ev) {
-      if (ev.key === 'ArrowRight' || ev.key === 'ArrowLeft') {
-        ev.preventDefault();
-        var next = tabs[(i + (ev.key === 'ArrowRight' ? 1 : tabs.length - 1)) % tabs.length];
-        next.focus();
-        activate(next);
+  try {
+    const saved = localStorage.getItem("hayato-site-theme");
+    if (saved && themes.includes(saved)) applyTheme(saved);
+  } catch (_) {}
+
+  themeBtn.addEventListener("click", () => applyTheme(themes[(themeIdx + 1) % themes.length]));
+
+  /* ── 2. Interactive Golden Eagle 2x2 Quadrant-Block Art ── */
+  const eagles = {
+    crest: `▐▙▄                                            ▄▟▌
+▝███▄▖                                      ▗▄███▘
+▄ ▀████▄                                  ▄████▀ ▄
+▜█▙▄▛▜██▝█▄▖          ▐██▛▛▀█▗▄▖      ▗▄█▘██▛▜▄▟█▛
+ ▀████▄▛▐▙▛▜█▄▖      ▗█████▀▟█▛▜▌  ▗▄█▛▜▟▌▜▄████▀ 
+▗▄▄▞▀▜██▚▄█▛▜███     ██████▛      ███▛▜█▄▞██▛▀▚▄▄▖
+ ▀████▙▄▖▄▟████▌    ▗██████▙      ▐████▙▄▗▄▟████▀ 
+   ▀▀▀▀▀▀▝██▄███▙▖  ▟███████▙▄  ▗▟███▄██▘▀▀▀▀▀▀   
+  ▜██████▙▝▄█▛▜████████████████████▛▜█▄▘▟██████▛  
+     ▗▄▄▄▄▄  ▟▛▗▛▜██████████████▛▜▖▜▙  ▄▄▄▄▄▖     
+    ▝▀▀▀▀▀▙▄█▖▝▛▚█▚▌██████████▐▞█▞▜▘▗█▄▟▀▀▀▀▀▘    
+       ▄█████▟▛▚█▘▟▌██████████▐▙▝█▞▜▙█████▄       
+        ▝▀▚▟██▚█▛▄█▌▐████████▌▐█▄▜█▞██▙▞▀▘        
+          ▀▀▀ █▛▘▀▀ ▄▜██████▛▄ ▀▀▝▜█ ▀▀▀          
+                  ▗████████████▖                  
+                  ▜█▀ ▗▀██▀▖ ▀█▛                  
+                ▗▄▄█▘▄▀▟▗▖▙▀▄▝█▄▄▖                
+              ▄██▛▀▄█▚█▛▟▙▜█▞█▄▀▜██▄              
+            ▗██▛▘▄█▛▚██▚██▞██▞▜█▄▝▜██▖            
+               ▄███▗██▛▟██▙▜██▖███▄               
+              ▝▀▀ ▗██▀ ████ ▀██▖ ▀▀▘              
+                       ▀▜▛▀                       `,
+    dive: `   ▗▖    ▐▙▖                                    
+    ▜██▄▖ ▝▜█▄                                  
+▀▙▄▖  ▝▀██▙▄▞▜█▙▖                               
+  ▀▀▜██▄▄▟█████████▄▖▐▄▖                        
+ ▗▄▄▄▄█▀▜████████████▙██▄                       
+   ▀▀▀▜███████████████████▄                     
+    ▜██████████████████████▙                    
+       ▝▜███████████████████▙ ▄▖                
+           ▀██████████████████▟▜███▄            
+             ▀███████████████████▛▀▀▘           
+              ▝▜███████████████████████████▄▖   
+                ▝▜█████████████████████████▖▀█▖ 
+                  ▝▀▀▀▀▜███████████████████████▙
+                   ▗▄▄███████████████▛▀▀▘     ▀▛
+           ▗▄▄▄▄▄▟█████████████████▛▘           
+        ▝▀▀█████████████████████▛▚▄             
+                      ▀▀▝█████▙▐███▙▖           
+                         ▝▜████▖▀▀███▙▄   ▄▖    
+                          ▝▀███▙   ▝▘ ▜█▛█▖▜▖   
+                            ▘▝▀▀█▄    █▘        
+                               ▗▟▛▜▛▀▄          
+                               ▚   ▝▌           `,
+    head: `                  ▄▄▟██████████▙▄▄▖               
+               ▗▄▟█████████████████▄▄▖            
+            ▄▟██████████████████████████▌         
+        ▗▄██████████████▀▀▘  ▝▀▀████████▛         
+        ▀▜█████████████▄▄▄▄  █▌   ▀▀▀▀▐█▘▄▄▄▖     
+        ▟██████████████████▙▖ ▀ ▝ ▗▄▄▄█▘▟█▛▜█▙▄▖  
+      ▗███████████████████████████████▌▗█▙▄█████▙ 
+     ▗████████████████████████▀▀▀▀▘▄▄▄▄▟█████████▄
+    ▗███████████████████████▌  ████▛▀▀▀▀▀▜████████
+   ▗▛▀▜██████████████████████▄▄ ▝▀▀▀▀▜█▄▄▄ ▝▀▜████
+     ▗██████████████████████████▀▀▘    ▀▀▀▀▀▘ ▐██▀
+     ▟█████████████████████▛▚▄▄▟███▘          ▐█▀ 
+    ▟████████████████████████████▛            ▝▘  
+   ▟████████████████████████████▀                 
+  ▗█████████████████████████████▖                 
+ ▗████▀  ███████▛▀███████▀███████▌                
+▀▀▀▘    ▐█████▛▘  ██████▘ ▐███▀███▌               
+       ▗████▛▘  ▗█████▛    ▐█▛ ▝▜██▙              
+       ██▀▀▘    ▐███▛▘     ▝▘    ▝▜█▄             
+                ▐█▀                ▝▀▘            `
+  };
+
+  const eagleEl = document.getElementById("eagle-art");
+  const eagleBtns = Array.from(document.querySelectorAll(".eagle-btn"));
+  const cipher = "01#/=+▒▓░";
+  let decodeTimer = null;
+
+  function renderEagle(key, animate) {
+    const target = eagles[key] || eagles.crest;
+    eagleBtns.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.eagle === key)));
+    if (decodeTimer) clearInterval(decodeTimer);
+    if (!animate || reducedMotion) {
+      eagleEl.textContent = target;
+      return;
+    }
+    let step = 0;
+    const total = 8;
+    decodeTimer = setInterval(() => {
+      step++;
+      if (step >= total) {
+        clearInterval(decodeTimer);
+        eagleEl.textContent = target;
+        return;
       }
+      const p = step / total;
+      let out = "";
+      for (let i = 0; i < target.length; i++) {
+        const ch = target[i];
+        if (ch === "\n" || ch === " " || Math.random() < p) {
+          out += ch;
+        } else {
+          out += cipher[(i + step * 7) % cipher.length];
+        }
+      }
+      eagleEl.textContent = out;
+    }, 38);
+  }
+
+  renderEagle("crest", false);
+  eagleBtns.forEach((b) => b.addEventListener("click", () => renderEagle(b.dataset.eagle, true)));
+
+  /* ── 3. Subtle Randomized Pixel-Wordmark Glitch Pulse (matches hayato-greeter) ── */
+  const logoEl = document.getElementById("pixel-logo");
+  const baseLogoHTML = logoEl.innerHTML;
+  const baseLines = [
+    "█   █                     ▄          ",
+    "█▄▄▄█  ▀▀▀▄ █   █  ▀▀▀▄ ▀▀█▀▀ ▄▀▀▀▄  ",
+    "█   █ ▄▀▀▀█ ▀▄▄▄█ ▄▀▀▀█   █   █   █  ",
+    "▀   ▀  ▀▀▀▀  ▄▄▄▀  ▀▀▀▀    ▀▀  ▀▀▀  "
+  ];
+  const glitchChars = ["0", "1", "#", "/", "=", "+"];
+  if (!reducedMotion) {
+    setInterval(() => {
+      if (Math.random() > 0.35) return;
+      const r = Math.floor(Math.random() * baseLines.length);
+      const line = baseLines[r];
+      const inkCols = [];
+      for (let c = 0; c < line.length; c++) if (line[c] !== " ") inkCols.push(c);
+      if (!inkCols.length) return;
+      const pick = inkCols[Math.floor(Math.random() * inkCols.length)];
+      const glyph = glitchChars[Math.floor(Math.random() * glitchChars.length)];
+      const mutated = baseLines.map((ln, idx) => {
+        if (idx !== r) return idx === 3 ? ln + '<span class="u blink">▀▀▀▀</span>' : ln;
+        const body = ln.slice(0, pick) + '<span class="g">' + glyph + "</span>" + ln.slice(pick + 1);
+        return idx === 3 ? body + '<span class="u blink">▀▀▀▀</span>' : body;
+      }).join("\n");
+      logoEl.innerHTML = mutated;
+      setTimeout(() => { logoEl.innerHTML = baseLogoHTML; }, 140);
+    }, 2400);
+  }
+
+  /* ── 4. Live Showcase GIF Tabs + Thumbnails ── */
+  const demoTabs = Array.from(document.querySelectorAll(".demo-tab"));
+  const thumbCards = Array.from(document.querySelectorAll(".thumb-card"));
+  const demoImg = document.getElementById("demo-img");
+  const demoTitle = document.getElementById("demo-title");
+  const demoCmd = document.getElementById("demo-cmd");
+  const demoCap = document.getElementById("demo-cap");
+
+  function selectDemo(idx) {
+    const tab = demoTabs[idx];
+    if (!tab) return;
+    demoTabs.forEach((t, i) => t.setAttribute("aria-selected", String(i === idx)));
+    thumbCards.forEach((c, i) => c.classList.toggle("active", i === idx));
+    demoImg.src = tab.dataset.src;
+    demoTitle.textContent = tab.dataset.title;
+    demoCmd.textContent = tab.dataset.cmd;
+    demoCap.innerHTML = tab.dataset.cap;
+  }
+
+  demoTabs.forEach((t, i) => t.addEventListener("click", () => selectDemo(i)));
+  thumbCards.forEach((c, i) => c.addEventListener("click", () => selectDemo(i)));
+
+  /* ── 5. Comprehensive Feature Filter + Live Search ── */
+  const fPills = Array.from(document.querySelectorAll(".f-pill"));
+  const fGroups = Array.from(document.querySelectorAll(".feat-group"));
+  const featInput = document.getElementById("feat-q");
+  let activeCat = "all";
+
+  function filterFeatures() {
+    const q = featInput.value.trim().toLowerCase();
+    fGroups.forEach((g) => {
+      const catOk = activeCat === "all" || g.dataset.cat === activeCat;
+      const items = Array.from(g.querySelectorAll("li"));
+      let visibleItems = 0;
+      items.forEach((li) => {
+        const hit = !q || li.textContent.toLowerCase().includes(q);
+        li.classList.toggle("hidden", !hit);
+        if (hit) visibleItems++;
+      });
+      g.classList.toggle("hidden", !(catOk && visibleItems > 0));
     });
+  }
+
+  fPills.forEach((p) => {
+    p.addEventListener("click", () => {
+      activeCat = p.dataset.cat;
+      fPills.forEach((b) => b.setAttribute("aria-pressed", String(b === p)));
+      filterFeatures();
+    });
+  });
+  featInput.addEventListener("input", filterFeatures);
+
+  /* ── 6. Copy Buttons ── */
+  document.querySelectorAll(".copy-btn").forEach((btn) => {
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        const orig = btn.textContent;
+        btn.textContent = "copied!";
+        setTimeout(() => { btn.textContent = orig; }, 1400);
+      } catch (_) {}
+    });
+  });
+
+  /* ── 7. Fun Keyboard Shortcuts (t = theme, 1/2/3 = eagle, / = search features) ── */
+  document.addEventListener("keydown", (e) => {
+    if (e.target && (e.target.tagName === "INPUT" || e.target.tagName === "TEXTAREA")) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === "t" || e.key === "T") {
+      applyTheme(themes[(themeIdx + 1) % themes.length]);
+    } else if (e.key === "1") {
+      renderEagle("crest", true);
+    } else if (e.key === "2") {
+      renderEagle("dive", true);
+    } else if (e.key === "3") {
+      renderEagle("head", true);
+    } else if (e.key === "/") {
+      e.preventDefault();
+      featInput.focus();
+      featInput.scrollIntoView({ behavior: reducedMotion ? "auto" : "smooth", block: "center" });
+    }
   });
 })();
 </script>

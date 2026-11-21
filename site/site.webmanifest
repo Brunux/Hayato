@@ -4,8 +4,8 @@
   "description": "Debian arm64 for ARM Chromebooks and Mainline ARM64. Keyboard first. Light. Fast. Fun.",
   "start_url": "./",
   "display": "browser",
-  "background_color": "#002b36",
-  "theme_color": "#002b36",
+  "background_color": "#1a1b26",
+  "theme_color": "#1a1b26",
   "icons": [
     { "src": "brand/hayato.svg", "type": "image/svg+xml", "sizes": "any" },
     { "src": "apple-touch-icon.png", "type": "image/png", "sizes": "180x180" }
