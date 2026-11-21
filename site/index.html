@@ -714,6 +714,7 @@ section { padding: 72px 0; }
   flex-direction: column;
 }
 .feat-group.hidden { display: none; }
+.feat-group.span-all { grid-column: 1 / -1; }
 .fg-head {
   display: flex;
   align-items: center;
@@ -729,24 +730,38 @@ section { padding: 72px 0; }
   list-style: none;
   margin: 0;
   padding: 12px 16px 14px;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 10px;
 }
 .fg-list li {
-  display: grid;
-  grid-template-columns: 14px minmax(0, 1fr);
-  gap: 8px;
+  position: relative;
+  padding-left: 16px;
   font-size: 13.5px;
   color: var(--body);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 .fg-list li.hidden { display: none; }
 .fg-list li::before {
   content: "›";
+  position: absolute;
+  left: 0;
+  top: 0;
   color: var(--cursor);
   font-weight: 800;
 }
 .fg-list strong { color: var(--text); }
+.feat-empty {
+  display: none;
+  padding: 24px;
+  text-align: center;
+  background: var(--surface);
+  border: 1px dashed var(--border);
+  border-radius: 7px;
+  color: var(--muted);
+  font-size: 13.5px;
+}
+.feat-empty.show { display: block; }
 
 /* ── Keybindings ── */
 .keys-grid {
@@ -1185,7 +1200,7 @@ footer {
         </article>
 
         <!-- 7. Installer & Security Hardening -->
-        <article class="feat-group" data-cat="security">
+        <article class="feat-group span-all" data-cat="security">
           <div class="fg-head"><h3>07 · Disk Installer, Backups &amp; Security</h3><span class="fg-tag">installer · audited v0.6.1</span></div>
           <ul class="fg-list">
             <li><strong>6-step Rust disk installer:</strong> <code>hayato installer</code> (or headless <code>--clone</code>) checks your hardware, power, and disks before cloning the live OS onto internal storage — defaults to Cancel, double-confirms, and blocks you from wiping the drive you booted from.</li>
@@ -1195,6 +1210,7 @@ footer {
           </ul>
         </article>
       </div>
+      <div class="feat-empty" id="feat-empty">No features matched that search — try clearing the filter.</div>
     </div>
   </section>
 
@@ -1524,8 +1540,11 @@ footer {
   const featInput = document.getElementById("feat-q");
   let activeCat = "all";
 
+  const featEmpty = document.getElementById("feat-empty");
+
   function filterFeatures() {
     const q = featInput.value.trim().toLowerCase();
+    const visibleGroups = [];
     fGroups.forEach((g) => {
       const catOk = activeCat === "all" || g.dataset.cat === activeCat;
       const items = Array.from(g.querySelectorAll("li"));
@@ -1535,9 +1554,17 @@ footer {
         li.classList.toggle("hidden", !hit);
         if (hit) visibleItems++;
       });
-      g.classList.toggle("hidden", !(catOk && visibleItems > 0));
+      const show = catOk && visibleItems > 0;
+      g.classList.toggle("hidden", !show);
+      g.classList.remove("span-all");
+      if (show) visibleGroups.push(g);
     });
+    if (visibleGroups.length % 2 === 1) {
+      visibleGroups[visibleGroups.length - 1].classList.add("span-all");
+    }
+    featEmpty.classList.toggle("show", visibleGroups.length === 0);
   }
+  filterFeatures();
 
   fPills.forEach((p) => {
     p.addEventListener("click", () => {
