@@ -54,8 +54,19 @@ case "$cmd" in
 		exec "$HAYATO_CORE_DIR/scripts/install-desktop.sh"
 		;;
 	debs)
+		outdir="${1:-}"
 		"$HAYATO_DESKTOP_DIR/scripts/build-hayato.sh"
-		exec "$HAYATO_CORE_DIR/scripts/build-core-deb.sh" "$@"
+		"$HAYATO_CORE_DIR/scripts/build-core-deb.sh" ${outdir:+"$outdir"}
+		for dev_dir in "$HAYATO_DEVICES_DIR"/devices/*; do
+			[ -d "$dev_dir" ] || continue
+			dev="$(basename "$dev_dir")"
+			[ "$dev" = "_template" ] && continue
+			DEVICE="$dev" "$HAYATO_DEVICES_DIR/scripts/build-device-deb.sh" ${outdir:+"$outdir"}
+		done
+		if [ -n "$outdir" ]; then
+			. "$HAYATO_CORE_DIR/scripts/lib.sh"
+			cp -f "$HAYATO_STAGE"/hayato_*.deb "$outdir/" 2>/dev/null || true
+		fi
 		;;
 	image)
 		exec "$HAYATO_CORE_DIR/scripts/make-image.sh" "$@"
