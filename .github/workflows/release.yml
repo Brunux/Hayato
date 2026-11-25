@@ -305,7 +305,8 @@ jobs:
             for pdeb in prev-release/*.deb; do
               [ -f "$pdeb" ] || continue
               base="$(basename "$pdeb")"
-              [ -f "release-files/$base" ] || cp -a "$pdeb" "release-files/$base"
+              pkg_prefix="${base%%_*}_"
+              compgen -G "release-files/${pkg_prefix}*.deb" >/dev/null || cp -a "$pdeb" "release-files/$base"
             done
           fi
           chmod +x ./core/scripts/hayato-apt.sh
