@@ -123,7 +123,7 @@ failure.
 
 | Step | Expected |
 |---|---|
-| look at the bar | the pills are the workspace number plus the glyph of what is open there - **1: >_** for a terminal, **2: 🌐** for Firefox - and a workspace with nothing in it is its bare number |
+| look at the bar | the pills are the workspace number plus the glyph of what is open there - **1: >_** for a terminal, **2: 🌐** for Chromium - and a workspace with nothing in it is its bare number |
 | open a second terminal in the same workspace | the pill keeps **one** terminal glyph (`deduplicate_icons`): one glyph per kind of window, not per window |
 | open an app with no line in `~/.config/workstyle/config.toml` (`libreoffice --writer`) | a plain window outline (U+F2D0) in the pill, and **no** workstyle line in `journalctl -b` - an unmapped window is a debug message (see `tools/workstyle/patches/`) |
 | `swaymsg -t get_workspaces \| jq -r '.[] \| "\(.num) \(.name)"'` | the name carries the glyphs and `num` stays the number: anything scripted reads `num`, not `name` |
@@ -224,9 +224,9 @@ one a person notices on the battery.
 | `pgrep -af swayidle` during all of it | one process, with the 150/300/360 timeouts and both wake lines |
 | `pgrep -x swaylock` at five minutes | one process: with `swayidle -w` the rest of the chain only runs if the 150 s command returned |
 | play a video in mpv, fullscreen or in a window | no idle screen, no lock, no panel off **while the window is visible** (the mpv rule is `visible`, not `fullscreen`, so a paused film also holds it); close the player and the timers start over |
-| fullscreen a YouTube page in Firefox for six minutes | the same: the screen stays awake (the `fullscreen` scope is deliberate - the browser merely open does not inhibit) |
+| fullscreen a YouTube page in Chromium for six minutes | the same: the screen stays awake (the `fullscreen` scope is deliberate - the browser merely open does not inhibit) |
 | open a PDF in `papers` and go fullscreen | the same |
-| leave a page playing in a Firefox **background** tab | it does **not** inhibit: the screen sleeps. That is deliberate |
+| leave a page playing in a Chromium **background** tab | it does **not** inhibit: the screen sleeps. That is deliberate |
 | click the **coffee cup** on the bar | it takes the accent colour of the current workspace and the tooltip says the screen is kept awake; wait past six minutes - no idle screen, no lock, no panel off |
 | click it again | it turns dim; the timers run again from the next idle period |
 | `systemctl suspend`, then wake | the panel is on at the lock: `after-resume` turned it on (a suspend is not an idle timeout) |
@@ -252,7 +252,7 @@ What a failure means:
   `after-resume` one for a suspend) is missing; the first is inside the swayidle
   chain and the second is the logind hook. Both are checked.
 * **a fullscreen video locks anyway**: the application has no Wayland app id
-  (Firefox under Xwayland, `MOZ_ENABLE_WAYLAND=0`), or
+  (Chromium under Xwayland, `--ozone-platform=x11`), or
   `/etc/sway/config.d/32-idle-inhibit.conf` is missing; `check-system.sh` FAILs
   on the rules. The coffee cup is the manual override for anything else.
 * **the coffee cup does nothing**: `idle_inhibitor` is not in waybar's
@@ -421,11 +421,11 @@ with an explicit `--prefix ~/.local`, so npm never needs root and never touches
 | reopen the same directory | instant: the thumbnails come from `~/.cache/thumbnails/normal/` and are not decoded again |
 | Enter on an image | **imv** in its own window (zoom, pan, rotate; the arrow keys walk the folder). The first picture of a session also raises a notification naming those keys (`hayato-image-hint`), and only the first. A foot window drawing sixels means imv could not get an EGL context, which is the fallback |
 | Enter on an SVG | **imv** as well, not `bat`: an SVG is a text file, but the image family is decided before the text test |
-| Enter on a **video** (`.mp4`, `.mkv`) | **mpv** in its own window with sound; `q` closes it. Firefox means mpv is missing |
-| Enter on a PDF, a DjVu or a comic | **papers**, with search, zoom and print. Firefox means papers is missing |
-| Enter on an EPUB | Firefox: `papers` reads no EPUB |
-| Enter on an HTML file | `bat` (it is text), not Firefox |
-| Enter on a `.deb` | Firefox, as a download prompt: the browser is what a package is for here |
+| Enter on a **video** (`.mp4`, `.mkv`) | **mpv** in its own window with sound; `q` closes it. Chromium means mpv is missing |
+| Enter on a PDF, a DjVu or a comic | **papers**, with search, zoom and print. Chromium means papers is missing |
+| Enter on an EPUB | Chromium: `papers` reads no EPUB |
+| Enter on an HTML file | `bat` (it is text), not Chromium |
+| Enter on a `.deb` | Chromium, as a download prompt: the browser is what a package is for here |
 | Enter on a text file | `bat` in the popup window (`BAT_THEME=ansi`, Tokyo Night) |
 | open a deep path (`~/Dev/Hayato/uis/sway/files/home/.config/bin`) | the window is drawn wide enough that the **end** of the name is readable: rofi cannot scroll a row sideways, so `lib-rofi.sh`'s `ui_width` sizes the list instead of letting rofi cut it with `…` |
 | spam `Alt+Ctrl+F` on a directory of large photos | the application keeps responding while the rows fill in (four decoders at a time) |
@@ -543,7 +543,7 @@ stays in `~/.local/state/hayato/install-<timestamp>.log`.
 | Step | Expected |
 |---|---|
 | press **Search** (nothing else) | the applications menu, the same one as `Alt+D`: one row per `.desktop` entry, narrowed as you type |
-| type `fire` and press Enter | `firefox-esr` starts |
+| type `chrom` and press Enter | `chromium` starts |
 | hold **Search**, tap a top-row key | an F-key reaches the focused window; no launcher opens on the way |
 | press **Search+Shift** | the terminal file search window (see below), not the launcher |
 
@@ -594,7 +594,7 @@ correctly absent.
 | tap **Search** on its own | the launcher, not the window |
 | press **Alt+Search** | the file search, not the window |
 | hold **Search**, tap a top-row key | an F-key reaches the focused window; no menu opens on the way |
-| right-click a file -> **Open With** | the first entry is what a double click does: text in `bat`, a document in `papers`, a picture in `imv` (or `chafa`), a video in `mpv`. Two deliberate exceptions: an HTML page is text to the Files list (`bat`) and a page to a double click (**Firefox**), and an EPUB goes to Firefox because `papers` reads none |
+| right-click a file -> **Open With** | the first entry is what a double click does: text in `bat`, a document in `papers`, a picture in `imv` (or `chafa`), a video in `mpv`. Two deliberate exceptions: an HTML page is text to the Files list (`bat`) and a page to a double click (**Chromium**), and an EPUB goes to Chromium because `papers` reads none |
 | press **F4** | `foot` opens in the current directory (not an error about `x-terminal-emulator`) |
 | delete a file | it goes to the Trash and **Restore** puts it back (`gvfsd-trash`) |
 | look at a folder of photos | thumbnails; a PDF or a video keeps its mimetype icon (libfm decodes images only - that is not a bug) |
@@ -671,8 +671,8 @@ archive refuses as about what it saves.
 | type the passphrase twice | a busy card, then the path and size of `hayato-profile-<host>-<date>.tar.zst.gpg`; a `.txt` manifest sits beside it |
 | `ls -l` on the stick | both files are `0600` (on exFAT the bits are a no-op, which is why the archive is encrypted) |
 | `sed -n '1,12p'` the manifest | date, host, image revision, the paths and `apt-mark showmanual` - and no key material |
-| `gpg -d <archive> \| tar --zstd -t` with the passphrase | `.ssh/`, `.gnupg/`, `.bashrc`, `.config/...`, the agents' homes and `.config/mozilla/firefox/<profile>/` with `places.sqlite`, `logins.db` and `key4.db`; `tar -tv` shows `-rw-------` on `id_ed25519` |
-| `gpg -d <archive> \| tar --zstd -t \| grep -E 'storage/\|security_state\|cache2\|sqlite-wal'` | nothing: the Firefox site data and the caches never travel (the profile is 238 MB, the archive a few) |
+| `gpg -d <archive> \| tar --zstd -t` with the passphrase | `.ssh/`, `.gnupg/`, `.bashrc`, `.config/...`, the agents' homes and `.config/chromium/Default/` with `Bookmarks`, `Preferences` and `Login Data`; `tar -tv` shows `-rw-------` on `id_ed25519` |
+| `gpg -d <archive> \| tar --zstd -t \| grep -E 'Service Worker\|ShaderCache\|Code Cache\|GPUCache'` | nothing: the Chromium site data and the caches never travel |
 | export again with a different passphrase at the second prompt | "The two passphrases differ", and the prompt asks again: nothing is written |
 | export with no stick inserted, pick `~/Downloads` | the archive lands there; copying it to a stick later is the same file |
 | **Restore a profile**, pick the archive | the passphrase, then the count of files and **Cancel as the first row** |
@@ -680,7 +680,7 @@ archive refuses as about what it saves.
 | **Restore** over a file you changed | the file comes back, the card says to log out and back in, and `~/.cache/hayato/backups/profile-before-restore-<date>.tar.zst` holds the version from before |
 | `~/.config/bin/hayato-profile import <archive>` from ssh | the same work with a terminal prompt (typed `restore`), no rofi |
 | **Save a diagnostics bundle** | `hayato-report-<host>-<date>.tar.zst` with `report.txt`, `journal.txt`, `dmesg.txt`, `hardware.txt`, `sysinfo.txt` and a `README.txt`; `report.txt` has the `check-system.sh` summary and no colour escapes |
-| `check-system.sh` | `developer menu complete`, the gpg round-trip, `--dry-run` naming `.ssh`/`.gnupg`, the agents' homes, the Firefox profile and the three ways in, all OK; no `unexpected user unit` after the round-trip |
+| `check-system.sh` | `developer menu complete`, the gpg round-trip, `--dry-run` naming `.ssh`/`.gnupg`, the agents' homes, the Chromium profile and the three ways in, all OK; no `unexpected user unit` after the round-trip |
 | after a report run | `systemctl --user is-active gpg-agent.service` is `inactive` if it was not running before the check |
 
 ## The shell - `cd -`, the aliases and the prompt
@@ -714,7 +714,7 @@ name for that reason.
 | Step | Expected |
 |---|---|
 | `fc-list :lang=ar` | several faces (`fonts-noto-core`), not an empty list |
-| `echo 'مرحبا بالعالم'` in foot, and the same text in Firefox | Arabic letters, joined and right-to-left; not a row of boxes |
+| `echo 'مرحبا بالعالم'` in foot, and the same text in Chromium | Arabic letters, joined and right-to-left; not a row of boxes |
 | `echo 'नमस्ते दुनिया'`, `echo 'שלום עולם'`, `echo 'สวัสดี'` | Devanagari, Hebrew and Thai text in the same way |
 | `fc-list :lang=ja` | **empty**: CJK is deliberately not installed |
 | `echo '日本語'` before installing CJK | boxes - the documented gap, not a fault |
@@ -817,19 +817,19 @@ The manual is `05-system.md` § *Remote login (ssh)*.
 | Step | Expected |
 |---|---|
 | three fingers to the left / to the right | next / previous workspace, the same as `Alt+1..0` |
-| three fingers up with two tabs open in `firefox-esr` | the browser moves to the next tab, as if Ctrl+Tab had been pressed |
+| three fingers up with two tabs open in `chromium` | the browser moves to the next tab, as if Ctrl+Tab had been pressed |
 | three fingers down | the previous tab (Ctrl+Shift+Tab) |
-| the same in foot, or in an editor with two files open | **nothing**, in any window that is not Firefox - and `pgrep -a wtype` while swiping shows no process: the filter runs inside sway, so the gesture costs nothing there |
+| the same in foot, or in an editor with two files open | **nothing**, in any window that is not a browser - and `pgrep -a wtype` while swiping shows no process: the filter runs inside sway, so the gesture costs nothing there |
 | three fingers up on the bare desktop | nothing, and nothing in `journalctl --user -b` |
 
 What a failure means:
 
 * **the swipe does nothing at all, for all four directions**: `/etc/sway/config.d/22-workspace-gestures.conf`
   is not in the image; `check-system.sh` FAILs on the four bindings.
-* **left/right work, up/down do not in Firefox**: `wtype` is missing (`check-system.sh` FAILs
-  on it), or that Firefox runs under Xwayland (`MOZ_ENABLE_WAYLAND=0`): it then has no Wayland
+* **left/right work, up/down do not in Chromium**: `wtype` is missing (`check-system.sh` FAILs
+  on it), or that Chromium runs under Xwayland (`--ozone-platform=x11`): it then has no Wayland
   app id, which is what the binding filters on.
-* **up/down also type into another window**: the `[app_id="(?i)^firefox" con_id="__focused__"]`
+* **up/down also type into another window**: the `[app_id="(?i)^(chromium|firefox|librewolf)" con_id="__focused__"]`
   prefix is gone from the binding; `check-system.sh` FAILs on it.
 * **the tab changes on the *press* of another key instead**: something is bound to
   Ctrl+Tab in `~/.config/sway/config`; sway sees the injected keys first, and a
