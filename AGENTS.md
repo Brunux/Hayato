@@ -21,6 +21,15 @@ old monorepo context) before updating submodule pins here.
   push hardware quirks into `desktop/` or `core/scripts/rootfs-setup.sh`.
 - **Partitioning, rootfs debootstrap, bootloaders, or `make-release.sh` sanitization**:
   Work inside `core/`. Use the uniform `boot_*` backend interface rather than assuming ChromeOS `cgpt`.
+- **UI/UX Design Gate for new features**:
+  Before implementing any new user-facing feature or major redesign, evaluate whether it introduces
+  or changes a visual/interaction surface (TUI screen, GTK4 app, Waybar indicator, notification,
+  greeter, or multi-step flow). If so, spawn a specialized **UI/UX Designer** subagent **before
+  writing code**, passing `desktop/AGENTS.md`, `hayato-ui` widgets/tokens, `hayato-theme` 16-theme
+  rules, relevant existing Hayato exemplars, and the 80×24 / 152×45 dual-density constraints. The
+  subagent must challenge the interaction paradigm (e.g. studio/form vs. wizard), produce wireframes
+  for compact & wide grids, define the single `Phase` enum + non-`Alt` keybindings + touch targets,
+  and rank P0/P1/P2 priorities.
 - **Every user-facing change ships with three witnesses**:
   1. Executable witness (`check-core.sh` / `check-device.sh` / `check-desktop.sh` + unit tests).
   2. Documentation update in `desktop/uis/sway/files/usr/share/doc/hayato/`.
